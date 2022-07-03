@@ -1,15 +1,22 @@
 import React from 'react'
 import "./Signup.css"
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Signup({
-  setShowSignup,
   setSignupMessage,
   signupMessage
 }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
+
+  /* clear messages on mount */
+  useEffect(() => {
+    setSignupMessage('')
+  },[])
   
   const handleOnSubmitSignup = async () => {
     try {
@@ -20,7 +27,7 @@ function Signup({
       })
       console.log(res)
       setSignupMessage('Success creating new account')
-      setShowSignup(false)
+      navigate('/login')
     } catch (e) {
       setSignupMessage(e.response.data.error.message)
     }

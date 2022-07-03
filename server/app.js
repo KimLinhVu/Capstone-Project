@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
@@ -30,13 +31,16 @@ app.post('/login', async (req, res, next) => {
     return next(new BadRequestError('Missing password field.'))
   }
 
+  /* decrypt hashed password */
   /* search db for pw that matches correct user */
-  const user = await User.findOne({ username, password })
-  if (user) {
-    res.status(200).json({ token: 'test123' })
-  } else {
-    return next(new BadRequestError('User does not exist or password does not match.'))
-  }
+  const user = await User.findOne({ username })
+  bcrypt.compare(password, user?.password, function (err, result) {
+    if (err || !result) {
+      return next(new BadRequestError('User does not exist or password does not match.'))
+    } else {
+      res.status(200).json({ token: 'test123' })
+    }
+  })
 })
 
 /* adds new user to Users db */
@@ -56,10 +60,7 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    const newUser = await User.create({
-      username,
-      password
-    })
+    const newUser = await new User({ username, password })
     await newUser.save()
     res.status(200).json()
   } catch (error) {

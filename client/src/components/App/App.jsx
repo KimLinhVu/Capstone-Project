@@ -32,7 +32,14 @@ function App() {
                 </Protected>
               }
             />
-            <Route path="/signup" element={<Signup />}/>
+            <Route path="/signup" element=
+              {
+                <Signup 
+                  setSignupMessage={setSignupMessage} 
+                  signupMessage={signupMessage}
+                />
+              }
+            />
             <Route path="*" element={<h1>Page Not Found</h1>}/>
           </Routes>
         </main>
