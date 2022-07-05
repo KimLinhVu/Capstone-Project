@@ -7,12 +7,16 @@ require('dotenv').config()
 
 const app = express()
 
-const User = require('./Users')
-const { BadRequestError } = require('./utils/errors')
-
 app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(express.urlencoded({ extended: true }))
+
+const User = require('./models/Users')
+const spotifyRouter = require('./routes/spotify')
+const { BadRequestError } = require('./utils/errors')
+
+app.use('/spotify', spotifyRouter)
 
 /* connect mongo Users database */
 mongoose.connect(process.env.MONGO_URI, { dbName: 'Users' }).then(() => {
