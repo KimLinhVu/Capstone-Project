@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { accessToken, logout, getCurrentUserProfile } from './spotify'
+import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
 import styled from 'styled-components/macro'
 
 const StyledLoginButton = styled.a`
@@ -14,13 +14,13 @@ const StyledLoginButton = styled.a`
 function Dashboard({
   clearToken
 }) {
-  const [token, setToken] = useState(null)
+  const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
+  const [playlist, setPlaylist] = useState(null)
   /* get value of tokens out of the URL */
   useEffect(() => {
-    setToken(accessToken)
-
-    const fetchData = async () => {
+    setSpotifyToken(accessToken)
+    const fetchUserProfile = async () => {
       try {
         const { data } = await getCurrentUserProfile()
         setProfile(data)
@@ -28,13 +28,24 @@ function Dashboard({
         console.log(error)
       }
     }
-    fetchData()
+
+    const fetchUserPlaylist = async () => {
+      try {
+        const { data } = await getCurrentUserPlaylist()
+        console.log(data.items)
+        setPlaylist(data.items)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchUserProfile()
+    fetchUserPlaylist()
     
   }, [])
 
   return (
     <div className="dashboard">
-      {token ? (
+      {spotifyToken ? (
       <>
         <h1>Logged In</h1>
         {profile && (
@@ -44,10 +55,15 @@ function Dashboard({
             {profile.images.length > 0 ? <img src={profile.images[0].url} alt="Profile Picture"/> : null}
           </div>
         )}
+        {playlist && (
+          <div>
+
+          </div>
+        )}
       </>)
        : <StyledLoginButton className="App-link" href="http://localhost:8888/spotify/login">Log Into Spotify</StyledLoginButton>}
       <button className="logout" onClick={clearToken}>Log Out</button>
-      {token ? <button onClick={logout}>Log Out of Spotify</button> : null}
+      {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
     </div>
   )
 }

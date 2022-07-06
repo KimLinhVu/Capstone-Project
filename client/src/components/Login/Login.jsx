@@ -18,17 +18,27 @@ function Login({
 
   const handleOnSubmitLogin = async (e) => {
     try {
-      const res = await axios.post('http://localhost:8888/login',
+      const { data } = await axios.post('http://localhost:8888/login',
       {
         username: username,
         password: password
       })
-      setToken(res.data)
+      setToken(data.accessToken)
       navigate('/')
     } catch (e) {
       setSignupMessage('')
       setLoginMessage(e.response.data.error.message)
     }
+  }
+
+  const userAuthenticated = () => {
+    axios.get('http://localhost:8888/isUserAuth', {
+      headers: {
+        "x-access-token": localStorage.getItem('token')
+      }
+    }).then(res => {
+      console.log(res)
+    })
   }
 
   return (

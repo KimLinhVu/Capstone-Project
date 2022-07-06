@@ -9,10 +9,10 @@ const LOCALSTORAGE_KEYS = {
 
 // Map to retrieve localStorage values
 const LOCALSTORAGE_VALUES = {
-  accessToken: window.localStorage.getItem(LOCALSTORAGE_KEYS.accessToken),
-  refreshToken: window.localStorage.getItem(LOCALSTORAGE_KEYS.refreshToken),
-  expireTime: window.localStorage.getItem(LOCALSTORAGE_KEYS.expireTime),
-  timestamp: window.localStorage.getItem(LOCALSTORAGE_KEYS.timestamp),
+  accessToken: localStorage.getItem(LOCALSTORAGE_KEYS.accessToken),
+  refreshToken: localStorage.getItem(LOCALSTORAGE_KEYS.refreshToken),
+  expireTime: localStorage.getItem(LOCALSTORAGE_KEYS.expireTime),
+  timestamp: localStorage.getItem(LOCALSTORAGE_KEYS.timestamp),
 };
 
 const hasTokenExpired = () => {
@@ -27,7 +27,7 @@ const hasTokenExpired = () => {
 
 export const logout = () => {
   for (const property in LOCALSTORAGE_KEYS) {
-    window.localStorage.removeItem(LOCALSTORAGE_KEYS[property])
+    localStorage.removeItem(LOCALSTORAGE_KEYS[property])
   }
 
   window.location = window.location.origin
@@ -42,8 +42,8 @@ const refreshToken = async () => {
     }
     const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)
 
-    window.localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
-    window.localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
+    localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
+    localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
 
     window.location.reload()
   } catch (error) {
@@ -72,9 +72,9 @@ const getAccessToken = () => {
   if (queryParams[LOCALSTORAGE_KEYS.accessToken]) {
     /* store query params in local storage */
     for (const prop in queryParams) {
-      window.localStorage.setItem(prop, queryParams[prop])
+      localStorage.setItem(prop, queryParams[prop])
     }
-    window.localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
+    localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
     return queryParams[LOCALSTORAGE_KEYS.accessToken]
   }
 
@@ -90,4 +90,8 @@ axios.defaults.headers['Content-Type'] = 'application/json'
 
 export const getCurrentUserProfile = () => {
   return axios.get('/me')
+}
+
+export const getCurrentUserPlaylist = () => {
+  return axios.get('/me/playlists')
 }

@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const app = express()
@@ -18,12 +19,6 @@ const { BadRequestError } = require('./utils/errors')
 
 app.use('/spotify', spotifyRouter)
 
-/* connect mongo Users database */
-// mongoose.connect(process.env.MONGO_URI, { dbName: 'Users' }).then(() => {
-//   console.log('Database Connected')
-// }).catch(err => {
-//   console.log('Database not connected ' + err)
-// })
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
 }).catch(err => {
@@ -47,7 +42,10 @@ app.post('/login', async (req, res, next) => {
     if (err || !result) {
       return next(new BadRequestError('User does not exist or password does not match.'))
     } else {
-      res.status(200).json({ token: 'test123' })
+      // res.status(200).json({ token: 'test123' })
+      /* create jwt */
+      const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
+      res.json({ accessToken })
     }
   })
 })
