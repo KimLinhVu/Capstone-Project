@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
+import axios from 'axios'
 import styled from 'styled-components/macro'
 
 const StyledLoginButton = styled.a`
@@ -34,6 +35,19 @@ function Dashboard({
         const { data } = await getCurrentUserPlaylist()
         console.log(data.items)
         setPlaylist(data.items)
+
+        axios.post('http://localhost:8888/playlist/', {
+          playlist: data.items
+        },{
+          headers: {
+            "x-access-token": localStorage.getItem('token')
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      
       } catch (error) {
         console.log(error)
       }
