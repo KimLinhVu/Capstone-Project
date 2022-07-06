@@ -58,7 +58,8 @@ router.get('/login', (req, res) => {
     response_type: 'code',
     redirect_uri: REDIRECT_URI,
     state,
-    scope: scopes
+    scope: scopes,
+    show_dialog: true
   })
 
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`)

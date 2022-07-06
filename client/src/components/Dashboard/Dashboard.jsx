@@ -54,8 +54,12 @@ function Dashboard({
     }
     fetchUserProfile()
     fetchUserPlaylist()
-    
   }, [])
+
+  const clearAllTokens = () => {
+    clearToken()
+    logout()
+  }
 
   return (
     <div className="dashboard">
@@ -76,7 +80,7 @@ function Dashboard({
         )}
       </>)
        : <StyledLoginButton className="App-link" href="http://localhost:8888/spotify/login">Log Into Spotify</StyledLoginButton>}
-      <button className="logout" onClick={clearToken}>Log Out</button>
+      <button className="logout" onClick={clearAllTokens}>Log Out</button>
       {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
     </div>
   )
