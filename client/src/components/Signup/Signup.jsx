@@ -3,6 +3,7 @@ import "./Signup.css"
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
+import Switch from 'react-switch'
 import axios from 'axios'
 
 const libraries = ['places']
@@ -15,6 +16,7 @@ function Signup({
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(null)
+  const [privacyChecked, setPrivacyChecked] = useState(false)
   const navigate = useNavigate()
 
   /* set up Google Map Places autocomplete */
@@ -38,9 +40,9 @@ function Signup({
       {
         username: username,
         password: password,
-        location: place
+        location: place,
+        privacy: privacyChecked
       })
-      console.log(res)
       setSignupMessage('Success creating new account')
       navigate('/login')
     } catch (e) {
@@ -50,7 +52,6 @@ function Signup({
 
   /* set up city/state autocomplete */
   const onLoad = (autocomplete) => {
-    console.log(autocomplete)
     setAutocomplete(autocomplete)
   }
 
@@ -69,6 +70,12 @@ function Signup({
       setSignupMessage('Please enter a valid City/State')
     }
   }
+
+  /* handle privacy switch */
+  const handlePrivacySwitch = () => {
+    setPrivacyChecked(!privacyChecked)
+    console.log(privacyChecked)
+  }
   
   return (
     <div className="signup">
@@ -83,6 +90,24 @@ function Signup({
       >
         <input type="text" placeholder='Enter your Location (City/State)' onChange={() => {setPlace(null)}}/>
       </Autocomplete>
+      <div className="switch">
+        <span>Public</span>
+        <Switch
+          onChange={handlePrivacySwitch}
+          checked={privacyChecked}
+          className="react-switch"
+          onColor="#86d3ff"
+          onHandleColor="#2693e6"
+          handleDiameter={30}
+          uncheckedIcon={false}
+          checkedIcon={false}
+          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+          height={20}
+          width={48}
+        />
+        <span>Private</span>
+      </div>
       <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''}>Sign Up</button>
       {signupMessage !== '' ? <p>{signupMessage}</p> : null}
     </div>

@@ -55,7 +55,7 @@ app.post('/login', async (req, res, next) => {
 /* adds new user to Users db */
 app.post('/signup', async (req, res, next) => {
   try {
-    const { username, password, location } = req.body
+    const { username, password, location, privacy } = req.body
     /* check to see if username and pw fields are filled out */
     if (!username) {
       return next(new BadRequestError('Missing username field.'))
@@ -69,7 +69,7 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    const newUser = await new User({ username, password, location })
+    const newUser = await new User({ username, password, location, privacy })
     await newUser.save()
     res.status(200).json()
   } catch (error) {
