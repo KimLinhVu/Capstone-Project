@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
 import axios from 'axios'
 import styled from 'styled-components/macro'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 const StyledLoginButton = styled.a`
   background-color: green;
@@ -18,6 +20,8 @@ function Dashboard({
   const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
+  const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
@@ -36,17 +40,17 @@ function Dashboard({
         console.log(data.items)
         setPlaylist(data.items)
 
-        axios.post('http://localhost:8888/playlist/', {
-          playlist: data.items
-        },{
-          headers: {
-            "x-access-token": localStorage.getItem('token')
-          }
-        }).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-        })
+        // axios.post('http://localhost:8888/playlist/', {
+        //   playlist: data.items
+        // },{
+        //   headers: {
+        //     "x-access-token": localStorage.getItem('token')
+        //   }
+        // }).then(res => {
+        //   console.log(res)
+        // }).catch(err => {
+        //   console.log(err)
+        // })
       
       } catch (error) {
         console.log(error)
@@ -55,6 +59,22 @@ function Dashboard({
     fetchUserProfile()
     fetchUserPlaylist()
   }, [])
+
+  const handleAddPlaylistOnClick = () => {
+    /* work on how to update an item in db */
+    console.log(currentAddPlaylist)
+    axios.post('http://localhost:8888/playlist/', {
+      playlist: currentAddPlaylist
+    },{
+      headers: {
+        "x-access-token": localStorage.getItem('token')
+      }
+    }).then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   const clearAllTokens = () => {
     clearToken()
@@ -74,8 +94,21 @@ function Dashboard({
           </div>
         )}
         {playlist && (
+          // <div>
+          //   {playlist.map(item => (
+          //     <div className='playlist'>
+          //       <img src={item.images[0]?.url} alt="Playlist Image"/>
+          //       <p>{item.name}</p>
+          //     </div>
+          //   ))}
+          // </div>
           <div>
-
+            <Dropdown 
+              options={playlist.map(item => ({value: item, label: item.name}))} 
+              onChange={(e) => setCurrentAddPlaylist(e.value)}
+              placeholder="Select a playlist to add to your profile"
+            />
+            <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>
         )}
       </>)
