@@ -80,8 +80,22 @@ function Signup({
   return (
     <div className="signup">
       <h1>Sign Up</h1>
-      <input type="text" name='user' placeholder='Enter username' onChange={(e) => setUsername(e.target.value)} value={username}/>
-      <input type="text" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
+      <input 
+        type="text" 
+        name='user' 
+        placeholder='Enter username' 
+        onChange={(e) => setUsername(e.target.value)} 
+        value={username}
+      />
+      <input 
+        type="text" 
+        name='password' 
+        placeholder='Enter password' 
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+
+      />
       <Autocomplete 
         types={['locality']} 
         restrictions={{ country: ['us'] }}
