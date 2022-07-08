@@ -31,15 +31,16 @@ function Login({
     }
   }
 
-  const userAuthenticated = () => {
-    axios.get('http://localhost:8888/isUserAuth', {
-      headers: {
-        "x-access-token": localStorage.getItem('token')
-      }
-    }).then(res => {
-      console.log(res)
-    })
-  }
+  /* example header of sending access token to server */
+  // const userAuthenticated = () => {
+  //   axios.get('http://localhost:8888/isUserAuth', {
+  //     headers: {
+  //       "x-access-token": localStorage.getItem('token')
+  //     }
+  //   }).then(res => {
+  //     console.log(res)
+  //   })
+  // }
 
   return (
     <div className="login">

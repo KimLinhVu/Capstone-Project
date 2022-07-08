@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
+import { getPlaylists, addPlaylists, addPlaylistToProfile } from './playlist'
+import axios from 'axios'
 import styled from 'styled-components/macro'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 const StyledLoginButton = styled.a`
   background-color: green;
@@ -17,6 +21,8 @@ function Dashboard({
   const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
+  const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
@@ -28,20 +34,50 @@ function Dashboard({
         console.log(error)
       }
     }
+    fetchUserProfile()
+  }, [])
 
-    const fetchUserPlaylist = async () => {
+  useEffect(() => {
+    const addUserPlaylist = async () => {
       try {
+        /* get list of playlist from Spotify API */
         const { data } = await getCurrentUserPlaylist()
-        console.log(data.items)
-        setPlaylist(data.items)
+        /* add to mongo database */
+        await addPlaylists(data.items)
+        /* retrieve playlist that belongs to user and store in playlist state */
+        const result = await getPlaylists()
+        const options = convertToOptionsArray(result.data)
+        setPlaylist(options)
       } catch (error) {
         console.log(error)
       }
     }
-    fetchUserProfile()
-    fetchUserPlaylist()
-    
-  }, [])
+    addUserPlaylist()
+  }, [currentAddPlaylist])
+
+  const convertToOptionsArray = (playlist) => {
+    const newArray = []
+    for (let i = 0; i < playlist?.length; i++) {
+      newArray.push({key: playlist[i].playlist.id, value: playlist[i], label: playlist[i].playlist.name})
+    }
+    return newArray
+  }
+
+  const handleAddPlaylistOnClick = async () => {
+    /* adds a playlist to the user's profile */
+    try {
+      const temp = currentAddPlaylist
+      setCurrentAddPlaylist(null)
+      await addPlaylistToProfile(temp)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const clearAllTokens = () => {
+    clearToken()
+    logout()
+  }
 
   return (
     <div className="dashboard">
@@ -57,12 +93,17 @@ function Dashboard({
         )}
         {playlist && (
           <div>
-
+            <Dropdown 
+              options={playlist} 
+              onChange={(e) => setCurrentAddPlaylist(e.value)}
+              placeholder="Select a playlist to add to your profile"
+            />
+            <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>
         )}
       </>)
        : <StyledLoginButton className="App-link" href="http://localhost:8888/spotify/login">Log Into Spotify</StyledLoginButton>}
-      <button className="logout" onClick={clearToken}>Log Out</button>
+      <button className="logout" onClick={clearAllTokens}>Log Out</button>
       {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
     </div>
   )
