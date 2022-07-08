@@ -15,6 +15,17 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.get('/current', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const playlists = await Playlist.find({ userId, added: true })
+    console.log(playlists)
+    res.json(playlists)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId

@@ -18,6 +18,5 @@
         "react"
     ],
     "rules": {
-        "camelcase": "off"
     }
 }
