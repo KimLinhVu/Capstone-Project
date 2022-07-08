@@ -1,36 +1,48 @@
 const express = require('express')
-const axios = require('axios')
 const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Playlist = require('../models/Playlists')
+const { BadRequestError } = require('../utils/errors')
 
-/* try implementing jwt token */
+router.get('/', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const playlists = await Playlist.find({ userId, added: false })
+    res.json(playlists)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const { playlist } = req.body
 
-    /* check to see if user has existing playlist in database */
-    const user = await Playlist.findOne({ userId })
-    if (user) {
-      // await Playlist.deleteMany({ userId })
-      /* pushes new playlist to current array of playlist in database */
-      Playlist.findOneAndUpdate({ uesrId: userId }, { $push: { playlist } }, { new: true }, (err, data) => {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log(data)
-        }
-      })
-    } else {
-      /* adds User's playlist to playlist database with user's id as an attribute */
-      const newPlaylist = await new Playlist({ userId, playlist: [playlist] })
-      await newPlaylist.save()
+    for (let i = 0; i < playlist.length; i++) {
+      const playlistItem = await Playlist.findOne({ userId, playlistId: playlist[i].id, playlist: playlist[i] })
+      if (!playlistItem) {
+        const newPlaylist = new Playlist({ userId, playlistId: playlist[i].id, playlist: playlist[i], added: false })
+        await newPlaylist.save()
+      }
     }
     res.status(200).json()
   } catch (error) {
     next(error)
+  }
+})
+
+router.post('/add', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    /* adds an "added" property to playlist object */
+    const userId = req.userId
+    const { playlist } = req.body
+    console.log(playlist.playlistId)
+
+    await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
+  } catch (error) {
+    console.log(error)
   }
 })
 
