@@ -18,7 +18,7 @@ function Login({
 
   const handleOnSubmitLogin = async (e) => {
     try {
-      const res = await axios.post('http://localhost:3001/login',
+      const res = await axios.post('http://localhost:8888/login',
       {
         username: username,
         password: password

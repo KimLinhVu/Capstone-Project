@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from '../Login/Login'
 import Signup from '../Signup/Signup'
 import Dashboard from '../Dashboard/Dashboard'
+import { Home } from '../Home/Home'
 import { Protected } from '../Protected'
 import useToken from './useToken'
 
@@ -40,6 +41,7 @@ function App() {
                 />
               }
             />
+            <Route path="/home" element={<Home />}/>
             <Route path="*" element={<h1>Page Not Found</h1>}/>
           </Routes>
         </main>
