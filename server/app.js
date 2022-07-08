@@ -44,9 +44,10 @@ app.post('/login', async (req, res, next) => {
     if (err || !result) {
       return next(new BadRequestError('User does not exist or password does not match.'))
     } else {
-      // res.status(200).json({ token: 'test123' })
       /* create jwt */
-      const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
+      const salt = bcrypt.genSaltSync(10)
+      const hashedUserId = bcrypt.hashSync(user.id, salt)
+      const accessToken = jwt.sign({ id: hashedUserId }, process.env.ACCESS_TOKEN_SECRET)
       res.json({ accessToken })
     }
   })
