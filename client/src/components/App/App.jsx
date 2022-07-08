@@ -43,7 +43,13 @@ function App() {
               }
             />
             
-            <Route path="/playlist/:playlistId" element={<PlaylistDetail />}/>
+            <Route path="/playlist/:playlistId" element=
+              {
+              <Protected token={token}>
+                <PlaylistDetail />
+              </Protected>
+              }
+            />
             <Route path="*" element={<h1>Page Not Found</h1>}/>
           </Routes>
         </main>
