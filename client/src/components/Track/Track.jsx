@@ -23,13 +23,21 @@ function Track({
   }, [])
 
   const addGenreToArray = (genres) => {
-    const newArray = genreArray
+    let newArray = genreArray
     genres.forEach(genre => {
-      if (genreArray.hasOwnProperty(genre)) {
-        console.log(genre)
-      } else {
-        newArray.push({ })
+      let found = false
+      newArray.forEach(item => {
+        if (Object.keys(item).includes(genre)) {
+          item[genre] += 1
+          found = true
+        }
+      })
+      if (!found) {
+        const newGenre = {}
+        newGenre[genre] = 0
+        newArray.push(newGenre)
       }
+      setGenreArray(newArray)
     })
   }
   

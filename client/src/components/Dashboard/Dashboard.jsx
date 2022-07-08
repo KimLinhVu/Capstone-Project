@@ -94,7 +94,6 @@ function Dashboard({
         {profile && (
           <div>
             <h1>{profile.display_name}</h1>
-            <p>id: {profile.id}</p>
             <p>{profile.followers.total} Followers</p>
             {profile.images.length > 0 ? <img src={profile.images[0].url} alt="Profile Picture"/> : null}
           </div>
