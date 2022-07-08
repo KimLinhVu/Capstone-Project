@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from '../Login/Login'
 import Signup from '../Signup/Signup'
 import Dashboard from '../Dashboard/Dashboard'
-import { Home } from '../Home/Home'
 import { Protected } from '../Protected'
+import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
 import useToken from './useToken'
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
               {
                 <Login 
                   setToken={setToken}
+                  clearToken = {clearToken}
                   signupMessage={signupMessage}
                   setSignupMessage={setSignupMessage}
                 />
@@ -41,7 +42,8 @@ function App() {
                 />
               }
             />
-            <Route path="/home" element={<Home />}/>
+            
+            <Route path="/playlist/:playlistId" element={<PlaylistDetail />}/>
             <Route path="*" element={<h1>Page Not Found</h1>}/>
           </Routes>
         </main>

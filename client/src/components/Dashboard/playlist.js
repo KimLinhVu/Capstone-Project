@@ -1,9 +1,11 @@
 import axios from 'axios'
 
-export const getPlaylists = () => {
+export const getPlaylists = (spotifyId) => {
+  console.log(spotifyId)
   return axios.get('http://localhost:8888/playlist/', {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      "x-access-token": localStorage.getItem('token'),
+      "spotify-id": spotifyId
     }
   })
 }
@@ -16,9 +18,10 @@ export const getCurrentPlaylists = () => {
   })
 }
 
-export const addPlaylists = (playlist) => {
+export const addPlaylists = (playlist, spotifyId) => {
   return axios.post('http://localhost:8888/playlist/', {
-    playlist: playlist
+    playlist: playlist,
+    spotifyId: spotifyId
   }, {
     headers: {
       "x-access-token": localStorage.getItem('token')
