@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
+import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from '../../spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from './playlist'
 import styled from 'styled-components/macro'
 import Dropdown from 'react-dropdown'
+import Playlist from '../Playlist/Playlist'
 import 'react-dropdown/style.css'
 
 const StyledLoginButton = styled.a`
@@ -42,10 +43,12 @@ function Dashboard({
       try {
         /* get list of playlist from Spotify API */
         const { data } = await getCurrentUserPlaylist()
+        /* get user's profile */
+        const prof = await getCurrentUserProfile()
         /* add to mongo database */
-        await addPlaylists(data.items)
+        await addPlaylists(data.items, prof.data.id)
         /* retrieve playlist that belongs to user and store in playlist state */
-        const result = await getPlaylists()
+        const result = await getPlaylists(prof.data.id)
         const options = convertToOptionsArray(result.data)
         setPlaylist(options)
 
@@ -91,6 +94,7 @@ function Dashboard({
         {profile && (
           <div>
             <h1>{profile.display_name}</h1>
+            <p>id: {profile.id}</p>
             <p>{profile.followers.total} Followers</p>
             {profile.images.length > 0 ? <img src={profile.images[0].url} alt="Profile Picture"/> : null}
           </div>
@@ -109,10 +113,7 @@ function Dashboard({
           <div>
             <h1>Playlist Profile</h1>
             {currentPlaylist.map((item, idx) => (
-              <div key={idx}>
-                <h2>{item.playlist.name}</h2>
-                <img src={item.playlist.images[0].url} alt="Playlist Image"/>
-              </div>
+              <Playlist key={idx} playlist={item.playlist}/>
             ))}
           </div>
         )}

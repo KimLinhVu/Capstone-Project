@@ -1,12 +1,14 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '../../spotify'
 import "./Login.css"
 
 function Login({
   setToken,
+  clearToken,
   signupMessage,
   setSignupMessage
 }) {
@@ -16,6 +18,11 @@ function Login({
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    // logout()
+    clearToken()
+  }, [])
+
   const handleOnSubmitLogin = async (e) => {
     try {
       const { data } = await axios.post('http://localhost:8888/login',
@@ -24,23 +31,13 @@ function Login({
         password: password
       })
       setToken(data.accessToken)
+      logout()
       navigate('/')
     } catch (e) {
       setSignupMessage('')
       setLoginMessage(e.response.data.error.message)
     }
   }
-
-  /* example header of sending access token to server */
-  // const userAuthenticated = () => {
-  //   axios.get('http://localhost:8888/isUserAuth', {
-  //     headers: {
-  //       "x-access-token": localStorage.getItem('token')
-  //     }
-  //   }).then(res => {
-  //     console.log(res)
-  //   })
-  // }
 
   return (
     <div className="login">

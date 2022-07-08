@@ -8,7 +8,8 @@ const { BadRequestError } = require('../utils/errors')
 router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const playlists = await Playlist.find({ userId, added: false })
+    const spotifyId = req.headers['spotify-id']
+    const playlists = await Playlist.find({ userId, spotifyId, added: false })
     res.json(playlists)
   } catch (error) {
     console.log(error)
@@ -29,12 +30,12 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const { playlist } = req.body
+    const { playlist, spotifyId } = req.body
 
     for (let i = 0; i < playlist.length; i++) {
-      const playlistItem = await Playlist.findOne({ userId, playlistId: playlist[i].id, playlist: playlist[i] })
+      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i] })
       if (!playlistItem) {
-        const newPlaylist = new Playlist({ userId, playlistId: playlist[i].id, playlist: playlist[i], added: false })
+        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i], added: false })
         await newPlaylist.save()
       }
     }
