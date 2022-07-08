@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from './spotify'
-import { getPlaylists, addPlaylists, addPlaylistToProfile } from './playlist'
-import axios from 'axios'
+import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from './playlist'
 import styled from 'styled-components/macro'
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
@@ -21,6 +20,7 @@ function Dashboard({
   const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
+  const [currentPlaylist, setCurrentPlaylist] = useState(null)
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
   
   /* get value of tokens out of the URL */
@@ -48,6 +48,10 @@ function Dashboard({
         const result = await getPlaylists()
         const options = convertToOptionsArray(result.data)
         setPlaylist(options)
+
+        const currentResult = await getCurrentPlaylists()
+        setCurrentPlaylist(currentResult.data)
+        console.log(currentPlaylist)
       } catch (error) {
         console.log(error)
       }
@@ -99,6 +103,17 @@ function Dashboard({
               placeholder="Select a playlist to add to your profile"
             />
             <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
+          </div>
+        )}
+        {currentPlaylist && (
+          <div>
+            <h1>Playlist Profile</h1>
+            {currentPlaylist.map((item, idx) => (
+              <div key={idx}>
+                <h2>{item.playlist.name}</h2>
+                <img src={item.playlist.images[0].url} alt="Playlist Image"/>
+              </div>
+            ))}
           </div>
         )}
       </>)

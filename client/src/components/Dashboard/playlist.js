@@ -8,6 +8,14 @@ export const getPlaylists = () => {
   })
 }
 
+export const getCurrentPlaylists = () => {
+  return axios.get('http://localhost:8888/playlist/current', {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}
+
 export const addPlaylists = (playlist) => {
   return axios.post('http://localhost:8888/playlist/', {
     playlist: playlist
