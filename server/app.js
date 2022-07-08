@@ -82,6 +82,17 @@ app.post('/signup', async (req, res, next) => {
   }
 })
 
+app.post('/verify-token', (req, res) => {
+  const { token } = req.body
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
+    if (err) {
+      res.json({ auth: false })
+    } else {
+      res.json({ auth: true })
+    }
+  })
+})
+
 /* add generic error handler */
 app.use((error, req, res, next) => {
   const status = error.status || 500
