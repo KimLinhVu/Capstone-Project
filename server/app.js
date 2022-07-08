@@ -64,6 +64,11 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Missing password field.'))
     }
 
+    /* tests for valid password */
+    if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
+      return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
+    }
+
     /* check to see if username already exists */
     if (await User.findOne({ username })) {
       return next(new BadRequestError('Username already exists. Please try again.'))
