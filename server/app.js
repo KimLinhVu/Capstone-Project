@@ -19,8 +19,13 @@ const { BadRequestError } = require('./utils/errors')
 app.use('/spotify', spotifyRouter)
 
 /* connect mongo Users database */
-mongoose.connect(process.env.MONGO_URI, { dbName: 'Users' }).then(() => {
-  console.log('Database Connected')
+// mongoose.connect(process.env.MONGO_URI, { dbName: 'Users' }).then(() => {
+//   console.log('Database Connected')
+// }).catch(err => {
+//   console.log('Database not connected ' + err)
+// })
+mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
+  console.log('Database connected...')
 }).catch(err => {
   console.log('Database not connected ' + err)
 })

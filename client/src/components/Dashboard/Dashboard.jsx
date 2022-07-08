@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile } from './spotify'
-import { catchErrors } from '../../utils'
 import styled from 'styled-components/macro'
 
 const StyledLoginButton = styled.a`
@@ -22,11 +21,15 @@ function Dashboard({
     setToken(accessToken)
 
     const fetchData = async () => {
-      const { data } = await getCurrentUserProfile()
-      setProfile(data)
-      console.log(data)
+      try {
+        const { data } = await getCurrentUserProfile()
+        setProfile(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    catchErrors(fetchData())
+    fetchData()
+    
   }, [])
 
   return (
