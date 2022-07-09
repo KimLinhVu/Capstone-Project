@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { getTrackDetail, getArtistDetail } from '../../spotify'
+import './Track.css'
 
 function Track({
   track,
@@ -27,14 +28,13 @@ function Track({
     genres.forEach(genre => {
       let found = false
       newArray.forEach(item => {
-        if (Object.keys(item).includes(genre)) {
-          item[genre] += 1
+        if (item.genre === genre) {
+          item.count += 1
           found = true
         }
       })
       if (!found) {
-        const newGenre = {}
-        newGenre[genre] = 0
+        const newGenre = { genre: genre, count: 0}
         newArray.push(newGenre)
       }
       setGenreArray(newArray)
@@ -42,9 +42,9 @@ function Track({
   }
   
   return (
-    <div className="track-card">
+    <div className="track">
       <span>{trackNumber + 1}</span>
-      <h1>{track.name}</h1>
+      <p>{track.name}</p>
       <img src={track.album.images[0].url} alt="Track Image"/>
     </div>
   )

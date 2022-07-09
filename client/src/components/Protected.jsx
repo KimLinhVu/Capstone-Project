@@ -10,7 +10,6 @@ export const Protected = ({token, children}) => {
       token: token
     }).then(res => {
       if (!res.data.auth) {
-        logout()
         navigate('/login')
       }
     })

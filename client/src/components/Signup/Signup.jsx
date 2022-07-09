@@ -102,7 +102,7 @@ function Signup({
         onLoad={onLoad}
         onPlaceChanged={onPlaceChanged}
       >
-        <input type="text" placeholder='Enter your Location (City/State)' onChange={() => {setPlace(null)}}/>
+        <input type="text" placeholder='Enter your Location' onChange={() => {setPlace(null)}}/>
       </Autocomplete>
       <div className="switch">
         <span>Public</span>
