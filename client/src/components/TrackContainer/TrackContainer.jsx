@@ -3,7 +3,9 @@ import Track from '../Track/Track'
 import { useState } from 'react'
 
 function TrackContainer({
-  tracks
+  tracks,
+  addPlaylist,
+  playlistId
 }) {
   const [genreArray, setGenreArray] = useState([])
 
@@ -16,6 +18,8 @@ function TrackContainer({
           trackNumber={idx}
           genreArray={genreArray}
           setGenreArray={setGenreArray}
+          addPlaylist={addPlaylist}
+          playlistId={playlistId}
         />
       ))}
       <div className="genres">

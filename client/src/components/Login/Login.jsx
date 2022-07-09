@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../../spotify'
+import { logout } from '../../utils/spotify'
 import "./Login.css"
 
 function Login({

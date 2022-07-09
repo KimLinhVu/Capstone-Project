@@ -16,10 +16,12 @@ app.use(express.urlencoded({ extended: true }))
 const User = require('./models/Users')
 const spotifyRouter = require('./routes/spotify')
 const playlistRouter = require('./routes/playlist')
+const userRouter = require('./routes/users')
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
+app.use('/users', userRouter)
 
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')

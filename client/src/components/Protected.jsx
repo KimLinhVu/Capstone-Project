@@ -1,4 +1,4 @@
-import { logout } from '../spotify'
+import { logout } from '../utils/spotify'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'

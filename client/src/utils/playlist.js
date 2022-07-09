@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+/* current user */
 export const getPlaylists = (spotifyId) => {
   return axios.get('http://localhost:8888/playlist/', {
     headers: {
