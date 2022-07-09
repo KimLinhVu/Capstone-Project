@@ -37,8 +37,12 @@ function Track({
         const newGenre = { genre: genre, count: 0}
         newArray.push(newGenre)
       }
-      setGenreArray(newArray)
     })
+    /* sorts genre array by count */
+    newArray.sort((a, b) => {
+      return b.count - a.count
+    })
+    setGenreArray(newArray)
   }
   
   return (

@@ -26,7 +26,6 @@ function Dashboard({
   const [currentPlaylist, setCurrentPlaylist] = useState(null)
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
   const isMounted = useRef(false)
-  const navigate = useNavigate()
   
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -70,7 +69,7 @@ function Dashboard({
     } else {
       isMounted.current = true
     }
-  }, [currentAddPlaylist])
+  }, [currentAddPlaylist, playlist])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []

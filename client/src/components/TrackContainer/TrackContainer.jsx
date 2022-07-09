@@ -7,19 +7,8 @@ function TrackContainer({
 }) {
   const [genreArray, setGenreArray] = useState([])
 
-  useEffect(() => {
-    const sortedArray = getTopGenres()
-    console.log(sortedArray)
-  }, [genreArray])
-
-  const getTopGenres = () => {
-    const newArray = genreArray
-    newArray.sort((a, b) => (a.count > b.count) ? 1 : -1)
-    return newArray
-  }
   return (
     <div className="track-container">
-      
       {tracks.map((item, idx) => (
         <Track 
           key={idx} 
@@ -29,6 +18,12 @@ function TrackContainer({
           setGenreArray={setGenreArray}
         />
       ))}
+      <div className="genres">
+        <h2>Top Genres in Playlist</h2>
+        {genreArray.slice(0, 5).map((item, idx) => {
+          return <p key={idx}>{item.genre}</p>
+        })}
+      </div>
     </div>
   )
 }
