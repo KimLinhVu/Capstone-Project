@@ -54,4 +54,16 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    /* removes 'added' property to playlist object */
+    const userId = req.userId
+    const { playlistId } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 module.exports = router

@@ -38,3 +38,13 @@ export const addPlaylistToProfile = (playlist) => {
     }
   })
 }
+
+export const removePlaylistFromProfile = (playlistId) => {
+  return axios.post('http://localhost:8888/playlist/remove', {
+    playlistId: playlistId
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

@@ -7,9 +7,9 @@ const Playlist = require('../models/Playlists')
 
 router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
-    /* exclude own userId */
+    /* gets all users except self */
     const userId = req.userId
-    const allUsers = await Users.find({ privacy: false })
+    const allUsers = await Users.find({ _id: { $ne: userId }, privacy: false })
     res.json(allUsers)
   } catch (error) {
     console.log(error)
