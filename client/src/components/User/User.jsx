@@ -12,7 +12,6 @@ function User({
   useEffect(() => {
     const fetchPlaylist = async () => {
       const { data } = await getUserPlaylists(userId)
-      console.log(data)
       setPlaylist(data)
     }
     fetchPlaylist()

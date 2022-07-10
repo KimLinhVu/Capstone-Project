@@ -39,11 +39,13 @@ function Dashboard({
         console.log(error)
       }
     }
-    fetchUserProfile()
+    if (accessToken) {
+      fetchUserProfile()
+    }
   }, [])
 
   useEffect(() => {
-    if (isMounted.current) {
+    if (isMounted.current && accessToken) {
       const addUserPlaylist = async () => {
         try {
           /* get list of playlist from Spotify API */
@@ -60,7 +62,8 @@ function Dashboard({
           const options = convertToOptionsArray(result.data)
           setPlaylist(options)
 
-          const currentResult = await getCurrentPlaylists()
+          /* retrieve playlists that spotify user has added to their profile */
+          const currentResult = await getCurrentPlaylists(prof.data.id)
           setCurrentPlaylist(currentResult.data)
         } catch (error) {
           console.log(error)
@@ -70,7 +73,7 @@ function Dashboard({
     } else {
       isMounted.current = true
     }
-  }, [currentAddPlaylist])
+  }, [currentAddPlaylist, currentPlaylist])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
@@ -83,8 +86,11 @@ function Dashboard({
   const handleAddPlaylistOnClick = async () => {
     /* adds a playlist to the user's profile */
     try {
+      /* adds selected playlist to user's profile */
       const temp = currentAddPlaylist
       setCurrentAddPlaylist(null)
+      playlist.length <= 1 ? setSelected('No playlist available') : setSelected("Select a playlist to add to your profile")
+      
       await addPlaylistToProfile(temp)
     } catch (error) {
       console.log(error)

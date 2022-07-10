@@ -10,10 +10,11 @@ export const getPlaylists = (spotifyId) => {
   })
 }
 
-export const getCurrentPlaylists = () => {
+export const getCurrentPlaylists = (spotifyId) => {
   return axios.get('http://localhost:8888/playlist/current', {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      "x-access-token": localStorage.getItem('token'),
+      "spotify-id": spotifyId
     }
   })
 }
@@ -36,7 +37,7 @@ export const addPlaylistToProfile = (playlist) => {
     headers: {
       "x-access-token": localStorage.getItem('token')
     }
-  })
+  }) 
 }
 
 export const removePlaylistFromProfile = (playlistId) => {

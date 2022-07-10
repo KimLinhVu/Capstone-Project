@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {IoMdArrowDropdown, IoMdArrowDropup} from 'react-icons/io'
 import "./Dropdown.css"
 
@@ -10,6 +10,13 @@ function Dropdown({
   setCurrentAddPlaylist
 }) {
   const [isActive, setIsActive] = useState(false)
+
+  useEffect(() => {
+    if (options.length === 0) {
+      setSelected("No playlists available")
+    }
+  }, [])
+
   return (
     <div className="dropdown">
       <div className="dropdown-btn" onClick={() => setIsActive(!isActive)}>

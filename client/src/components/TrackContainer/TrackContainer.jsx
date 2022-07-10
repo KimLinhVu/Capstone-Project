@@ -54,6 +54,12 @@ function TrackContainer({
 
   return (
     <div className="track-container">
+      <div className="genres">
+        <h2>Top Genres in Playlist</h2>
+        {genreArray.slice(0, 5).map((item, idx) => {
+          return <p key={idx}>{item.genre}</p>
+        })}
+      </div>
       {tracks.map((item, idx) => (
         <Track 
           key={idx} 
@@ -63,12 +69,6 @@ function TrackContainer({
           playlistId={playlistId}
         />
       ))}
-      <div className="genres">
-        <h2>Top Genres in Playlist</h2>
-        {genreArray.slice(0, 5).map((item, idx) => {
-          return <p key={idx}>{item.genre}</p>
-        })}
-      </div>
     </div>
   )
 }
