@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from '../../utils/playlist'
 import styled from 'styled-components/macro'
-import Dropdown from 'react-dropdown'
+// import Dropdown from 'react-dropdown'
+import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
 import 'react-dropdown/style.css'
 import './Dashboard.css'
@@ -24,6 +25,7 @@ function Dashboard({
   const [playlist, setPlaylist] = useState(null)
   const [currentPlaylist, setCurrentPlaylist] = useState(null)
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const isMounted = useRef(false)
   
   /* get value of tokens out of the URL */
@@ -68,13 +70,13 @@ function Dashboard({
     } else {
       isMounted.current = true
     }
-  }, [currentAddPlaylist, playlist])
+  }, [currentAddPlaylist])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
-    for (let i = 0; i < playlist?.length; i++) {
-      newArray.push({key: playlist[i].playlist.id, value: playlist[i], label: playlist[i].playlist.name})
-    }
+    playlist?.forEach(item => {
+      newArray.push({ key: item.playlist.id, value: item, label: item.playlist.name })
+    })
     return newArray
   }
 
@@ -107,10 +109,10 @@ function Dashboard({
         {playlist && (
           <div>
             <Dropdown 
-              options={playlist} 
-              onChange={(e) => setCurrentAddPlaylist(e.value)}
-              placeholder="Select a playlist to add to your profile"
-              width={200}
+              options={playlist}
+              selected={selected}
+              setSelected={setSelected}
+              setCurrentAddPlaylist={setCurrentAddPlaylist}
             />
             <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>

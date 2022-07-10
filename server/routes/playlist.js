@@ -3,7 +3,6 @@ const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Playlist = require('../models/Playlists')
-const { BadRequestError } = require('../utils/errors')
 
 router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
