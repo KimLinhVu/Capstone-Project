@@ -104,17 +104,9 @@ export const getTrackDetail = (trackId) => {
 }
 
 export const getArtistDetail = (artistId) => {
-  return axios.get(`/artists/${artistId}`)
+  return axios.get(`/artists?ids=${artistId}`)
 }
 
 export const addTrackToPlaylist = async (playlistId, trackUri) => {
-  // const data = {
-  //   uris: [trackUri]
-  // }
-  // const res = await axios.post(`/playlists/${playlistId}/tracks`, data)
-  // console.log(res)
-  console.log(playlistId)
-  console.log(trackUri)
-  console.log(accessToken)
   return axios.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
 }
