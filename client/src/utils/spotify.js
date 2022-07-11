@@ -110,3 +110,7 @@ export const getArtistDetail = (artistId) => {
 export const addTrackToPlaylist = async (playlistId, trackUri) => {
   return axios.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
 }
+
+export const getTrackAudioFeatures = async (ids) => {
+  return axios.get(`/audio-features?ids=${ids}`)
+}

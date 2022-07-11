@@ -49,3 +49,14 @@ export const removePlaylistFromProfile = (playlistId) => {
     }
   })
 }
+
+export const addTrackVector = (playlistId, trackVector) => {
+  return axios.post('http://localhost:8888/playlist/track-vector', {
+    playlistId: playlistId,
+    trackVector: trackVector
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

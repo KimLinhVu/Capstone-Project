@@ -67,4 +67,15 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.post('/track-vector', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlistId, trackVector } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 module.exports = router

@@ -5,24 +5,21 @@ import { getPlaylistDetail } from '../../utils/spotify'
 import TrackContainer from '../TrackContainer/TrackContainer'
 
 function UserPlaylistDetal() {
-  const [isLoading, setIsLoading] = useState(true)
   const [playlist, setPlaylist] = useState(null)
   const { playlistId } = useParams()
   const { originalPlaylistId } = useParams()
 
   useEffect(() => {
-    setIsLoading(true)
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
       setPlaylist(data)
-      setIsLoading(false)
     }
     fetchPlaylist()
   }, [])
 
   return (
     <div className="playlist-detail">
-      {!isLoading && playlist ? 
+      {playlist ? 
         <>
           <div className='playlist-card'>
             <div className="playlist-header">

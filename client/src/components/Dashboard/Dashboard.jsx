@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from '../../utils/playlist'
 import styled from 'styled-components/macro'
-// import Dropdown from 'react-dropdown'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
 import 'react-dropdown/style.css'
@@ -73,7 +72,7 @@ function Dashboard({
     } else {
       isMounted.current = true
     }
-  }, [currentAddPlaylist, currentPlaylist])
+  }, [currentAddPlaylist])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
@@ -83,18 +82,15 @@ function Dashboard({
     return newArray
   }
 
-  const handleAddPlaylistOnClick = async () => {
-    /* adds a playlist to the user's profile */
-    try {
+  const handleAddPlaylistOnClick = () => {
+    const addPlaylist = async () => {
       /* adds selected playlist to user's profile */
       const temp = currentAddPlaylist
       setCurrentAddPlaylist(null)
       playlist.length <= 1 ? setSelected('No playlist available') : setSelected("Select a playlist to add to your profile")
-      
       await addPlaylistToProfile(temp)
-    } catch (error) {
-      console.log(error)
     }
+    addPlaylist()
   }
 
   const clearAllTokens = () => {
@@ -112,7 +108,7 @@ function Dashboard({
             {profile.images.length > 0 ? <img className='profile-picture' src={profile.images[0].url} alt="Profile Picture"/> : null}
           </div>
         )}
-        {playlist && (
+        {playlist ? (
           <div>
             <Dropdown 
               options={playlist}
@@ -122,7 +118,7 @@ function Dashboard({
             />
             <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>
-        )}
+        ) : <h1>Loading</h1>}
         {currentPlaylist && (
           <>
             <h1>Playlist Profile</h1>

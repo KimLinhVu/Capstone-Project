@@ -5,7 +5,8 @@ const playlistSchema = new mongoose.Schema({
   spotifyId: String,
   playlistId: String,
   playlist: Object,
-  added: Boolean
+  added: Boolean,
+  trackVector: Object
 })
 
 module.exports = mongoose.model('playlist', playlistSchema)
