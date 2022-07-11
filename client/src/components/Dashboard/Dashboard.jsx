@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from '../../utils/spotify'
-import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from '../../utils/playlist'
+import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist, getTrackAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
+import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
 import styled from 'styled-components/macro'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
@@ -56,21 +56,34 @@ function Dashboard({
           playlists?.forEach( async (item) => {
             await addPlaylists(item, prof.data.id)
           })
-          /* retrieve playlist that belongs to user and store in playlist state */
-          const result = await getPlaylists(prof.data.id)
-          const options = convertToOptionsArray(result.data)
-          setPlaylist(options)
-
-          /* retrieve playlists that spotify user has added to their profile */
-          const currentResult = await getCurrentPlaylists(prof.data.id)
-          setCurrentPlaylist(currentResult.data)
         } catch (error) {
           console.log(error)
         }
       }
-      addUserPlaylist()
+      if (accessToken) {
+        addUserPlaylist()
+      }
     } else {
       isMounted.current = true
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const displayProfilePlaylists = async () => {
+        const prof = await getCurrentUserProfile()
+        /* retrieve playlist that belongs to user and store in playlist state */
+        const result = await getPlaylists(prof.data.id)
+        const options = convertToOptionsArray(result.data)
+        setPlaylist(options)
+
+        /* retrieve playlists that spotify user has added to their profile */
+        const currentResult = await getCurrentPlaylists(prof.data.id)
+        setCurrentPlaylist(currentResult.data)
+      }
+      displayProfilePlaylists()
+    } catch (error) {
+      console.log(error)
     }
   }, [currentAddPlaylist])
 
@@ -84,11 +97,55 @@ function Dashboard({
 
   const handleAddPlaylistOnClick = () => {
     const addPlaylist = async () => {
+      /* calculate track vector for playlist */
+      const { data } = await getPlaylistDetail(currentAddPlaylist.playlistId)
+      setPlaylist(data)
+      
+      /* create string of track Ids to use in Spotify API */
+      let trackIdArray = []
+      const tracks = data.tracks.items
+      tracks.forEach(item => {
+        const id = item.track.id
+        trackIdArray.push(id)
+      })
+
+      /* receive track audio features for each track and store in an array */
+      const trackArrayLength = trackIdArray.length
+      let tempTrackVector = {
+        acousticness: 0,
+        danceability: 0,
+        energy: 0,
+        instrumentalness: 0,
+        key: 0,
+        liveness: 0,
+        loudness: 0,
+        mode: 0,
+        speechiness: 0,
+        tempo: 0,
+        time_signature: 0,
+        valence: 0
+      }
+      while (trackIdArray.length > 0) {
+        let trackIdString = trackIdArray.splice(0, 100).join(',')
+        const { data } = await getTrackAudioFeatures(trackIdString)
+        data.audio_features.forEach(item => {
+          Object.keys(tempTrackVector).forEach(key => {
+            tempTrackVector[key] += item[key]
+          })
+        })
+      }
+
+      /* take average of all track vector quantities */
+      Object.keys(tempTrackVector).forEach(key => {
+        tempTrackVector[key] /= trackArrayLength
+      })
+      /* store track-vector in playlist database */
+      await addTrackVector(currentAddPlaylist.playlistId, tempTrackVector)
+      
       /* adds selected playlist to user's profile */
-      const temp = currentAddPlaylist
+      await addPlaylistToProfile(currentAddPlaylist)
       setCurrentAddPlaylist(null)
       playlist.length <= 1 ? setSelected('No playlist available') : setSelected("Select a playlist to add to your profile")
-      await addPlaylistToProfile(temp)
     }
     addPlaylist()
   }

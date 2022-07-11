@@ -11,8 +11,8 @@ function RecommendView() {
   useEffect(() => {
     const fetchAllUsers = async () => {
       const { data } = await getAllUsers()
-      console.log(data)
       setUsers(data)
+      console.log(data)
     }
     fetchAllUsers()
   }, [])

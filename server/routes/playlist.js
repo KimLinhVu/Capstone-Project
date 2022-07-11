@@ -50,6 +50,7 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     const { playlist } = req.body
 
     await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
+    res.status(200).json()
   } catch (error) {
     console.log(error)
   }
@@ -62,6 +63,7 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
     const { playlistId } = req.body
 
     await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
+    res.status(200).json()
   } catch (error) {
     console.log(error)
   }
@@ -73,6 +75,7 @@ router.post('/track-vector', jwt.verifyJWT, async (req, res, next) => {
     const { playlistId, trackVector } = req.body
 
     await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
+    res.status(200).json()
   } catch (error) {
     console.log(error)
   }
