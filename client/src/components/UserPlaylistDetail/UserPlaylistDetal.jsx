@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from '../../utils/spotify'
 import TrackContainer from '../TrackContainer/TrackContainer'
-import { Link } from 'react-router-dom'
 
-function PlaylistDetail() {
+function UserPlaylistDetal() {
   const [isLoading, setIsLoading] = useState(true)
   const [playlist, setPlaylist] = useState(null)
   const { playlistId } = useParams()
+  const { originalPlaylistId } = useParams()
 
   useEffect(() => {
     setIsLoading(true)
@@ -30,11 +30,8 @@ function PlaylistDetail() {
               <img src={playlist.images[0].url} alt="Playlist Image" />
             </div>
           </div>
-          <div className="recommend-button">
-            <Link to={`/recommend/${playlist.id}`}><button className='recommend'>Recommend Me</button></Link>
-          </div>
           <div className="tracks">
-            <TrackContainer tracks={playlist.tracks.items}/>
+            <TrackContainer tracks={playlist.tracks.items} addPlaylist={true} playlistId={originalPlaylistId}/>
           </div>
         </>
       : null}
@@ -42,4 +39,4 @@ function PlaylistDetail() {
   )
 }
 
-export default PlaylistDetail
+export default UserPlaylistDetal

@@ -16,10 +16,12 @@ app.use(express.urlencoded({ extended: true }))
 const User = require('./models/Users')
 const spotifyRouter = require('./routes/spotify')
 const playlistRouter = require('./routes/playlist')
+const userRouter = require('./routes/users')
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
+app.use('/users', userRouter)
 
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
@@ -44,7 +46,6 @@ app.post('/login', async (req, res, next) => {
     if (err || !result) {
       return next(new BadRequestError('User does not exist or password does not match.'))
     } else {
-      // res.status(200).json({ token: 'test123' })
       /* create jwt */
       const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
       res.json({ accessToken })
@@ -65,9 +66,9 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* tests for valid password */
-    if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
-      return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
-    }
+    // if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
+    //   return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
+    // }
 
     /* check to see if username already exists */
     if (await User.findOne({ username })) {
