@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { getAllUsers, getUserPlaylists } from '../../utils/users'
+import { getAllUsers } from '../../utils/users'
 import { useParams } from 'react-router-dom'
 import User from '../User/User'
 

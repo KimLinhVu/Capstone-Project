@@ -87,7 +87,7 @@ axios.defaults.baseURL = 'https://api.spotify.com/v1'
 axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
-export const getCurrentUserProfile = () => {
+export const getCurrentUserProfile = async () => {
   return axios.get('/me')
 }
 
@@ -109,4 +109,8 @@ export const getArtistDetail = (artistId) => {
 
 export const addTrackToPlaylist = async (playlistId, trackUri) => {
   return axios.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
+}
+
+export const getTrackAudioFeatures = async (ids) => {
+  return axios.get(`/audio-features?ids=${ids}`)
 }

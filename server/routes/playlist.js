@@ -3,7 +3,6 @@ const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Playlist = require('../models/Playlists')
-const { BadRequestError } = require('../utils/errors')
 
 router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
@@ -19,7 +18,8 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
 router.get('/current', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const playlists = await Playlist.find({ userId, added: true })
+    const spotifyId = req.headers['spotify-id']
+    const playlists = await Playlist.find({ userId, spotifyId, added: true })
     res.json(playlists)
   } catch (error) {
     console.log(error)
@@ -50,6 +50,29 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     const { playlist } = req.body
 
     await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    /* removes 'added' property to playlist object */
+    const userId = req.userId
+    const { playlistId } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.post('/track-vector', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlistId, trackVector } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
   } catch (error) {
     console.log(error)
   }
