@@ -1,0 +1,15 @@
+.dashboard .playlist-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.dashboard .profile-picture {
+  width: 300px;
+  border-radius: 50%;
+}
+
+.dashboard .Dropdown-control, .Dropdown-menu {
+  width: 500px;
+}

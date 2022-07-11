@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export const getPlaylists = (spotifyId) => {
-  console.log(spotifyId)
   return axios.get('http://localhost:8888/playlist/', {
     headers: {
       "x-access-token": localStorage.getItem('token'),

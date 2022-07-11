@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist } from '../../spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile } from './playlist'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components/macro'
 import Dropdown from 'react-dropdown'
 import Playlist from '../Playlist/Playlist'
 import 'react-dropdown/style.css'
+import './Dashboard.css'
 
 const StyledLoginButton = styled.a`
   background-color: green;
@@ -23,6 +25,7 @@ function Dashboard({
   const [playlist, setPlaylist] = useState(null)
   const [currentPlaylist, setCurrentPlaylist] = useState(null)
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  const isMounted = useRef(false)
   
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -39,28 +42,34 @@ function Dashboard({
   }, [])
 
   useEffect(() => {
-    const addUserPlaylist = async () => {
-      try {
-        /* get list of playlist from Spotify API */
-        const { data } = await getCurrentUserPlaylist()
-        /* get user's profile */
-        const prof = await getCurrentUserProfile()
-        /* add to mongo database */
-        await addPlaylists(data.items, prof.data.id)
-        /* retrieve playlist that belongs to user and store in playlist state */
-        const result = await getPlaylists(prof.data.id)
-        const options = convertToOptionsArray(result.data)
-        setPlaylist(options)
+    if (isMounted.current) {
+      const addUserPlaylist = async () => {
+        try {
+          /* get list of playlist from Spotify API */
+          const { data } = await getCurrentUserPlaylist()
+          const playlists = data.items
+          /* get user's profile */
+          const prof = await getCurrentUserProfile()
+          /* add to mongo database */
+          playlists?.forEach( async (item) => {
+            await addPlaylists(item, prof.data.id)
+          })
+          /* retrieve playlist that belongs to user and store in playlist state */
+          const result = await getPlaylists(prof.data.id)
+          const options = convertToOptionsArray(result.data)
+          setPlaylist(options)
 
-        const currentResult = await getCurrentPlaylists()
-        setCurrentPlaylist(currentResult.data)
-        console.log(currentPlaylist)
-      } catch (error) {
-        console.log(error)
+          const currentResult = await getCurrentPlaylists()
+          setCurrentPlaylist(currentResult.data)
+        } catch (error) {
+          console.log(error)
+        }
       }
+      addUserPlaylist()
+    } else {
+      isMounted.current = true
     }
-    addUserPlaylist()
-  }, [currentAddPlaylist])
+  }, [currentAddPlaylist, playlist])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
@@ -90,13 +99,10 @@ function Dashboard({
     <div className="dashboard">
       {spotifyToken ? (
       <>
-        <h1>Logged In</h1>
         {profile && (
-          <div>
+          <div className='profile-container'>
             <h1>{profile.display_name}</h1>
-            <p>id: {profile.id}</p>
-            <p>{profile.followers.total} Followers</p>
-            {profile.images.length > 0 ? <img src={profile.images[0].url} alt="Profile Picture"/> : null}
+            {profile.images.length > 0 ? <img className='profile-picture' src={profile.images[0].url} alt="Profile Picture"/> : null}
           </div>
         )}
         {playlist && (
@@ -105,17 +111,20 @@ function Dashboard({
               options={playlist} 
               onChange={(e) => setCurrentAddPlaylist(e.value)}
               placeholder="Select a playlist to add to your profile"
+              width={200}
             />
             <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>
         )}
         {currentPlaylist && (
-          <div>
+          <>
             <h1>Playlist Profile</h1>
-            {currentPlaylist.map((item, idx) => (
-              <Playlist key={idx} playlist={item.playlist}/>
-            ))}
-          </div>
+            <div className='playlist-container'>
+              {currentPlaylist.map((item, idx) => (
+                <Playlist key={idx} playlist={item.playlist}/>
+              ))}
+            </div>
+          </>
         )}
       </>)
        : <StyledLoginButton className="App-link" href="http://localhost:8888/spotify/login">Log Into Spotify</StyledLoginButton>}

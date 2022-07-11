@@ -29,6 +29,7 @@ export const logout = () => {
   for (const property in LOCALSTORAGE_KEYS) {
     localStorage.removeItem(LOCALSTORAGE_KEYS[property])
   }
+  window.location = window.location.origin
 }
 
 const refreshToken = async () => {

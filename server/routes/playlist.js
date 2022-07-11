@@ -20,7 +20,6 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const playlists = await Playlist.find({ userId, added: true })
-    console.log(playlists)
     res.json(playlists)
   } catch (error) {
     console.log(error)
@@ -32,12 +31,11 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlist, spotifyId } = req.body
 
-    for (let i = 0; i < playlist.length; i++) {
-      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i] })
-      if (!playlistItem) {
-        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i], added: false })
-        await newPlaylist.save()
-      }
+    /* search for if playlist already exists */
+    const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
+    if (!playlistItem) {
+      const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false })
+      await newPlaylist.save()
     }
     res.status(200).json()
   } catch (error) {
@@ -50,7 +48,6 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     /* adds an "added" property to playlist object */
     const userId = req.userId
     const { playlist } = req.body
-    console.log(playlist.playlistId)
 
     await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
   } catch (error) {

@@ -97,8 +97,8 @@ router.get('/callback', (req, res) => {
         })}`)
       }
     })
-    .catch(err => {
-      res.send(err)
+    .catch(() => {
+      res.redirect('http://localhost:3000/')
     })
 })
 

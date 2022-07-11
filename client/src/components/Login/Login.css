@@ -3,3 +3,22 @@
   flex-direction: column;
   align-items: center;
 }
+
+.login input {
+  padding: 20px;
+  border-radius: 3px;
+  font-size: .8rem;
+  border: 1px solid black;
+}
+
+.login button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  background-color: rgb(108, 177, 108);
+  cursor: pointer;
+}
+
+.login button:hover {
+  filter: brightness(1.05);
+}

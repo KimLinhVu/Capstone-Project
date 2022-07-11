@@ -14,7 +14,6 @@ function PlaylistDetail() {
     setIsLoading(true)
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
-      console.log(data)
       setPlaylist(data)
       setIsLoading(false)
     }

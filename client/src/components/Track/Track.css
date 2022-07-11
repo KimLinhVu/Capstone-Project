@@ -1,0 +1,10 @@
+.track {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  border: 1px solid black;
+}
+
+.track img {
+  width: 80px;
+}
