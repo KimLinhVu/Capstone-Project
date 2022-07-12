@@ -4,6 +4,7 @@ const router = express.Router()
 
 const Playlist = require('../models/Playlists')
 
+/* returns all playlists belonging to spotify user */
 router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
@@ -15,6 +16,7 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+/* returns all playlists added to user profile */
 router.get('/current', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
@@ -26,6 +28,7 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+/* adds all user's spotify playlists to database */
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
@@ -43,6 +46,7 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+/* adds a spotify playlist to user profile */
 router.post('/add', jwt.verifyJWT, async (req, res, next) => {
   try {
     /* adds an "added" property to playlist object */
@@ -56,6 +60,7 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+/* removes a spotify playlist from user profile */
 router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
   try {
     /* removes 'added' property to playlist object */
@@ -69,13 +74,28 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
-router.post('/track-vector', jwt.verifyJWT, async (req, res, next) => {
+/* adds a track-vector property to playlist database */
+router.post('/add-track-vector', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const { playlistId, trackVector } = req.body
 
     await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
     res.status(200).json()
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+/* returns a playlist's track vector */
+router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const playlistId = req.headers['playlist-id']
+
+    const playlist = await Playlist.findOne({ userId, playlistId })
+    console.log(playlist)
+    res.status(200).json(playlist.trackVector)
   } catch (error) {
     console.log(error)
   }

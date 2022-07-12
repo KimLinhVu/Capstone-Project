@@ -1,8 +1,8 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
-import { getPlaylistDetail, getTrackAudioFeatures } from '../../utils/spotify'
-import { removePlaylistFromProfile, addTrackVector } from '../../utils/playlist'
+import { useState, useEffect } from 'react'
+import { getPlaylistDetail } from '../../utils/spotify'
+import { removePlaylistFromProfile } from '../../utils/playlist'
 import TrackContainer from '../TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -13,11 +13,11 @@ function PlaylistDetail() {
   let navigate = useNavigate()
   
   useEffect(() => {
-    const fetchPlaylist = async () => {
+    const fetchPlaylistInformation = async () => {
       const { data } = await getPlaylistDetail(playlistId)
       setPlaylist(data)
     }
-    fetchPlaylist()
+    fetchPlaylistInformation()
   }, [])
 
   const removePlaylist = () => {
