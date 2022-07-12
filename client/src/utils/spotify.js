@@ -111,6 +111,10 @@ export const addTrackToPlaylist = async (playlistId, trackUri) => {
   return axios.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
 }
 
-export const getTrackAudioFeatures = async (ids) => {
+export const getTracksAudioFeatures = async (ids) => {
   return axios.get(`/audio-features?ids=${ids}`)
+}
+
+export const getTrackAudioFeatures = async (id) => {
+  return axios.get(`/audio-features/${id}`)
 }

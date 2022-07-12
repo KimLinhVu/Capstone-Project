@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist, getTrackAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
+import React, { useState, useEffect } from 'react'
+import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
 import styled from 'styled-components/macro'
 import Dropdown from '../Dropdown/Dropdown'
@@ -112,7 +112,7 @@ function Dashboard({
       }
       while (trackIdArray.length > 0) {
         let trackIdString = trackIdArray.splice(0, 100).join(',')
-        const { data } = await getTrackAudioFeatures(trackIdString)
+        const { data } = await getTracksAudioFeatures(trackIdString)
         data.audio_features.forEach(item => {
           Object.keys(tempTrackVector).forEach(key => {
             tempTrackVector[key] += item[key]
