@@ -1,8 +1,7 @@
 import axios from 'axios'
 
-/* current user */
 export const getPlaylists = (spotifyId) => {
-  return axios.get('http://localhost:8888/playlist/', {
+  return axios.get('http://localhost:8888/playlist', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "spotify-id": spotifyId
@@ -51,12 +50,21 @@ export const removePlaylistFromProfile = (playlistId) => {
 }
 
 export const addTrackVector = (playlistId, trackVector) => {
-  return axios.post('http://localhost:8888/playlist/track-vector', {
+  return axios.post('http://localhost:8888/playlist/add-track-vector', {
     playlistId: playlistId,
     trackVector: trackVector
   }, {
     headers: {
       "x-access-token": localStorage.getItem('token')
+    }
+  })
+}
+
+export const getPlaylistTrackVector = (playlistId) => {
+  return axios.get('http://localhost:8888/playlist/get-track-vector', {
+    headers: {
+      "x-access-token": localStorage.getItem('token'),
+      "playlist-id": playlistId
     }
   })
 }
