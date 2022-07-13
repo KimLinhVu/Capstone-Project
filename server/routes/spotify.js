@@ -3,6 +3,9 @@ const express = require('express')
 const querystring = require('querystring')
 const axios = require('axios')
 const router = express.Router()
+const spotify = require('../utils/spotify')
+const playlist = require('../utils/playlist')
+const app = require('../app')
 
 router.use(express.json())
 
@@ -69,8 +72,23 @@ router.get('/callback', (req, res) => {
           expires_in
         })
 
-        /* redirect to react app on success */
-        res.redirect(`http://localhost:3000/?${queryParams}`)
+        /* store users playlists in database */
+        const storeInitialPlaylist = async () => {
+          try {
+            /* get user's userId */
+            const userId = app.getUserId()
+            const prof = await spotify.getCurrentUserProfile(access_token)
+
+            /* get list playlist from Spotify Api */
+            const { data } = await spotify.getCurrentUserPlaylist(access_token)
+            await playlist.addPlaylists(data.items, prof.data.id, userId)
+            /* redirect to react app on success */
+            res.redirect(`http://localhost:3000/?${queryParams}`)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        storeInitialPlaylist()
       } else {
         res.redirect(`/?${querystring.stringify({
           error: 'invalid_token'

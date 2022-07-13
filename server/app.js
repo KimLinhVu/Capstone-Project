@@ -23,6 +23,8 @@ app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
 
+let userId = ''
+
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
 }).catch(err => {
@@ -46,7 +48,8 @@ app.post('/login', async (req, res, next) => {
     if (err || !result) {
       return next(new BadRequestError('User does not exist or password does not match.'))
     } else {
-      /* create jwt */
+      /* create jwt and store userId */
+      userId = user.id
       const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
       res.json({ accessToken })
     }
@@ -102,4 +105,9 @@ app.use((error, req, res, next) => {
   return res.status(status).json({ error: { message, status } })
 })
 
+const getUserId = () => {
+  return userId
+}
+
+exports.getUserId = getUserId
 module.exports = app

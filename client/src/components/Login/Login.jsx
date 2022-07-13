@@ -19,7 +19,6 @@ function Login({
   const navigate = useNavigate()
 
   useEffect(() => {
-    // logout()
     clearToken()
   }, [])
 

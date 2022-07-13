@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
 import styled from 'styled-components/macro'
@@ -27,6 +27,7 @@ function Dashboard({
   const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const [isLoading, setIsLoading] = useState(false)
   
+  
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
@@ -46,18 +47,13 @@ function Dashboard({
   }, [])
 
   useEffect(() => {
-    const addUserPlaylist = async () => {
-      /* get list of playlist from Spotify API */
-      const { data } = await getCurrentUserPlaylist()
-      const playlists = data.items
-      /* get user's profile */
+    const addUserPlaylist = async () => {      
+      // /* get user's profile */
       const prof = await getCurrentUserProfile()
-      /* add to mongo database */
-      playlists?.forEach( async (item) => {
-        await addPlaylists(item, prof.data.id)
-      })
+
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
+      console.log(result)
       const options = convertToOptionsArray(result.data)
       setPlaylist(options)
 

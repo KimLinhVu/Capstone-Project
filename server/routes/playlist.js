@@ -29,17 +29,19 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
 })
 
 /* adds all user's spotify playlists to database */
-router.post('/', jwt.verifyJWT, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
-    const userId = req.userId
-    const { playlist, spotifyId } = req.body
+    // const userId = req.userId
+    const { playlist, spotifyId, userId } = req.body
 
-    /* search for if playlist already exists */
-    const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
-    if (!playlistItem) {
-      const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false })
-      await newPlaylist.save()
-    }
+    playlist.forEach(async (playlist) => {
+      /* search for if playlist already exists */
+      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
+      if (!playlistItem) {
+        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false })
+        await newPlaylist.save()
+      }
+    })
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -94,7 +96,6 @@ router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
     const playlistId = req.headers['playlist-id']
 
     const playlist = await Playlist.findOne({ userId, playlistId })
-    console.log(playlist)
     res.status(200).json(playlist.trackVector)
   } catch (error) {
     console.log(error)
