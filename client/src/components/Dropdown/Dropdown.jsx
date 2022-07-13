@@ -19,7 +19,7 @@ function Dropdown({
 
   return (
     <div className="dropdown">
-      <div className="dropdown-btn" onClick={() => setIsActive(!isActive)}>
+      <div className="dropdown-btn" onClick={options.length === 0 ? () => {} : () => setIsActive(!isActive)}>
         {selected}
         {isActive ? <IoMdArrowDropup size={20} className='icon'/> : <IoMdArrowDropdown size={20} className='icon'/>}
       </div>
