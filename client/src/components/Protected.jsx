@@ -1,9 +1,12 @@
-import { logout } from '../utils/spotify'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const Protected = ({token, children}) => {
+export const Protected = ({
+  token, 
+  children,
+  notifyError
+}) => {
   const navigate = useNavigate()
   useEffect(() => {
     axios.post('http://localhost:8888/verify-token', {
@@ -11,7 +14,7 @@ export const Protected = ({token, children}) => {
     }).then(() => {
       /* do nothing if successfully authenticated */
     }).catch(() => {
-      /* do an alert in bootstrap */
+      notifyError('Authentication Failed')
       navigate('/login')
     })
   }, [])

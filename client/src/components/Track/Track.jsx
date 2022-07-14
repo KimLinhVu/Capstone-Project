@@ -54,9 +54,9 @@ function Track({
     const res = await addTrackToPlaylist(playlistId, track.uri)
     /* sends success or error toast */
     if (res.status === 201) {
-      notifySuccess()
+      notifySuccess('Track added successfully')
     } else {
-      notifyError()
+      notifyError('Error adding track')
     }
   }
   

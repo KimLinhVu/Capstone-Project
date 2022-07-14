@@ -11,7 +11,7 @@
   border: 1px solid black;
 }
 
-.login button {
+.login .login-btn {
   border: none;
   padding: 10px 20px;
   border-radius: 3px;

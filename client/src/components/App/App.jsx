@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from '../Login/Login'
 import Signup from '../Signup/Signup'
@@ -9,10 +8,35 @@ import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
 import useToken from '../../utils/useToken'
 import RecommendView from '../RecommendView/RecommendView'
 import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [signupMessage, setSignupMessage] = useState('')
   const {token, setToken, clearToken} = useToken()
+
+  const notifySuccess = (successMessage) => {
+    toast.success(successMessage, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+
+  const notifyError = (errorMessage) => {
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
 
   return (
     <div className='app'>
@@ -23,15 +47,14 @@ function App() {
               {
                 <Login 
                   setToken={setToken}
-                  clearToken = {clearToken}
-                  signupMessage={signupMessage}
-                  setSignupMessage={setSignupMessage}
+                  clearToken={clearToken}
+                  notifyError={notifyError}
                 />
               }
             />
             <Route path="/" element=
               {
-                <Protected token={token}>
+                <Protected notifyError={notifyError} token={token}>
                   <Dashboard clearToken={clearToken}/>
                 </Protected>
               }
@@ -39,29 +62,35 @@ function App() {
             <Route path="/signup" element=
               {
                 <Signup 
-                  setSignupMessage={setSignupMessage} 
-                  signupMessage={signupMessage}
+                  notifyError={notifyError}
+                  notifySuccess={notifySuccess}
                 />
               }
             />
             <Route path="/playlist/:playlistId" element=
               {
-                <Protected token={token}>
-                  <PlaylistDetail />
+                <Protected notifyError={notifyError} token={token}>
+                  <PlaylistDetail
+                    notifyError={notifyError}
+                    notifySuccess={notifySuccess}
+                  />
                 </Protected>
               }
             />
             <Route path="/recommend/:playlistId" element=
               {
-                <Protected token={token}>
+                <Protected notifyError={notifyError} token={token}>
                   <RecommendView />
                 </Protected>
               }
             />
             <Route path="recommend/playlist/:playlistId/:originalPlaylistId" element=
               {
-                <Protected token={token}>
-                  <UserPlaylistDetail />
+                <Protected notifyError={notifyError} token={token}>
+                  <UserPlaylistDetail 
+                    notifyError={notifyError}
+                    notifySuccess={notifySuccess}
+                  />
                 </Protected>
               }
             />

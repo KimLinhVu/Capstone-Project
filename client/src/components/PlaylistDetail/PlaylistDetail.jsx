@@ -6,7 +6,10 @@ import { removePlaylistFromProfile } from '../../utils/playlist'
 import TrackContainer from '../TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
 
-function PlaylistDetail() {
+function PlaylistDetail({
+  notifyError,
+  notifySuccess
+}) {
   const [playlist, setPlaylist] = useState(null)
   const { playlistId } = useParams()
 
@@ -40,7 +43,11 @@ function PlaylistDetail() {
             <button className='remove-playlist' onClick={removePlaylist}>Remove Playlist</button>
           </div>
           <div className="tracks">
-            <TrackContainer tracks={playlist.tracks.items}/>
+            <TrackContainer 
+              tracks={playlist.tracks.items}
+              notifyError={notifyError}
+              notifySuccess={notifySuccess}
+            />
           </div>
         </>
       : null}
