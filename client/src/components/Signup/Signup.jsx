@@ -74,7 +74,6 @@ function Signup({
   /* handle privacy switch */
   const handlePrivacySwitch = () => {
     setPrivacyChecked(!privacyChecked)
-    console.log(privacyChecked)
   }
   
   return (

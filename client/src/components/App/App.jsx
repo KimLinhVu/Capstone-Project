@@ -8,7 +8,7 @@ import { Protected } from '../Protected'
 import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
 import useToken from '../../utils/useToken'
 import RecommendView from '../RecommendView/RecommendView'
-import UserPlaylistDetal from '../UserPlaylistDetail/UserPlaylistDetal'
+import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
 
 function App() {
   const [signupMessage, setSignupMessage] = useState('')
@@ -61,7 +61,7 @@ function App() {
             <Route path="recommend/playlist/:playlistId/:originalPlaylistId" element=
               {
                 <Protected token={token}>
-                  <UserPlaylistDetal />
+                  <UserPlaylistDetail />
                 </Protected>
               }
             />

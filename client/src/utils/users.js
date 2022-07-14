@@ -16,3 +16,11 @@ export const getUserPlaylists = (userId) => {
     }
   })
 }
+
+export const getUserLocation = () => {
+  return axios.get('http://localhost:8888/users/location', {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

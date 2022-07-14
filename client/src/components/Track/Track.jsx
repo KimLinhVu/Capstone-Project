@@ -9,7 +9,9 @@ function Track({
   track,
   trackNumber,
   addPlaylist,
-  playlistId
+  playlistId,
+  notifySuccess,
+  notifyError
 }) {
   const [similarity, setSimilarity] = useState(null)
 
@@ -49,11 +51,12 @@ function Track({
   }, [])
 
   const addTrack = async () => {
-    try {
-      const res = await addTrackToPlaylist(playlistId, track.uri)
-      console.log(res)
-    } catch (error) {
-      console.log(error)
+    const res = await addTrackToPlaylist(playlistId, track.uri)
+    /* sends success or error toast */
+    if (res.status === 201) {
+      notifySuccess()
+    } else {
+      notifyError()
     }
   }
   

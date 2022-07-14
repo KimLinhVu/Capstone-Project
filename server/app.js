@@ -51,7 +51,7 @@ app.post('/login', async (req, res, next) => {
       /* create jwt and store userId */
       userId = user.id
       const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
-      res.json({ accessToken })
+      res.json({ accessToken, userId })
     }
   })
 })
@@ -90,9 +90,11 @@ app.post('/verify-token', (req, res) => {
   const { token } = req.body
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
     if (err) {
-      res.json({ auth: false })
+      // res.json({ auth: false })
+      res.send(401, 'Failed to Authenticate')
     } else {
-      res.json({ auth: true })
+      // res.json({ auth: true })
+      res.send(200, 'Successfully Authenticated')
     }
   })
 })

@@ -1,0 +1,18 @@
+.recommend-view {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.recommend-view .users {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.recommend-view .map-container {
+  width: 100%;
+  height: 100vh;
+}

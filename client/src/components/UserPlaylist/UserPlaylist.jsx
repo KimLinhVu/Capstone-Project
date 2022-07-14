@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './UserPlaylist.css'
 
 function User({
   user,
@@ -9,8 +10,9 @@ function User({
 }) {
 
   return (
-    <div className='user'>
+    <div className='user-playlist'>
       <h2>{user.username}</h2>
+      {/* <p>{user.location.formatted_address}</p> */}
       {playlist ? (
         <div className='playlist-card'>
           <p>{playlist.name}</p>
