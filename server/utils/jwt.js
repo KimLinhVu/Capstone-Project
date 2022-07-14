@@ -8,8 +8,7 @@ const verifyJWT = (req, res, next) => {
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
-        console.log(err)
-        res.json({ auth: false, message: 'Failed to authenticate' })
+        res.status(401).send()
       } else {
         req.userId = user.id
         next()

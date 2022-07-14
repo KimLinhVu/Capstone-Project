@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getCurrentUserPlaylist, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
+import React, { useState, useEffect } from 'react'
+import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components/macro'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
-import 'react-dropdown/style.css'
 import './Dashboard.css'
 
 const StyledLoginButton = styled.a`
@@ -27,19 +27,12 @@ function Dashboard({
   const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const [isLoading, setIsLoading] = useState(false)
   
-  
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
     const fetchUserProfile = async () => {
-      try {
-        /* gets user profile */
-        const { data } = await getCurrentUserProfile()
-        setProfile(data)
-        
-      } catch (error) {
-        console.log(error)
-      }
+      const { data } = await getCurrentUserProfile()
+      setProfile(data)
     }
     if (accessToken) {
       fetchUserProfile()
@@ -53,7 +46,6 @@ function Dashboard({
 
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
-      console.log(result)
       const options = convertToOptionsArray(result.data)
       setPlaylist(options)
 

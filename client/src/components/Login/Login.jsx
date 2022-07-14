@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../../utils/spotify'
 import "./Login.css"
 
 function Login({
@@ -15,7 +14,7 @@ function Login({
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginMessage, setLoginMessage] = useState('')
-
+  
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,13 +23,12 @@ function Login({
 
   const handleOnSubmitLogin = async (e) => {
     try {
-      const { data } = await axios.post('http://localhost:8888/login',
+      const { data, userId } = await axios.post('http://localhost:8888/login',
       {
         username: username,
         password: password
       })
       setToken(data.accessToken)
-      logout()
       navigate('/')
     } catch (e) {
       setSignupMessage('')

@@ -45,8 +45,8 @@ const refreshToken = async () => {
     localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
 
     window.location.reload()
-  } catch (error) {
-    console.log(error)
+  } catch (err) {
+    
   }
 }
 

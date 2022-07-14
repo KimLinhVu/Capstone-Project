@@ -21,12 +21,8 @@ function PlaylistDetail() {
   }, [])
 
   const removePlaylist = () => {
-    try {
-      removePlaylistFromProfile(playlist.id)
-      navigate('/')
-    } catch (error) {
-      console.log(error)
-    }
+    removePlaylistFromProfile(playlist.id)
+    navigate('/')
   }
 
   return (

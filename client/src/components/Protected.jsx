@@ -8,10 +8,11 @@ export const Protected = ({token, children}) => {
   useEffect(() => {
     axios.post('http://localhost:8888/verify-token', {
       token: token
-    }).then(res => {
-      if (!res.data.auth) {
-        navigate('/login')
-      }
+    }).then(() => {
+      /* do nothing if successfully authenticated */
+    }).catch(() => {
+      /* do an alert in bootstrap */
+      navigate('/login')
     })
   }, [])
   

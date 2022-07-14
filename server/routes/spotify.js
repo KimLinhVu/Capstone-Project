@@ -85,7 +85,7 @@ router.get('/callback', (req, res) => {
             /* redirect to react app on success */
             res.redirect(`http://localhost:3000/?${queryParams}`)
           } catch (error) {
-            console.log(error)
+
           }
         }
         storeInitialPlaylist()

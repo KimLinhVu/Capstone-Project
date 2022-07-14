@@ -7,6 +7,9 @@ export const convertObjectToVector = (trackObject) => {
 }
 
 export const calculateTrackSimilarity = (a, b) => {
+  if (JSON.stringify(a) === JSON.stringify(b)) {
+    return 0
+  }
   let dotproduct = 0
   let mA = 0
   let mB = 0

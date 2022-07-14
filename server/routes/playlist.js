@@ -12,7 +12,7 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: false })
     res.json(playlists)
   } catch (error) {
-    console.log(error)
+
   }
 })
 
@@ -24,14 +24,13 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: true })
     res.json(playlists)
   } catch (error) {
-    console.log(error)
+
   }
 })
 
 /* adds all user's spotify playlists to database */
 router.post('/', async (req, res, next) => {
   try {
-    // const userId = req.userId
     const { playlist, spotifyId, userId } = req.body
 
     playlist.forEach(async (playlist) => {
@@ -58,7 +57,7 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
     res.status(200).json()
   } catch (error) {
-    console.log(error)
+
   }
 })
 
@@ -72,7 +71,7 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
     res.status(200).json()
   } catch (error) {
-    console.log(error)
+
   }
 })
 
@@ -85,7 +84,7 @@ router.post('/add-track-vector', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
     res.status(200).json()
   } catch (error) {
-    console.log(error)
+
   }
 })
 
@@ -98,7 +97,7 @@ router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
     const playlist = await Playlist.findOne({ userId, playlistId })
     res.status(200).json(playlist.trackVector)
   } catch (error) {
-    console.log(error)
+
   }
 })
 

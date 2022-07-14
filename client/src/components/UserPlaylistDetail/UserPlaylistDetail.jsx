@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from '../../utils/spotify'
 import TrackContainer from '../TrackContainer/TrackContainer'
 
-function UserPlaylistDetal() {
+function UserPlaylistDetal(props) {
   const [playlist, setPlaylist] = useState(null)
-  const { playlistId } = useParams()
-  const { originalPlaylistId } = useParams()
+  const { playlistId, originalPlaylistId } = useParams()
 
   useEffect(() => {
     const fetchPlaylist = async () => {
