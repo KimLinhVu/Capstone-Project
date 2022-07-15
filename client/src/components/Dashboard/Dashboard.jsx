@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useLayoutEffect } from 'react'
 
 function Dashboard({
   clearToken
@@ -14,10 +15,12 @@ function Dashboard({
   const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
-  const [currentPlaylist, setCurrentPlaylist] = useState(null)
-  const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  const [currentPlaylist, setCurrentPlaylist] = useState([])
+  const [displayPlaylist, setDisplayPlaylist] = useState([])
+  const [currentAddPlaylist, setCurrentAddPlaylist] = useState([])
   const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const [isLoading, setIsLoading] = useState(false)
+  const [playlistSearch, setPlaylistSearch] = useState('')
 
   const navigate = useNavigate()
   
@@ -46,12 +49,18 @@ function Dashboard({
       /* retrieve playlists that spotify user has added to their profile */
       const currentResult = await getCurrentPlaylists(prof.data.id)
       setCurrentPlaylist(currentResult.data)
+      setDisplayPlaylist(currentResult.data)
     }
     if (accessToken) {
       addUserPlaylist()
     }
     
   }, [currentAddPlaylist])
+
+  useEffect(() => {
+    const newArray = currentPlaylist?.filter(item => { return item.playlist.name.toLowerCase().includes(playlistSearch.toLowerCase()) })
+    setDisplayPlaylist(newArray)
+  }, [playlistSearch])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
@@ -146,12 +155,13 @@ function Dashboard({
           </div>
         ) : <h1>Loading</h1>}
         <h1>Playlist Profile</h1>
-        {currentPlaylist && !isLoading ? (
+        <input type="text" placeholder='Search For A Playlist' className='playlist-searchbar' value={playlistSearch} onChange={(e) => setPlaylistSearch(e.target.value)}/>
+        {displayPlaylist && !isLoading ? (
           <>
             <div className='playlist-container'>
-              {currentPlaylist.map((item, idx) => (
+              {displayPlaylist.length !== 0 ? displayPlaylist.map((item, idx) => (
                 <Playlist key={idx} playlist={item.playlist}/>
-              ))}
+              )) : <h2>Playlist Not Found</h2>}
             </div>
           </>
         ) : <h2>Loading</h2>}
