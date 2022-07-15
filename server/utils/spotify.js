@@ -12,7 +12,7 @@ const getCurrentUserProfile = async (accessToken) => {
 }
 
 const getCurrentUserPlaylist = (accessToken) => {
-  return axios.get('/me/playlists', {
+  return axios.get('/me/playlists?limit=50', {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

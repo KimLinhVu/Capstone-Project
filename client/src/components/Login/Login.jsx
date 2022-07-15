@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import { notifyError } from '../../utils/toast';
+import { logout } from '../../utils/spotify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
 import Button from 'react-bootstrap/Button';

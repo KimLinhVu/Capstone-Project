@@ -17,6 +17,8 @@ function Dropdown({
     }
   }, [])
 
+  /* add search feature for dropdown */
+
   return (
     <div className="dropdown">
       <div className="dropdown-btn" onClick={options.length === 0 ? () => {} : () => setIsActive(!isActive)}>

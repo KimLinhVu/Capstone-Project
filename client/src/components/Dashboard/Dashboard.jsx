@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useLayoutEffect } from 'react'
 
 function Dashboard({
   clearToken
@@ -58,6 +57,7 @@ function Dashboard({
   }, [currentAddPlaylist])
 
   useEffect(() => {
+    /* displays playlists included in search input */
     const newArray = currentPlaylist?.filter(item => { return item.playlist.name.toLowerCase().includes(playlistSearch.toLowerCase()) })
     setDisplayPlaylist(newArray)
   }, [playlistSearch])
@@ -130,6 +130,7 @@ function Dashboard({
 
   const clearAllTokens = () => {
     clearToken()
+    logout()
     navigate('/login')
   }
 
