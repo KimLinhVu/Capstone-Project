@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import { notifyError } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login({
   setToken,
@@ -45,7 +47,7 @@ function Login({
         <p>Password</p>
         <input type="password" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
       </label>
-      <button type="submit" className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
+      <Button variant='outline-primary' size='lg' className='login-btn' onClick={handleOnSubmitLogin}>Log In</Button>
       <Link to="/signup"><p className='register'>Register Now</p></Link>
       <div className="toast">
         <ToastContainer

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
-import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
+import { getPlaylists, getCurrentPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
 import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Dashboard({
   clearToken
@@ -154,9 +156,9 @@ function Dashboard({
           </>
         ) : <h2>Loading</h2>}
       </>)
-       : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
-      <button className="logout" onClick={clearAllTokens}>Log Out</button>
-      {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
+       : <Button className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</Button>}
+      <Button className="logout" onClick={clearAllTokens}>Log Out</Button>
+      {spotifyToken ? <Button onClick={logout}>Log Out of Spotify</Button> : null}
     </div>
   )
 }
