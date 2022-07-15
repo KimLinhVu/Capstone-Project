@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from '../Login/Login'
 import Signup from '../Signup/Signup'
@@ -9,9 +8,9 @@ import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
 import useToken from '../../utils/useToken'
 import RecommendView from '../RecommendView/RecommendView'
 import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [signupMessage, setSignupMessage] = useState('')
   const {token, setToken, clearToken} = useToken()
 
   return (
@@ -23,9 +22,7 @@ function App() {
               {
                 <Login 
                   setToken={setToken}
-                  clearToken = {clearToken}
-                  signupMessage={signupMessage}
-                  setSignupMessage={setSignupMessage}
+                  clearToken={clearToken}
                 />
               }
             />
@@ -38,10 +35,7 @@ function App() {
             />
             <Route path="/signup" element=
               {
-                <Signup 
-                  setSignupMessage={setSignupMessage} 
-                  signupMessage={signupMessage}
-                />
+                <Signup />
               }
             />
             <Route path="/playlist/:playlistId" element=

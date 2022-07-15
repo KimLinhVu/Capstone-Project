@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
-import { useLocation } from 'react-router-dom'
-import styled from 'styled-components/macro'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
+import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
-
-const StyledLoginButton = styled.a`
-  background-color: green;
-  color: white;
-  padding: 10px 20px;
-  margin: 20px auto;
-  border-radius: 30px;
-  display: inline-block;
-`
 
 function Dashboard({
   clearToken
@@ -26,6 +16,8 @@ function Dashboard({
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
   const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const [isLoading, setIsLoading] = useState(false)
+
+  const navigate = useNavigate()
   
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -127,7 +119,7 @@ function Dashboard({
 
   const clearAllTokens = () => {
     clearToken()
-    logout()
+    navigate('/login')
   }
 
   return (
@@ -162,7 +154,7 @@ function Dashboard({
           </>
         ) : <h2>Loading</h2>}
       </>)
-       : <StyledLoginButton className="App-link" href="http://localhost:8888/spotify/login">Log Into Spotify</StyledLoginButton>}
+       : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
       <button className="logout" onClick={clearAllTokens}>Log Out</button>
       {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
     </div>

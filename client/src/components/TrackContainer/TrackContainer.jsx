@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Track from '../Track/Track'
 import { useState } from 'react'
 import { getArtistDetail } from '../../utils/spotify'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function TrackContainer({
@@ -54,30 +54,6 @@ function TrackContainer({
     getArtistGenres()
   }, [])
 
-  const notifySuccess = () => {
-    toast.success('Track added successfully', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
-
-  const notifyError = () => {
-    toast.error('Error adding track', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
-
   return (
     <div className="track-container">
       <div className="genres">
@@ -93,8 +69,6 @@ function TrackContainer({
           trackNumber={idx}
           addPlaylist={addPlaylist}
           playlistId={playlistId}
-          notifySuccess={notifySuccess}
-          notifyError={notifyError}
         />
       ))}
       <ToastContainer

@@ -23,8 +23,6 @@ app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
 
-let userId = ''
-
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
 }).catch(err => {
@@ -49,7 +47,8 @@ app.post('/login', async (req, res, next) => {
       return next(new BadRequestError('User does not exist or password does not match.'))
     } else {
       /* create jwt and store userId */
-      userId = user.id
+      app.locals.userId = user.id
+      const userId = user.id
       const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
       res.json({ accessToken, userId })
     }
@@ -90,11 +89,9 @@ app.post('/verify-token', (req, res) => {
   const { token } = req.body
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
     if (err) {
-      // res.json({ auth: false })
-      res.send(401, 'Failed to Authenticate')
+      res.status(401).send('Failed to authenticate')
     } else {
-      // res.json({ auth: true })
-      res.send(200, 'Successfully Authenticated')
+      res.status(200).send('Successfully Authenticated')
     }
   })
 })
@@ -108,7 +105,7 @@ app.use((error, req, res, next) => {
 })
 
 const getUserId = () => {
-  return userId
+  return app.locals.userId
 }
 
 exports.getUserId = getUserId

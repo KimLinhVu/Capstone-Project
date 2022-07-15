@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from '../../utils/spotify'
 import TrackContainer from '../TrackContainer/TrackContainer'
 
-function UserPlaylistDetal(props) {
+function UserPlaylistDetal() {
   const [playlist, setPlaylist] = useState(null)
   const { playlistId, originalPlaylistId } = useParams()
 
@@ -27,7 +27,11 @@ function UserPlaylistDetal(props) {
             </div>
           </div>
           <div className="tracks">
-            <TrackContainer tracks={playlist.tracks.items} addPlaylist={true} playlistId={originalPlaylistId}/>
+            <TrackContainer 
+              tracks={playlist.tracks.items} 
+              addPlaylist={true} 
+              playlistId={originalPlaylistId}
+            />
           </div>
         </>
       : null}

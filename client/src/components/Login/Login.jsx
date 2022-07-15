@@ -1,19 +1,18 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import PropTypes from 'prop-types'
 import { Link, useNavigate } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import { notifyError } from '../../utils/toast';
+import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
 
 function Login({
   setToken,
-  clearToken,
-  signupMessage,
-  setSignupMessage
+  clearToken
 }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [loginMessage, setLoginMessage] = useState('')
   
   const navigate = useNavigate()
 
@@ -23,7 +22,7 @@ function Login({
 
   const handleOnSubmitLogin = async (e) => {
     try {
-      const { data, userId } = await axios.post('http://localhost:8888/login',
+      const { data } = await axios.post('http://localhost:8888/login',
       {
         username: username,
         password: password
@@ -31,8 +30,7 @@ function Login({
       setToken(data.accessToken)
       navigate('/')
     } catch (e) {
-      setSignupMessage('')
-      setLoginMessage(e.response.data.error.message)
+      notifyError(e.response.data.error.message)
     }
   }
 
@@ -47,16 +45,23 @@ function Login({
         <p>Password</p>
         <input type="password" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
       </label>
-      <button type="submit" className='login' onClick={handleOnSubmitLogin}>Log In</button>
+      <button type="submit" className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
       <Link to="/signup"><p className='register'>Register Now</p></Link>
-      {signupMessage !== '' ? <p>{signupMessage}</p> : null}
-      {loginMessage !== '' ? <p>{loginMessage}</p> : null}
+      <div className="toast">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </div>
     </div>
   )
-}
-
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired
 }
 
 export default Login

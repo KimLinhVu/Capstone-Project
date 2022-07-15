@@ -1,17 +1,15 @@
 import React from 'react'
 import "./Signup.css"
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
+import { notifyError, notifySuccess } from '../../utils/toast'
 import Switch from 'react-switch'
 import axios from 'axios'
 
 const libraries = ['places']
 
-function Signup({
-  setSignupMessage,
-  signupMessage
-}) {
+function Signup() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
@@ -24,11 +22,6 @@ function Signup({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: libraries
   })
-
-  /* clear messages on mount */
-  useEffect(() => {
-    setSignupMessage('')
-  },[])
 
   if (!isLoaded) {
     return <h1>Loading</h1>
@@ -43,10 +36,10 @@ function Signup({
         location: place,
         privacy: privacyChecked
       })
-      setSignupMessage('Success creating new account')
+      notifySuccess('Successfully created an account')
       navigate('/login')
     } catch (e) {
-      setSignupMessage(e.response.data.error.message)
+      notifyError(e.response.data.error.message)
     }
   }
 
@@ -61,13 +54,13 @@ function Signup({
       const placeObject = autocomplete.getPlace()
       if (Object.keys(placeObject).length <= 1) {
         setPlace(null)
-        setSignupMessage('Please enter a valid City/State')
+        notifyError('Please enter a valid City/State')
       } else {
         setPlace(placeObject)
       }
     } else {
       setPlace(null)
-      setSignupMessage('Please enter a valid City/State')
+      notifyError('Please enter a valid City/State')
     }
   }
 
@@ -122,7 +115,6 @@ function Signup({
         <span>Private</span>
       </div>
       <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''}>Sign Up</button>
-      {signupMessage !== '' ? <p>{signupMessage}</p> : null}
     </div>
   )
 }

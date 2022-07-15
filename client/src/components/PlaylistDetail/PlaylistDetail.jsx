@@ -5,6 +5,7 @@ import { getPlaylistDetail } from '../../utils/spotify'
 import { removePlaylistFromProfile } from '../../utils/playlist'
 import TrackContainer from '../TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
+import { notifyError, notifySuccess } from '../../utils/toast'
 
 function PlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
@@ -40,7 +41,11 @@ function PlaylistDetail() {
             <button className='remove-playlist' onClick={removePlaylist}>Remove Playlist</button>
           </div>
           <div className="tracks">
-            <TrackContainer tracks={playlist.tracks.items}/>
+            <TrackContainer 
+              tracks={playlist.tracks.items}
+              notifyError={notifyError}
+              notifySuccess={notifySuccess}
+            />
           </div>
         </>
       : null}
