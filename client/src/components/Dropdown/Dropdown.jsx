@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import {IoMdArrowDropdown, IoMdArrowDropup} from 'react-icons/io'
+import { sortOptionsTracks } from '../../utils/playlist'
 import "./Dropdown.css"
 
 function Dropdown({
@@ -14,10 +15,11 @@ function Dropdown({
   useEffect(() => {
     if (options.length === 0) {
       setSelected("No playlists available")
+    } else {
+      /* sort options array alphabetically */
+      sortOptionsTracks(options)
     }
   }, [])
-
-  /* add search feature for dropdown */
 
   return (
     <div className="dropdown">

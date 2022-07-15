@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
-import { getPlaylists, getCurrentPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
+import { getPlaylists, getCurrentPlaylists, addPlaylistToProfile, addTrackVector, sortOptionsTracks } from '../../utils/playlist'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
 import { useNavigate } from 'react-router-dom'
@@ -43,10 +43,18 @@ function Dashboard({
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
+      sortOptionsTracks(options)
       setPlaylist(options)
 
       /* retrieve playlists that spotify user has added to their profile */
       const currentResult = await getCurrentPlaylists(prof.data.id)
+
+      /* sort playlists alphabetically */
+      currentResult.data.sort((a, b) => {
+        if(a.playlist.name.toLowerCase() < b.playlist.name.toLowerCase()) { return -1; }
+        if(a.playlist.name.toLowerCase() > b.playlist.name.toLowerCase()) { return 1; }
+        return 0;
+      })
       setCurrentPlaylist(currentResult.data)
       setDisplayPlaylist(currentResult.data)
     }
