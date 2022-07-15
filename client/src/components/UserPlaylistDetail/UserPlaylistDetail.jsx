@@ -4,10 +4,7 @@ import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from '../../utils/spotify'
 import TrackContainer from '../TrackContainer/TrackContainer'
 
-function UserPlaylistDetal({
-  notifyError,
-  notifySuccess
-}) {
+function UserPlaylistDetal() {
   const [playlist, setPlaylist] = useState(null)
   const { playlistId, originalPlaylistId } = useParams()
 
@@ -34,8 +31,6 @@ function UserPlaylistDetal({
               tracks={playlist.tracks.items} 
               addPlaylist={true} 
               playlistId={originalPlaylistId}
-              notifyError={notifyError}
-              notifySuccess={notifySuccess}
             />
           </div>
         </>

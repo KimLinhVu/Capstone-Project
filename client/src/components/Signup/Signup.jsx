@@ -1,17 +1,15 @@
 import React from 'react'
 import "./Signup.css"
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
+import { notifyError, notifySuccess } from '../../utils/toast'
 import Switch from 'react-switch'
 import axios from 'axios'
 
 const libraries = ['places']
 
-function Signup({
-  notifySuccess,
-  notifyError
-}) {
+function Signup() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)

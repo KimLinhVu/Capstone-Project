@@ -3,6 +3,7 @@ import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, get
 import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
+import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 
 function Dashboard({
@@ -15,6 +16,8 @@ function Dashboard({
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
   const [selected, setSelected] = useState("Select a playlist to add to your profile")
   const [isLoading, setIsLoading] = useState(false)
+
+  const navigate = useNavigate()
   
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -116,7 +119,7 @@ function Dashboard({
 
   const clearAllTokens = () => {
     clearToken()
-    logout()
+    navigate('/login')
   }
 
   return (

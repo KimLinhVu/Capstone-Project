@@ -2,15 +2,13 @@ import React, { useEffect } from 'react'
 import Track from '../Track/Track'
 import { useState } from 'react'
 import { getArtistDetail } from '../../utils/spotify'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function TrackContainer({
   tracks,
   addPlaylist,
-  playlistId,
-  notifyError,
-  notifySuccess
+  playlistId
 }) {
   const [genreArray, setGenreArray] = useState([])
 
@@ -71,8 +69,6 @@ function TrackContainer({
           trackNumber={idx}
           addPlaylist={addPlaylist}
           playlistId={playlistId}
-          notifySuccess={notifySuccess}
-          notifyError={notifyError}
         />
       ))}
       <ToastContainer

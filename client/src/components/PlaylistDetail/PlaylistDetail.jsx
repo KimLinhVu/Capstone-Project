@@ -5,11 +5,9 @@ import { getPlaylistDetail } from '../../utils/spotify'
 import { removePlaylistFromProfile } from '../../utils/playlist'
 import TrackContainer from '../TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
+import { notifyError, notifySuccess } from '../../utils/toast'
 
-function PlaylistDetail({
-  notifyError,
-  notifySuccess
-}) {
+function PlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
   const { playlistId } = useParams()
 

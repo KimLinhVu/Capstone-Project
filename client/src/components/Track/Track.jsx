@@ -3,15 +3,14 @@ import { useState, useEffect } from 'react'
 import { addTrackToPlaylist, getTrackAudioFeatures } from '../../utils/spotify'
 import { convertObjectToVector, calculateTrackSimilarity } from '../../utils/similarity'
 import { getPlaylistTrackVector } from '../../utils/playlist'
+import { notifyError, notifySuccess } from '../../utils/toast'
 import './Track.css'
 
 function Track({
   track,
   trackNumber,
   addPlaylist,
-  playlistId,
-  notifySuccess,
-  notifyError
+  playlistId
 }) {
   const [similarity, setSimilarity] = useState(null)
 

@@ -2,14 +2,14 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import { notifyError } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
 
 function Login({
   setToken,
-  clearToken,
-  notifyError
+  clearToken
 }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -22,7 +22,7 @@ function Login({
 
   const handleOnSubmitLogin = async (e) => {
     try {
-      const { data, userId } = await axios.post('http://localhost:8888/login',
+      const { data } = await axios.post('http://localhost:8888/login',
       {
         username: username,
         password: password
