@@ -86,7 +86,7 @@ function Dashboard({
       })
 
       /* receive track audio features for each track and store in an array */
-      const trackArrayLength = trackIdArray.length
+      let trackArrayLength = trackIdArray.length
       let tempTrackVector = {
         acousticness: 0,
         danceability: 0,
@@ -104,10 +104,15 @@ function Dashboard({
       while (trackIdArray.length > 0) {
         let trackIdString = trackIdArray.splice(0, 100).join(',')
         const { data } = await getTracksAudioFeatures(trackIdString)
+        // eslint-disable-next-line no-loop-func
         data.audio_features.forEach(item => {
-          Object.keys(tempTrackVector).forEach(key => {
-            tempTrackVector[key] += item[key]
-          })
+          if (item !== null) {
+            Object.keys(tempTrackVector).forEach(key => {
+              tempTrackVector[key] += item[key]
+            })
+          } else {
+            trackArrayLength -= 1
+          }
         })
       }
 

@@ -92,7 +92,7 @@ export const getCurrentUserProfile = async () => {
 }
 
 export const getCurrentUserPlaylist = () => {
-  return axios.get('/me/playlists')
+  return axios.get('/me/playlists?limit=50')
 }
 
 export const getPlaylistDetail = (playlistId) => {

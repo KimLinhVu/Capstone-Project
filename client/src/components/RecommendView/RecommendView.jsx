@@ -164,6 +164,7 @@ function Map({
       <Marker 
         position={center}
         label='User Location'
+        onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
       />
       {allUsers?.map((user, idx) => {
         const position = user.location.geometry.location
