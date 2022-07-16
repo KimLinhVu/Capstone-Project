@@ -73,7 +73,8 @@ function TrackContainer({
       ))}
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        limit={1}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

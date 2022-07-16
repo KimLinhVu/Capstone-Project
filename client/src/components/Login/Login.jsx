@@ -20,6 +20,7 @@ function Login({
   const navigate = useNavigate()
 
   useEffect(() => {
+    logout()
     clearToken()
   }, [])
 
@@ -50,19 +51,18 @@ function Login({
       </label>
       <Button variant='outline-primary' size='lg' className='login-btn' onClick={handleOnSubmitLogin}>Log In</Button>
       <Link to="/signup"><p className='register'>Register Now</p></Link>
-      <div className="toast">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

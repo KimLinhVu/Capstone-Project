@@ -68,9 +68,11 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* tests for valid password */
-    // if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
-    //   return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
-    // }
+    if (password === 'test123') {
+      /* allow test123 as a pw while developing */
+    } else if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
+      return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
+    }
 
     /* check to see if username already exists */
     if (await User.findOne({ username })) {

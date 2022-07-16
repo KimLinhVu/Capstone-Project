@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
+import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail, logoutSpotify } from '../../utils/spotify'
 import { getPlaylists, getCurrentPlaylists, addPlaylistToProfile, addTrackVector, sortOptionsTracks } from '../../utils/playlist'
 import Dropdown from '../Dropdown/Dropdown'
 import Playlist from '../Playlist/Playlist'
@@ -142,8 +142,6 @@ function Dashboard({
   }
 
   const clearAllTokens = () => {
-    clearToken()
-    logout()
     navigate('/login')
   }
 
@@ -182,7 +180,7 @@ function Dashboard({
       </>)
        : <Button className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</Button>}
       <Button className="logout" onClick={clearAllTokens}>Log Out</Button>
-      {spotifyToken ? <Button onClick={logout}>Log Out of Spotify</Button> : null}
+      {spotifyToken ? <Button onClick={logoutSpotify}>Log Out of Spotify</Button> : null}
     </div>
   )
 }
