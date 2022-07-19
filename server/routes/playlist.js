@@ -3,6 +3,7 @@ const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Playlist = require('../models/Playlists')
+const { BadRequestError } = require('../utils/errors')
 
 /* returns all playlists belonging to spotify user */
 router.get('/playlists', jwt.verifyJWT, async (req, res, next) => {
@@ -66,7 +67,10 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlist } = req.body
 
-    await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
+    const found = await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
+    if (!found) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -80,7 +84,10 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlistId } = req.body
 
-    await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
+    const found = await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
+    if (!found) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -93,7 +100,10 @@ router.post('/add-track-vector', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlistId, trackVector } = req.body
 
-    await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
+    const found = await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
+    if (!found) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -107,6 +117,9 @@ router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
     const playlistId = req.headers['playlist-id']
 
     const playlist = await Playlist.findOne({ userId, playlistId })
+    if (!playlist) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json(playlist.trackVector)
   } catch (error) {
     next(error)
@@ -119,7 +132,10 @@ router.post('/add-favorite', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlistId } = req.body
 
-    await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: true })
+    const found = await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: true })
+    if (!found) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -132,7 +148,10 @@ router.post('/remove-favorite', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const { playlistId } = req.body
 
-    await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: false })
+    const found = await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: false })
+    if (!found) {
+      return next(new BadRequestError('Playlist Not Found'))
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
