@@ -4,6 +4,7 @@ import { addTrackToPlaylist, getTrackAudioFeatures } from '../../utils/spotify'
 import { convertObjectToVector, calculateTrackSimilarity } from '../../utils/similarity'
 import { getPlaylistTrackVector } from '../../utils/playlist'
 import { notifyError, notifySuccess } from '../../utils/toast'
+import { AiFillPlusCircle } from "react-icons/ai";
 import './Track.css'
 
 function Track({
@@ -58,15 +59,29 @@ function Track({
       notifyError('Error adding track')
     }
   }
+
+  const convertDuration = (millis) => {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+  }
   
   return (
     <div className="track">
-      <span>{trackNumber + 1}</span>
-      <p>{track.name}</p>
-      <img src={track.album.images[0].url} alt="Track Image"/>
+      <div className="track-left">
+        <span className='num'>{trackNumber + 1}</span>
+        <img src={track.album.images[0].url} alt="Track Image"/>
+        <div className="info">
+          <span className='title'>{track.name}</span>
+          <span className='artist'>{track.artists[0].name}</span>
+        </div>
+      </div>
+      <div className="track-right">
+        <span className="time">{convertDuration(track.duration_ms)}</span>
+      </div>
       {addPlaylist ? 
       <>
-        <button onClick={addTrack}>Add Song To Playlist</button>
+        <button onClick={addTrack}><AiFillPlusCircle id='add'/></button>
         <p>Similarity Score: {similarity}</p>
       </> : null}
     </div>

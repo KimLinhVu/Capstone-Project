@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from '../../utils/toast'
+import { ToastContainer } from 'react-toastify'
 import Switch from 'react-switch'
 import axios from 'axios'
 
@@ -36,8 +37,8 @@ function Signup() {
         location: place,
         privacy: privacyChecked
       })
-      notifySuccess('Successfully created an account')
-      navigate('/login')
+      notifySuccess('Successfully created an account. Redirecting...')
+      setTimeout(() => navigate('/login'), 2000)
     } catch (e) {
       notifyError(e.response.data.error.message)
     }
@@ -114,7 +115,19 @@ function Signup() {
         />
         <span>Private</span>
       </div>
-      <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''}>Sign Up</button>
+      <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

@@ -9,6 +9,7 @@ import useToken from '../../utils/useToken'
 import RecommendView from '../RecommendView/RecommendView'
 import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
 import 'react-toastify/dist/ReactToastify.css';
+import './App.css'
 
 function App() {
   const {token, setToken, clearToken} = useToken()

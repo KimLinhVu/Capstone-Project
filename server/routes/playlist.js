@@ -5,11 +5,23 @@ const router = express.Router()
 const Playlist = require('../models/Playlists')
 
 /* returns all playlists belonging to spotify user */
-router.get('/', jwt.verifyJWT, async (req, res, next) => {
+router.get('/playlists', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const spotifyId = req.headers['spotify-id']
     const playlists = await Playlist.find({ userId, spotifyId, added: false })
+    res.json(playlists)
+  } catch (error) {
+
+  }
+})
+
+/* returns all favorited playlists belonging to spotify user */
+router.get('/favorites', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const spotifyId = req.headers['spotify-id']
+    const playlists = await Playlist.find({ userId, spotifyId, added: true, favorite: true })
     res.json(playlists)
   } catch (error) {
 
@@ -37,7 +49,7 @@ router.post('/', async (req, res, next) => {
       /* search for if playlist already exists */
       const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
       if (!playlistItem) {
-        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false })
+        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false, favorite: false })
         await newPlaylist.save()
       }
     })
@@ -96,6 +108,32 @@ router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
 
     const playlist = await Playlist.findOne({ userId, playlistId })
     res.status(200).json(playlist.trackVector)
+  } catch (error) {
+
+  }
+})
+
+/* adds playlist as a favorite playlist */
+router.post('/add-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlistId } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: true })
+    res.status(200).json()
+  } catch (error) {
+
+  }
+})
+
+/* remove playlist as a favorite playlist */
+router.post('/remove-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlistId } = req.body
+
+    await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: false })
+    res.status(200).json()
   } catch (error) {
 
   }

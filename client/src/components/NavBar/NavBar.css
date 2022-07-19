@@ -1,0 +1,26 @@
+.nav-bar {
+  padding: 30px 30px 15px 35px;
+  position: fixed;
+  width: 100%;
+  font-size: 1em;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.nav-bar .tabs {
+  display: flex;
+  gap: 50px;
+  color: var(--txt-med);
+}
+
+.nav-bar .tabs span {
+  cursor: pointer;
+}
+
+.nav-bar .tabs .selectedTab {
+  color: var(--txt-dark);
+  font-weight: 500;
+}

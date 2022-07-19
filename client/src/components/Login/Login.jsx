@@ -7,8 +7,6 @@ import { notifyError } from '../../utils/toast';
 import { logout } from '../../utils/spotify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login({
   setToken,
@@ -20,6 +18,7 @@ function Login({
   const navigate = useNavigate()
 
   useEffect(() => {
+    logout()
     clearToken()
   }, [])
 
@@ -48,21 +47,20 @@ function Login({
         <p>Password</p>
         <input type="password" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
       </label>
-      <Button variant='outline-primary' size='lg' className='login-btn' onClick={handleOnSubmitLogin}>Log In</Button>
+      <button className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
       <Link to="/signup"><p className='register'>Register Now</p></Link>
-      <div className="toast">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

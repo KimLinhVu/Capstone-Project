@@ -1,15 +1,81 @@
-.dashboard .playlist-container {
+.dashboard {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  background: var(--background-color);
+  padding: 0 5%;
+  min-height: 100vh;
 }
 
-.dashboard .profile-picture {
-  width: 300px;
-  border-radius: 50%;
+.dashboard .dashboard-right {
+  padding-left: 500px;
+  align-self: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard .playlist-tab {
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 20px;
+  display: none;
+}
+
+.dashboard .favorites-tab {
+  width: 100%;
+  padding: 10px 10px;
+  display: none;
+}
+
+.dashboard .carousel {
+  width: 100%;
+  background: url('/Users/kimlinh/CodePath/Project/Capstone-Project/client/img/lily.jpeg');
+  background-size: cover;
+  background-position: 5rem;
+  height: 35vh;
+}
+
+/* navlinks section */
+.dashboard .nav {
+  margin: 10px 0;
+  padding: 10px 0 0 0;
+}
+
+.dashboard .links {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.dashboard .links button {
+  border: none;
+  background: transparent;
+  color: black;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding-bottom: 20px;
+  margin-top: 10px;
+  margin-right: 50px;
+  transition: 100ms ease-in-out;
 }
 
 .dashboard .Dropdown-control, .Dropdown-menu {
   width: 500px;
+}
+
+.dashboard .show {
+  display: contents;
+}
+
+.dashboard .links .tab-show {
+  border-bottom: 3px solid rgb(214, 112, 151);
+}
+
+.dashboard .nav hr {
+  height: .5px;
+  background-color: grey;
+  margin-bottom: 20px;
+  border: none;
 }

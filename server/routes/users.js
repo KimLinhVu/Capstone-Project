@@ -16,6 +16,16 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.get('/profile', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const user = await Users.findOne({ id: userId })
+    res.json(user)
+  } catch (error) {
+
+  }
+})
+
 router.get('/playlist', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.headers['user-id']
