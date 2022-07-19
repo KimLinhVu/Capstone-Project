@@ -41,7 +41,6 @@
 }
 
 #add {
-  /* padding: 10px; */
   border: 1px solid var(--light-border);
   border-radius: 7px;
   cursor: pointer;

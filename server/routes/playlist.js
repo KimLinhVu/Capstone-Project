@@ -12,7 +12,7 @@ router.get('/playlists', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: false })
     res.json(playlists)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -24,7 +24,7 @@ router.get('/favorites', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: true, favorite: true })
     res.json(playlists)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -36,7 +36,7 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: true })
     res.json(playlists)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -69,7 +69,7 @@ router.post('/add', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId: playlist.playlistId }, { added: true })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -83,7 +83,7 @@ router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { added: false })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -96,7 +96,7 @@ router.post('/add-track-vector', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { trackVector })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -109,7 +109,7 @@ router.get('/get-track-vector', jwt.verifyJWT, async (req, res, next) => {
     const playlist = await Playlist.findOne({ userId, playlistId })
     res.status(200).json(playlist.trackVector)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -122,7 +122,7 @@ router.post('/add-favorite', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: true })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -135,7 +135,7 @@ router.post('/remove-favorite', jwt.verifyJWT, async (req, res, next) => {
     await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: false })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
