@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { addTrackToPlaylist, getTrackAudioFeatures } from '../../utils/spotify'
-import { convertObjectToVector, calculateTrackSimilarity } from '../../utils/similarity'
-import { getPlaylistTrackVector } from '../../utils/playlist'
-import { notifyError, notifySuccess } from '../../utils/toast'
+import { addTrackToPlaylist, getTrackAudioFeatures } from 'utils/spotify'
+import { convertObjectToVector, calculateTrackSimilarity } from 'utils/similarity'
+import { getPlaylistTrackVector } from 'utils/playlist'
+import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle } from "react-icons/ai";
 import './Track.css'
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect, useMemo } from 'react'
-import { getAllUsers, getUserPlaylists, getUserLocation } from '../../utils/users'
+import { getAllUsers, getUserPlaylists, getUserLocation } from 'utils/users'
 import { useParams } from 'react-router-dom'
-import { getPlaylistTrackVector } from '../../utils/playlist'
-import { convertObjectToVector, calculateTrackSimilarity } from '../../utils/similarity'
+import { getPlaylistTrackVector } from 'utils/playlist'
+import { convertObjectToVector, calculateTrackSimilarity } from 'utils/similarity'
 import UserPlaylist from '../UserPlaylist/UserPlaylist'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
 import "./RecommendView.css"

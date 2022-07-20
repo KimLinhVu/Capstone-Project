@@ -2,10 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AiFillCloseCircle } from 'react-icons/ai'
-import { removePlaylistFromProfile } from '../../utils/playlist'
+import { removePlaylistFromProfile } from 'utils/playlist'
 import { Tooltip } from '@mui/material'
 import { MdOutlineFavoriteBorder, MdOutlineFavorite } from 'react-icons/md'
-import { addFavoritePlaylist, removeFavoritePlaylist } from '../../utils/playlist'
+import { addFavoritePlaylist, removeFavoritePlaylist } from 'utils/playlist'
 import "./PlaylistCard.css"
 
 function PlaylistCard({

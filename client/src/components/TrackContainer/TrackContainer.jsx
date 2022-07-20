@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Track from '../Track/Track'
 import { useState } from 'react'
-import { getArtistDetail } from '../../utils/spotify'
+import { getArtistDetail } from 'utils/spotify'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './TrackContainer.css'

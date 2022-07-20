@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import {IoMdArrowDropdown, IoMdArrowDropup} from 'react-icons/io'
-import { sortOptionsTracks } from '../../utils/playlist'
+import { sortOptionsTracks } from 'utils/playlist'
 import "./Dropdown.css"
 
 function Dropdown({

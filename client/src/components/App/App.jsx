@@ -5,7 +5,7 @@ import Signup from '../Signup/Signup'
 import Dashboard from '../Dashboard/Dashboard'
 import { Protected } from '../Protected'
 import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
-import useToken from '../../utils/useToken'
+import useToken from 'utils/useToken'
 import RecommendView from '../RecommendView/RecommendView'
 import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
 import 'react-toastify/dist/ReactToastify.css';

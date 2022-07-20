@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { accessToken, getCurrentUserProfile } from '../../utils/spotify'
-import { getPlaylists, getCurrentPlaylists, sortOptionsTracks } from '../../utils/playlist'
+import { accessToken, getCurrentUserProfile } from 'utils/spotify'
+import { getPlaylists, getCurrentPlaylists, sortOptionsTracks } from 'utils/playlist'
 import PlaylistView from '../PlaylistView/PlaylistView'
 import FavoriteView from '../FavoriteView/FavoriteView'
 import ProfileCard from '../ProfileCard/ProfileCard'

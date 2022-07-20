@@ -3,7 +3,7 @@ import "./Signup.css"
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
-import { notifyError, notifySuccess } from '../../utils/toast'
+import { notifyError, notifySuccess } from 'utils/toast'
 import { ToastContainer } from 'react-toastify'
 import Switch from 'react-switch'
 import axios from 'axios'
