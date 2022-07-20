@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
-import TrackContainer from '../TrackContainer/TrackContainer'
+import TrackContainer from 'components/TrackContainer/TrackContainer'
 
 function UserPlaylistDetal() {
   const [playlist, setPlaylist] = useState(null)

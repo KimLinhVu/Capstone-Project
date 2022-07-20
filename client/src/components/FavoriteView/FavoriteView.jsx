@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { getFavoritePlaylists } from 'utils/playlist'
-import PlaylistCard from '../PlaylistCard/PlaylistCard'
+import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 import ReactLoading from 'react-loading'
 import './FavoriteView.css'
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, getCurrentUserProfile } from 'utils/spotify'
 import { getPlaylists, getCurrentPlaylists, sortOptionsTracks } from 'utils/playlist'
-import PlaylistView from '../PlaylistView/PlaylistView'
-import FavoriteView from '../FavoriteView/FavoriteView'
-import ProfileCard from '../ProfileCard/ProfileCard'
+import PlaylistView from 'components/PlaylistView/PlaylistView'
+import FavoriteView from 'components/FavoriteView/FavoriteView'
+import ProfileCard from 'components/ProfileCard/ProfileCard'
 import './Dashboard.css'
 
 function Dashboard() {

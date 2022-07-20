@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import { removePlaylistFromProfile } from 'utils/playlist'
-import TrackContainer from '../TrackContainer/TrackContainer'
+import TrackContainer from 'components/TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
 import { notifyError, notifySuccess } from 'utils/toast'
-import NavBar from '../NavBar/NavBar'
+import NavBar from 'components/NavBar/NavBar'
 import './PlaylistDetail.css'
 
 function PlaylistDetail() {

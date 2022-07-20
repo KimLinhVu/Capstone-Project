@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Track from '../Track/Track'
+import Track from 'components/Track/Track'
 import { useState } from 'react'
 import { getArtistDetail } from 'utils/spotify'
 import { ToastContainer } from 'react-toastify';
