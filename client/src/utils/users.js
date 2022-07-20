@@ -24,3 +24,11 @@ export const getUserLocation = () => {
     }
   })
 }
+
+export const getUserProfile = () => {
+  return axios.get('http://localhost:8888/users/profile', {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

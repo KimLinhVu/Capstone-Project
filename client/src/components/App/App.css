@@ -1,6 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --txt-med: #667da6;
+  --txt-light: #b3c1d8;
+  --txt-dark: #314067;
+  --light-border: #ccc;
+  --background-color: rgb(250, 249, 249);
 }

@@ -1,10 +1,49 @@
 .track {
   display: flex;
-  justify-content: space-around;
   flex-direction: row;
-  border: 1px solid black;
+  justify-content: space-between;
+  font-size: .9em;
 }
 
-.track img {
-  width: 80px;
+.track .track-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  color: var(--txt-dark);
 }
+
+.track .track-left img {
+  width: 50px;
+  border-radius: 10px;
+}
+
+.track .track-left .info {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: space-between;
+}
+
+.track .info .title {
+  font-weight: 500;
+}
+
+.track .info .artist {
+  color: var(--txt-med);
+  font-size: .9em;
+}
+
+.track .track-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#add {
+  border: 1px solid var(--light-border);
+  border-radius: 7px;
+  cursor: pointer;
+  color: black;
+}
+

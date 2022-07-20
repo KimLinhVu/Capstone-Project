@@ -29,6 +29,12 @@ export const logout = () => {
   for (const property in LOCALSTORAGE_KEYS) {
     localStorage.removeItem(LOCALSTORAGE_KEYS[property])
   }
+}
+
+export const logoutSpotify = () => {
+  for (const property in LOCALSTORAGE_KEYS) {
+    localStorage.removeItem(LOCALSTORAGE_KEYS[property])
+  }
   window.location = window.location.origin
 }
 
@@ -37,7 +43,7 @@ const refreshToken = async () => {
     if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' || 
       (Date.now() - Number(LOCALSTORAGE_VALUES.timestamp) / 1000) < 1000) {
       console.error('No refresh token available')
-      logout()
+      logoutSpotify()
     }
     const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)
 
@@ -92,7 +98,7 @@ export const getCurrentUserProfile = async () => {
 }
 
 export const getCurrentUserPlaylist = () => {
-  return axios.get('/me/playlists')
+  return axios.get('/me/playlists?limit=50')
 }
 
 export const getPlaylistDetail = (playlistId) => {

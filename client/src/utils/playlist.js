@@ -1,7 +1,16 @@
 import axios from 'axios'
 
 export const getPlaylists = (spotifyId) => {
-  return axios.get('http://localhost:8888/playlist', {
+  return axios.get('http://localhost:8888/playlist/playlists', {
+    headers: {
+      "x-access-token": localStorage.getItem('token'),
+      "spotify-id": spotifyId
+    }
+  })
+}
+
+export const getFavoritePlaylists = (spotifyId) => {
+  return axios.get('http://localhost:8888/playlist/favorites', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "spotify-id": spotifyId
@@ -66,5 +75,33 @@ export const getPlaylistTrackVector = (playlistId) => {
       "x-access-token": localStorage.getItem('token'),
       "playlist-id": playlistId
     }
+  })
+}
+
+export const addFavoritePlaylist = (playlistId) => {
+  return axios.post('http://localhost:8888/playlist/add-favorite', {
+    playlistId: playlistId,
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}
+
+export const removeFavoritePlaylist = (playlistId) => {
+  return axios.post('http://localhost:8888/playlist/remove-favorite', {
+    playlistId: playlistId,
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}
+
+export const sortOptionsTracks = (options) => {
+  options.sort((a, b) => {
+    if(a.label.toLowerCase() < b.label.toLowerCase()) { return -1; }
+    if(a.label.toLowerCase() > b.label.toLowerCase()) { return 1; }
+    return 0;
   })
 }

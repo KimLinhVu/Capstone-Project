@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import Track from '../Track/Track'
+import Track from 'components/Track/Track'
 import { useState } from 'react'
-import { getArtistDetail } from '../../utils/spotify'
+import { getArtistDetail } from 'utils/spotify'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './TrackContainer.css'
 
 function TrackContainer({
   tracks,
@@ -62,18 +63,21 @@ function TrackContainer({
           return <p key={idx}>{item.genre}</p>
         })}
       </div>
-      {tracks.map((item, idx) => (
-        <Track 
-          key={idx} 
-          track={item.track} 
-          trackNumber={idx}
-          addPlaylist={addPlaylist}
-          playlistId={playlistId}
-        />
-      ))}
+      <div className="tracks">
+        {tracks.map((item, idx) => (
+          <Track 
+            key={idx} 
+            track={item.track} 
+            trackNumber={idx}
+            addPlaylist={addPlaylist}
+            playlistId={playlistId}
+          />
+        ))}
+      </div>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        limit={1}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

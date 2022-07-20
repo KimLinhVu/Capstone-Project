@@ -1,0 +1,13 @@
+.track-container {
+  width: 100%;
+  padding: 20px 30px 30px 30px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.track-container .tracks {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

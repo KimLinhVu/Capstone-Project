@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { accessToken, logout, getCurrentUserProfile, getTracksAudioFeatures, getPlaylistDetail } from '../../utils/spotify'
-import { getPlaylists, getCurrentPlaylists, addPlaylists, addPlaylistToProfile, addTrackVector } from '../../utils/playlist'
-import Dropdown from '../Dropdown/Dropdown'
-import Playlist from '../Playlist/Playlist'
-import { useNavigate } from 'react-router-dom'
+import { accessToken, getCurrentUserProfile } from 'utils/spotify'
+import { getPlaylists, getCurrentPlaylists, sortOptionsTracks } from 'utils/playlist'
+import PlaylistView from 'components/PlaylistView/PlaylistView'
+import FavoriteView from 'components/FavoriteView/FavoriteView'
+import ProfileCard from 'components/ProfileCard/ProfileCard'
 import './Dashboard.css'
 
-function Dashboard({
-  clearToken
-}) {
+function Dashboard() {
   const [spotifyToken, setSpotifyToken] = useState(null)
-  const [profile, setProfile] = useState(null)
+  const [spotifyProfile, setSpotifyProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
-  const [currentPlaylist, setCurrentPlaylist] = useState(null)
+  const [currentPlaylist, setCurrentPlaylist] = useState([])
+  const [displayPlaylist, setDisplayPlaylist] = useState([])
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
-  const [selected, setSelected] = useState("Select a playlist to add to your profile")
-  const [isLoading, setIsLoading] = useState(false)
-
-  const navigate = useNavigate()
+  const [selected, setSelected] = useState("Add A Playlist")
+  const [playlistSearch, setPlaylistSearch] = useState('')
+  const [refresh, setRefresh] = useState(false)
+  const [playlistShow, setPlaylistShow] = useState(true)
+  const [favoriteShow, setFavoriteShow] = useState(false)
   
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
-    const fetchUserProfile = async () => {
+    const fetchUserSpotifyProfile = async () => {
       const { data } = await getCurrentUserProfile()
-      setProfile(data)
+      setSpotifyProfile(data)
     }
     if (accessToken) {
-      fetchUserProfile()
+      fetchUserSpotifyProfile()
     }
   }, [])
 
@@ -39,17 +39,32 @@ function Dashboard({
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
+      sortOptionsTracks(options)
       setPlaylist(options)
 
       /* retrieve playlists that spotify user has added to their profile */
       const currentResult = await getCurrentPlaylists(prof.data.id)
+
+      /* sort playlists alphabetically */
+      currentResult.data.sort((a, b) => {
+        if(a.playlist.name.toLowerCase() < b.playlist.name.toLowerCase()) { return -1; }
+        if(a.playlist.name.toLowerCase() > b.playlist.name.toLowerCase()) { return 1; }
+        return 0;
+      })
       setCurrentPlaylist(currentResult.data)
+      setDisplayPlaylist(currentResult.data)
     }
     if (accessToken) {
       addUserPlaylist()
     }
     
-  }, [currentAddPlaylist])
+  }, [currentAddPlaylist, refresh])
+
+  useEffect(() => {
+    /* displays playlists included in search input */
+    const newArray = currentPlaylist?.filter(item => { return item.playlist.name.toLowerCase().includes(playlistSearch.toLowerCase()) })
+    setDisplayPlaylist(newArray)
+  }, [playlistSearch])
 
   const convertToOptionsArray = (playlist) => {
     const newArray = []
@@ -59,104 +74,59 @@ function Dashboard({
     return newArray
   }
 
-  const handleAddPlaylistOnClick = () => {
-    const addPlaylist = async () => {
-      setIsLoading(true)
-      /* calculate track vector for playlist */
-      const { data } = await getPlaylistDetail(currentAddPlaylist.playlistId)
-      setPlaylist(data)
-      
-      /* create string of track Ids to use in Spotify API */
-      let trackIdArray = []
-      const tracks = data.tracks.items
-      tracks.forEach(item => {
-        const id = item.track.id
-        trackIdArray.push(id)
-      })
-
-      /* receive track audio features for each track and store in an array */
-      const trackArrayLength = trackIdArray.length
-      let tempTrackVector = {
-        acousticness: 0,
-        danceability: 0,
-        energy: 0,
-        instrumentalness: 0,
-        key: 0,
-        liveness: 0,
-        loudness: 0,
-        mode: 0,
-        speechiness: 0,
-        tempo: 0,
-        time_signature: 0,
-        valence: 0
-      }
-      while (trackIdArray.length > 0) {
-        let trackIdString = trackIdArray.splice(0, 100).join(',')
-        const { data } = await getTracksAudioFeatures(trackIdString)
-        data.audio_features.forEach(item => {
-          Object.keys(tempTrackVector).forEach(key => {
-            tempTrackVector[key] += item[key]
-          })
-        })
-      }
-
-      /* take average of all track vector quantities */
-      Object.keys(tempTrackVector).forEach(key => {
-        tempTrackVector[key] /= trackArrayLength
-      })
-      /* store track-vector in playlist database */
-      await addTrackVector(currentAddPlaylist.playlistId, tempTrackVector)
-      
-      /* adds selected playlist to user's profile */
-      await addPlaylistToProfile(currentAddPlaylist)
-      setCurrentAddPlaylist(null)
-      playlist.length <= 1 ? setSelected('No playlist available') : setSelected("Select a playlist to add to your profile")
-
-      setIsLoading(false)
-    }
-    addPlaylist()
-  }
-
-  const clearAllTokens = () => {
-    clearToken()
-    navigate('/login')
-  }
-
   return (
     <div className="dashboard">
       {spotifyToken ? (
       <>
-        {profile && (
-          <div className='profile-container'>
-            <h1>{profile.display_name}</h1>
-            {profile.images.length > 0 ? <img className='profile-picture' src={profile.images[0].url} alt="Profile Picture"/> : null}
+        <div className="carousel">
+          {/* Background Image */}
+        </div>
+        {spotifyProfile && 
+          <ProfileCard spotifyProfile={spotifyProfile} spotifyToken={spotifyToken}/>
+        }
+        <div className="dashboard-right">
+          <div className="nav">
+            <div className="links">
+              <button onClick={() => {
+                setPlaylistShow(true)
+                setFavoriteShow(false)
+              }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
+              <button onClick={() =>{
+                setPlaylistShow(false)
+                setFavoriteShow(true)
+              }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
+              <button>Followers</button>
+            </div>
+            <hr />
           </div>
-        )}
-        {playlist ? (
-          <div>
-            <Dropdown 
-              options={playlist}
+          <div className={`playlist-tab ${playlistShow ? 'show' : ''}`}>
+            <PlaylistView
+              playlist={playlist}
               selected={selected}
               setSelected={setSelected}
               setCurrentAddPlaylist={setCurrentAddPlaylist}
+              currentAddPlaylist={currentAddPlaylist}
+              playlistSearch={playlistSearch}
+              setPlaylistSearch={setPlaylistSearch}
+              displayPlaylist={displayPlaylist}
+              setPlaylist={setPlaylist}
+              spotifyName={spotifyProfile?.display_name}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
-            <button className="add-playlist" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}>Add Playlist to Profile</button>
           </div>
-        ) : <h1>Loading</h1>}
-        <h1>Playlist Profile</h1>
-        {currentPlaylist && !isLoading ? (
-          <>
-            <div className='playlist-container'>
-              {currentPlaylist.map((item, idx) => (
-                <Playlist key={idx} playlist={item.playlist}/>
-              ))}
-            </div>
-          </>
-        ) : <h2>Loading</h2>}
+          <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
+            {spotifyProfile && (
+              <FavoriteView
+                refresh={refresh}
+                setRefresh={setRefresh}
+                spotifyProfile={spotifyProfile}
+              />
+            )}
+          </div>
+        </div>
       </>)
        : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
-      <button className="logout" onClick={clearAllTokens}>Log Out</button>
-      {spotifyToken ? <button onClick={logout}>Log Out of Spotify</button> : null}
     </div>
   )
 }

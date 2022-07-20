@@ -1,14 +1,15 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Login from '../Login/Login'
-import Signup from '../Signup/Signup'
-import Dashboard from '../Dashboard/Dashboard'
-import { Protected } from '../Protected'
-import PlaylistDetail from '../PlaylistDetail/PlaylistDetail'
-import useToken from '../../utils/useToken'
-import RecommendView from '../RecommendView/RecommendView'
-import UserPlaylistDetail from '../UserPlaylistDetail/UserPlaylistDetail'
+import Login from 'components/Login/Login'
+import Signup from 'components/Signup/Signup'
+import Dashboard from 'components/Dashboard/Dashboard'
+import { Protected } from 'components/Protected'
+import PlaylistDetail from 'components/PlaylistDetail/PlaylistDetail'
+import useToken from 'utils/useToken'
+import RecommendView from 'components/RecommendView/RecommendView'
+import UserPlaylistDetail from 'components/UserPlaylistDetail/UserPlaylistDetail'
 import 'react-toastify/dist/ReactToastify.css';
+import './App.css'
 
 function App() {
   const {token, setToken, clearToken} = useToken()

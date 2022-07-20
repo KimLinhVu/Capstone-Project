@@ -1,11 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { getPlaylistDetail } from '../../utils/spotify'
-import { removePlaylistFromProfile } from '../../utils/playlist'
-import TrackContainer from '../TrackContainer/TrackContainer'
+import { getPlaylistDetail } from 'utils/spotify'
+import { removePlaylistFromProfile } from 'utils/playlist'
+import TrackContainer from 'components/TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
-import { notifyError, notifySuccess } from '../../utils/toast'
+import { notifyError, notifySuccess } from 'utils/toast'
+import NavBar from 'components/NavBar/NavBar'
+import './PlaylistDetail.css'
 
 function PlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
@@ -28,12 +30,13 @@ function PlaylistDetail() {
 
   return (
     <div className="playlist-detail">
+      <NavBar />
       {playlist ? 
-        <>
+        <div className='playlist-detail-content'>
           <div className='playlist-card'>
+            <img src={playlist.images[0].url} alt="Playlist Image" />
             <div className="playlist-header">
               <h2>{playlist.name}</h2>
-              <img src={playlist.images[0].url} alt="Playlist Image" />
             </div>
           </div>
           <div className="buttons">
@@ -47,8 +50,8 @@ function PlaylistDetail() {
               notifySuccess={notifySuccess}
             />
           </div>
-        </>
-      : null}
+        </div>
+      : <h1>Loading...</h1>}
     </div>
   )
 }

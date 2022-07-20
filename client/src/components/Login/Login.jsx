@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
-import { notifyError } from '../../utils/toast';
+import { notifyError } from 'utils/toast';
+import { logout } from 'utils/spotify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"
 
@@ -17,6 +18,7 @@ function Login({
   const navigate = useNavigate()
 
   useEffect(() => {
+    logout()
     clearToken()
   }, [])
 
@@ -45,21 +47,20 @@ function Login({
         <p>Password</p>
         <input type="password" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
       </label>
-      <button type="submit" className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
+      <button className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
       <Link to="/signup"><p className='register'>Register Now</p></Link>
-      <div className="toast">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

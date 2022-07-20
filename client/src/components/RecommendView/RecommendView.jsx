@@ -1,21 +1,23 @@
 import React from 'react'
 import { useState, useEffect, useMemo } from 'react'
-import { getAllUsers, getUserPlaylists, getUserLocation } from '../../utils/users'
+import { getAllUsers, getUserPlaylists, getUserLocation } from 'utils/users'
 import { useParams } from 'react-router-dom'
-import { getPlaylistTrackVector } from '../../utils/playlist'
-import { convertObjectToVector, calculateTrackSimilarity } from '../../utils/similarity'
-import UserPlaylist from '../UserPlaylist/UserPlaylist'
+import { getPlaylistTrackVector } from 'utils/playlist'
+import { convertObjectToVector, calculateTrackSimilarity } from 'utils/similarity'
+import UserPlaylist from 'components/UserPlaylist/UserPlaylist'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
 import "./RecommendView.css"
 
 function RecommendView() {
   const [allUsers, setAllUsers] = useState(null)
+  const [currentUsers, setCurrentUsers] = useState([])
   const [displayUsers, setDisplayUsers] = useState(null)
   const [users, setUsers] = useState([])
   const [userLocation, setUserLocation] = useState(null)
   const [usersLocationArray, setUsersLocationArray] = useState([])
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [userSearch, setUserSearch] = useState([])
   const { playlistId } = useParams()
 
   const { isLoaded } = useJsApiLoader({
@@ -57,9 +59,16 @@ function RecommendView() {
       let newArray = users.sort((a, b) => {
         return a.similarityScore - b.similarityScore
       })
+      setCurrentUsers(newArray)
       setDisplayUsers(newArray)
     }
   }, [users])
+
+  useEffect(() => {
+    /* displays users included in search input */
+    const newArray = currentUsers?.filter(item => item.user.user.username.toLowerCase().includes(userSearch.toLowerCase()))
+    setDisplayUsers(newArray)
+  }, [userSearch])
 
   const addUsersToLocationArray = (users) => {
     let resultArray = []
@@ -84,6 +93,7 @@ function RecommendView() {
     <div className="recommend-view">
       <div className="users">
         <h2>Users</h2>
+        <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
         {displayUsers ? displayUsers.map((item, idx) => {
           return (
             <UserPlaylist 
@@ -154,6 +164,7 @@ function Map({
       <Marker 
         position={center}
         label='User Location'
+        onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
       />
       {allUsers?.map((user, idx) => {
         const position = user.location.geometry.location

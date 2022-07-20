@@ -1,0 +1,87 @@
+/* profile card of dashboard */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0px 0px 13px 0px rgba(206, 206, 209, 0.7);
+  border-radius: 10px;
+  position: absolute;
+  padding: 30px;
+  width: 400px;
+  height: 80%;
+  align-self: flex-start;
+  margin-top: 100px;
+  margin-left: 50px;
+}
+
+.profile-card .profile-picture {
+  align-self: center;
+  width: 250px;
+  border-radius: 50%;
+}
+
+.profile-card .user-info {
+  margin: 10px 10px;
+  margin-bottom: 40px;
+}
+
+.profile-card .user-info .header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-card .user-info .header .settings {
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.profile-card .user-info .location {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-card .spotify-info {
+  margin: 40px 0px;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--background-color);
+}
+
+.profile-card .spotify-info .spotify-info-content {
+  padding-left: 15px;
+  padding-top: 10px;
+}
+
+.profile-card .spotify-info .spotify-user {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-card .spotify-info .spotify-user .spotify-name {
+  margin-left: 6px;
+}
+
+.profile-card .spotify-profile-btn {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0px;
+  width: 100%;
+  border-radius: 6px;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  background-color: green;
+  transition: 200ms ease-in-out;
+}
+
+.profile-card .spotify-profile-btn:hover {
+  background-color: rgb(26, 109, 26);
+  transform: translateY(-3px);
+}
+
+.profile-card h2 {
+  font-weight: 700;
+}
+
+.profile-card p {
+  font-size: 1.1rem;
+}
