@@ -49,6 +49,51 @@
   transform: translateY(-3px);
 }
 
+.playlist-detail .header {
+  position: absolute;
+  display: flex;
+  margin: 115px 250px;
+}
+
+.playlist-detail .header img {
+  width: 300px;
+  height: 300px;
+  box-shadow: 0 0 13px 0px rgba(1, 1, 14, 0.7);
+}
+
+.playlist-detail .header .playlist-header-info {
+  margin-left: 50px;
+  margin-top: 30px;
+}
+
+.playlist-detail .buttons {
+  border-radius: 6px;
+  margin-top: 30px;
+  padding: 3px;
+}
+
+.playlist-detail .recommend-btn, .remove-playlist-btn {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  background: var(--elements-pink);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.playlist-detail .remove-playlist-btn {
+  margin-left: 5px;
+  background: rgb(197, 14, 84);
+}
+
+.playlist-detail .recommend-btn:hover, .remove-playlist-btn:hover {
+  box-shadow: 0 0 13px 0px rgba(155, 155, 161, 0.7);
+  transform: translateY(-3px);
+}
+
 .playlist-detail .playlist-detail-content {
   padding: 270px 50px 0px 82px;
   width: 80%;

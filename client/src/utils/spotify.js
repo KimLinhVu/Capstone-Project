@@ -110,6 +110,10 @@ export const getPlaylistItems = (playlistId, offset) => {
   return instance.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`)
 }
 
+export const getPlaylistItems = (playlistId, offset) => {
+  return axios.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`)
+}
+
 export const getTrackDetail = (trackId) => {
   return instance.get(`/tracks/${trackId}`)
 }

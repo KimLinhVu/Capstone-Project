@@ -24,8 +24,6 @@ app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
 
-const devPassword = 'test123'
-
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
 }).catch(err => {
@@ -71,7 +69,7 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* tests for valid password */
-    if (password === devPassword) {
+    if (password === 'test123') {
       /* allow test123 as a pw while developing */
     } else if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
       return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
