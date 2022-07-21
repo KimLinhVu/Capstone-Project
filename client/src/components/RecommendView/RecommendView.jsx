@@ -6,6 +6,7 @@ import { getPlaylistTrackVector } from 'utils/playlist'
 import UserPlaylist from 'components/UserPlaylist/UserPlaylist'
 import Similarity from 'utils/similarity'
 import Map from 'components/Map/Map'
+import ReactLoading from 'react-loading'
 import "./RecommendView.css"
 
 function RecommendView() {
@@ -88,7 +89,7 @@ function RecommendView() {
       <div className="users">
         <h2>Users</h2>
         <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
-        {displayUsers ? displayUsers.map((item, idx) => {
+        {isLoading || displayUsers ? displayUsers?.map((item, idx) => {
           return (
             <UserPlaylist 
               key={idx}
@@ -101,19 +102,20 @@ function RecommendView() {
               playlistId={playlistId}
             />
           )
-        }) : <p>Click On a Location</p>}
+        }) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/> }
       </div>
       {!isLoading ? (
         <Map 
-        userLocation={userLocation}
-        allUsers={allUsers}
-        usersLocationArray={usersLocationArray}
-        vector={vector}
-        setUsers={setUsers}
-        similar={similar}
-        similarityMethod={profile?.similarityMethod}
+          userLocation={userLocation}
+          allUsers={allUsers}
+          usersLocationArray={usersLocationArray}
+          vector={vector}
+          setUsers={setUsers}
+          similar={similar}
+          similarityMethod={profile?.similarityMethod}
+          setIsLoading={setIsLoading}
         />
-      ): <h1>Loading...</h1>}
+      ): <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
     </div>
   )
 }

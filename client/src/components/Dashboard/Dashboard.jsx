@@ -20,6 +20,7 @@ function Dashboard() {
   const [selected, setSelected] = useState("Add A Playlist")
   const [playlistSearch, setPlaylistSearch] = useState('')
   const [refresh, setRefresh] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [playlistShow, setPlaylistShow] = useState(true)
   const [favoriteShow, setFavoriteShow] = useState(false)
   const [followersShow, setFollowersShow] = useState(false)
