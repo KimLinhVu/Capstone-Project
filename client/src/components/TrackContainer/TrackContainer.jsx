@@ -67,6 +67,7 @@ function TrackContainer({
           }
         })
       }
+      console.log(tempTracks)
     }
     getAllTracks()
   }, [])
