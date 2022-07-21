@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import { removePlaylistFromProfile } from 'utils/playlist'
 import { Link, useNavigate } from 'react-router-dom'
-import { notifyError, notifySuccess } from 'utils/toast'
 import NavBar from 'components/NavBar/NavBar'
 import GenreContainer from 'components/GenreContainer/GenreContainer'
 import Tracks from 'utils/tracks'
 import TrackContainer from 'components/TrackContainer/TrackContainer'
+import ReactLoading from 'react-loading'
 import './PlaylistDetail.css'
 
 function PlaylistDetail() {
@@ -28,7 +28,6 @@ function PlaylistDetail() {
       setPlaylist(data)
 
       const allTracks = await track.getAllPlaylistTracks(playlistId)
-      console.log(allTracks)
       setTracks(allTracks)
 
       setIsLoading(false)
@@ -76,7 +75,7 @@ function PlaylistDetail() {
             </div>
           </div>
       </>
-      : <h1>Loading...</h1>}
+      : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
   </div>
   )
 }

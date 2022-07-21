@@ -61,10 +61,11 @@
 }
 
 .playlist-detail .left .details {
-  box-shadow: 0 0 13px 0px rgba(217, 217, 223, 0.7);
+  box-shadow: 0px 0px 7px 0px rgba(186, 186, 187, 0.7);
+  background: var(--background-color);
   width: 290px;
   padding: 15px 20px 5px 20px;
-  border-radius: 6px;
+  border-radius: 7px;
 }
 
 .playlist-detail .right {

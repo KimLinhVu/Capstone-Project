@@ -25,20 +25,20 @@ function UserTrack({
   }
   
   return (
-    <div className="track">
-      <div className="track-left">
-        <span className='num'>{trackNumber + 1}</span>
+    <div className="user-track">
+      <span className='num'>{trackNumber + 1}</span>
+      <div className="song">
         <img src={track.album.images[0].url} alt="Track Image"/>
-        <div className="info">
+        <div className="song-info">
           <span className='title'>{track.name}</span>
           <span className='artist'>{track.artists[0].name}</span>
         </div>
       </div>
-      <div className="track-right">
+      <span className="similarity">{similarityScore.toFixed(2)}</span>
+      <div className="time">
         <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
       </div>
-      <button onClick={addTrack}><AiFillPlusCircle id='add'/></button>
-      <p>Similarity Score: {similarityScore.toFixed(2)}</p>
+      <AiFillPlusCircle onClick={addTrack} id='add'/>
     </div>
   )
 }

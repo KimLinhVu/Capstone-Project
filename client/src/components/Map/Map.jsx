@@ -1,7 +1,8 @@
 import React from 'react'
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
+import ReactLoading from 'react-loading'
 
 function Map({
   userLocation,
@@ -10,8 +11,10 @@ function Map({
   vector,
   setUsers,
   similar,
-  similarityMethod
+  similarityMethod,
+  setIsLoading
 }) {
+  const [map, setMap] = useState(null)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -22,11 +25,12 @@ function Map({
 
   const options = {
     streetViewControl: false,
-    fullscreenControl: false
+    fullscreenControl: false,
+    
   }
 
   if (!isLoaded) {
-    return <h1>Loading</h1>
+    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
   const handleMarkerOnClick = (location) => {
@@ -56,12 +60,28 @@ function Map({
     })
   }
 
+  const onBoundsChanged = () => {
+    setIsLoading(true)
+    /* check which markers are currently in view of map bounds */
+    markerArray.forEach(item => {
+      const inBounds = map?.getBounds().contains(item)
+      if (inBounds) {
+        handleMarkerOnClick(item)
+      }
+    })
+    setIsLoading(false)
+  }
+
   return (
     <GoogleMap
       zoom={8}
       center={center}
       options={options}
       mapContainerClassName="map-container"
+      onZoomChanged={onBoundsChanged}
+      onLoad={map => {
+        setMap(map)
+      }}
     >
       <Marker 
         position={center}

@@ -101,6 +101,7 @@ function PlaylistView({
              setSelected={setSelected}
              setCurrentAddPlaylist={setCurrentAddPlaylist}
              refresh={refresh}
+             isLoading={isLoading}
            />
           ) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
           <Tooltip title='Add Playlist'>
