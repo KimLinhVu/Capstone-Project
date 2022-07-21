@@ -1,0 +1,23 @@
+.genre-container {
+  margin-bottom: 30px;
+}
+
+.genre-container .genres {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  color: var(--txt-med);
+}
+
+.genre-container .genres button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  text-transform: capitalize;
+  color: var(--txt-dark);
+  font-size: 1rem;
+}
+
+.genre-container .genres button:hover {
+  filter: brightness(.9);
+}
