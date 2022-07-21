@@ -1,5 +1,6 @@
 import React from 'react'
 import Tracks from 'utils/tracks'
+import './Track.css'
 
 function Track({
   track,
