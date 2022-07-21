@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
-import TrackContainer from 'components/TrackContainer/TrackContainer'
+import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer'
 
 function UserPlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
@@ -20,7 +20,6 @@ function UserPlaylistDetail() {
 
   return (
     <div className="playlist-detail">
-      {similarityMethod ? <h1>{similarityMethod}</h1> : <p>No State</p>}
       {playlist ? 
         <div>
           <div className='playlist-card'>
@@ -30,7 +29,7 @@ function UserPlaylistDetail() {
             </div>
           </div>
           <div className="tracks">
-            <TrackContainer 
+            <UserTrackContainer 
               tracks={playlist.tracks.items} 
               addPlaylist={true} 
               playlistId={playlistId}

@@ -1,13 +1,22 @@
-import React from 'react'
-import './TrackContainer.css'
-import Track from 'components/Track/Track'
+import React, { useEffect, useState } from 'react'
+import Tracks from 'utils/tracks';
+import UserTrack from 'components/UserTrack/UserTrack';
+import { getTracksAudioFeatures } from 'utils/spotify';
+import { ToastContainer } from 'react-toastify';
+import Similarity from 'utils/similarity';
+import { getPlaylistTrackVector } from 'utils/playlist';
 import ReactLoading from 'react-loading'
+import 'react-toastify/dist/ReactToastify.css';
+import './UserTrackContainer.css'
 
-function TrackContainer({
-  tracks,
-  isLoading
+function UserTrackContainer({
+  originalPlaylistId,
+  similarityMethod,
+  playlistId
 }) {
   const [tracks, setTracks] = useState(null)
+  const [trackDetails, setTrackDetails] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const track = new Tracks()
   const similar = new Similarity()
 
@@ -15,6 +24,7 @@ function TrackContainer({
   /* implement filter by similarity score option */
   useEffect(() => {
     const getAllTracks = async () => {
+      setIsLoading(true)
       /* fetches originalPlaylist track vector */
       const result = await getPlaylistTrackVector(originalPlaylistId)
       const vector = similar.convertObjectToVector(result.data)
@@ -23,12 +33,13 @@ function TrackContainer({
       const allTracks = await track.getAllPlaylistTracks(playlistId)
 
       /* gets track audio features for each track */
-      const trackIdArray = allTracks.map(item => {
-        return item.track.id
+      let trackIdArray = []
+      allTracks.forEach(item => {
+        trackIdArray.push(item.track.id)
       })
 
       /* initialize tracks array */
-      const tempTracks = []
+      let tempTracks = []
 
       while (trackIdArray.length > 0) {
         let trackIdString = trackIdArray.splice(0, 100).join(',')
@@ -57,21 +68,51 @@ function TrackContainer({
             } else {
               similarity = similar.calculateOwnSimilarity(vector, trackVectorArray)
             }
-            tempTracks.push({ id: item.id, similarity: similarity})
+            tempTracks.push({ id: item.id, similarity: similarity, vector: trackVectorArray})
           }
         })
       }
-      console.log(tempTracks)
+      /* sort tempTracks by similarity score */
+      tempTracks.sort((a, b) => {
+        return a.similarity - b.similarity
+      })
+      const trackDetailArray = await track.getAllTrackDetails(tempTracks)
+      setTrackDetails(trackDetailArray)
+      setTracks(tempTracks)
+
+      setIsLoading(false)
     }
     getAllTracks()
   }, [])
   
   return (
-    <div className='track-container'>
+    <div className="user-track-container">
       <div className="tracks">
+        {!isLoading ? tracks?.map((item, idx) => (
+          <UserTrack 
+            key={idx}
+            similarityScore={item.similarity}
+            vector={item.vector}
+            trackNumber={idx}
+            playlistId={originalPlaylistId}
+            track={trackDetails[idx]}
+          />
+        )) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
 
-export default TrackContainer
+export default UserTrackContainer
