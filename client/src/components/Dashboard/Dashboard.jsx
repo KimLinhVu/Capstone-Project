@@ -115,6 +115,8 @@ function Dashboard() {
               <button onClick={() =>{
                 closeAllTabs()
                 setFavoriteShow(true)
+                setFollowersShow(false)
+                setFollowingShow(false)
               }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
               <button onClick={() => {
                 closeAllTabs()

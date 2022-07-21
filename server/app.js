@@ -23,8 +23,6 @@ app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
 
-const devPassword = 'test123'
-
 mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database connected...')
 }).catch(err => {
@@ -70,7 +68,7 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* tests for valid password */
-    if (password === devPassword) {
+    if (password === 'test123') {
       /* allow test123 as a pw while developing */
     } else if (password.length < 8 || !/\d/.test(password) || !/[A-Z]/.test(password)) {
       return next(new BadRequestError('Password must be at least 8 characters, contain an uppercase letter, and contain a number'))
@@ -81,7 +79,10 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    const newUser = await new User({ username, password, location, privacy })
+    /* randomly decide which similarity method user receives */
+    const similarityMethod = Math.round(Math.random())
+
+    const newUser = await new User({ username, password, location, privacy, following: [], followers: [], similarityMethod })
     await newUser.save()
     res.status(200).json()
   } catch (error) {
