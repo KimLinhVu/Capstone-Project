@@ -3,8 +3,7 @@
   flex-direction: column;
   align-items: center;
   background: var(--background-color);
-  padding: 0% 5%;
-  height: 100vh;
+  padding: 0 5%;
   min-height: 100vh;
 }
 
@@ -23,7 +22,7 @@
   display: none;
 }
 
-.dashboard .favorites-tab {
+.dashboard .favorites-tab, .followers-tab {
   width: 100%;
   padding: 10px 10px;
   display: none;
@@ -31,7 +30,7 @@
 
 .dashboard .carousel {
   width: 100%;
-  background: url('../../../img/lily.jpeg');
+  background: url('/Users/kimlinh/CodePath/Project/Capstone-Project/client/img/lily.jpeg');
   background-size: cover;
   background-position: 5rem;
   height: 35vh;
@@ -39,8 +38,8 @@
 
 /* navlinks section */
 .dashboard .nav {
-  margin: 10px 0px;
-  padding: 10px 0px 0px 0px;
+  margin: 10px 0;
+  padding: 10px 0 0 0;
 }
 
 .dashboard .links {
@@ -71,7 +70,7 @@
 }
 
 .dashboard .links .tab-show {
-  border-bottom: 3px solid rgb(214, 112, 151);
+  border-bottom: 3px solid var(--elements-pink);
 }
 
 .dashboard .nav hr {
