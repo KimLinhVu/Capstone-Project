@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { getArtistDetail } from '../../utils/spotify'
+import './GenreContainer.css'
 
 function GenreContainer({
   tracks
@@ -54,9 +55,8 @@ function GenreContainer({
   return (
     <div className="genre-container">
       <div className="genres">
-        <h2>Top Genres in Playlist</h2>
         {topFiveGenres.map((item, idx) => {
-          return <p key={idx}>{item.genre}</p>
+          return <button key={idx}>{item.genre}</button>
         })}
       </div>
     </div>

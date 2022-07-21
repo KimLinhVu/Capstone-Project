@@ -122,6 +122,10 @@ export const getTracksDetails = (trackIdString) => {
   return instance.get(`/tracks/?ids=${trackIdString}`)
 }
 
+export const getTracksDetails = (trackIdString) => {
+  return axios.get(`/tracks/?ids=${trackIdString}`)
+}
+
 export const getArtistDetail = (artistId) => {
   return instance.get(`/artists?ids=${artistId}`)
 }

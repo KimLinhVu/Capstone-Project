@@ -27,7 +27,6 @@ function UserTrackContainer({
   useEffect(() => {
     const getAllTracks = async () => {
       setIsLoading(true)
-
       /* get all tracks in a user's playlist */
       const allTracks = await track.getAllPlaylistTracks(playlistId)
 
