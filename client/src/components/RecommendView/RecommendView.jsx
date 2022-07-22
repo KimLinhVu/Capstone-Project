@@ -88,7 +88,7 @@ function RecommendView() {
       <div className="users">
         <h2>Users</h2>
         <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
-        {isLoading || displayUsers ? displayUsers?.map((item, idx) => {
+        {displayUsers ? displayUsers.map((item, idx) => {
           return (
             <UserPlaylist 
               key={idx}
@@ -101,7 +101,7 @@ function RecommendView() {
               playlistId={playlistId}
             />
           )
-        }) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/> }
+        }) : <p>No Users Found</p> }
       </div>
       {!isLoading ? (
         <Map 
