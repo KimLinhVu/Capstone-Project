@@ -27,7 +27,7 @@ function UserTrackContainer({
       setIsLoading(true)
       /* fetches originalPlaylist track vector */
       const result = await getPlaylistTrackVector(originalPlaylistId)
-      const vector = similar.convertObjectToVector(result.data)
+      const vector = result.data
       
       /* get all tracks in a user's playlist */
       const allTracks = await track.getAllPlaylistTracks(playlistId)
@@ -60,15 +60,14 @@ function UserTrackContainer({
           }
           if (item !== null) {
             similar.createTrackObject(tempTrackVector, item)
-            const trackVectorArray = similar.convertObjectToVector(tempTrackVector)
             
             let similarity = 0
             if (similarityMethod === 0) {
-              similarity = similar.calculateCosineSimilarity(vector, trackVectorArray)
+              similarity = similar.calculateCosineSimilarity(vector, tempTrackVector)
             } else {
-              similarity = similar.calculateOwnSimilarity(vector, trackVectorArray)
+              similarity = similar.calculateOwnSimilarity(vector, tempTrackVector)
             }
-            tempTracks.push({ id: item.id, similarity: similarity, vector: trackVectorArray})
+            tempTracks.push({ id: item.id, similarity: similarity, vector: tempTrackVector})
           }
         })
       }

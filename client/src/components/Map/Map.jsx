@@ -44,7 +44,7 @@ function Map({
       setUsers([])
       const { data } = await getUserPlaylists(user.user._id)
       data?.forEach(playlist => {
-        const userVector = similar.convertObjectToVector(playlist.trackVector)
+        const userVector = playlist.trackVector
 
         /* use random similarity method associated with user */
         let similarity = 0
