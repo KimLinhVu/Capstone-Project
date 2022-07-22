@@ -9,7 +9,8 @@ function Dropdown({
   selected,
   setSelected,
   setCurrentAddPlaylist,
-  refresh
+  refresh,
+  isLoading
 }) {
   const [isActive, setIsActive] = useState(false)
   const track = new Tracks()
@@ -26,13 +27,13 @@ function Dropdown({
 
   return (
     <div className="dropdown">
-      <div className="dropdown-btn" onClick={options.length === 0 ? () => {} : () => setIsActive(!isActive)}>
+      <div className="dropdown-btn" onClick={options.length === 0 || isLoading ? () => {} : () => setIsActive(!isActive)}>
         <p>{selected}</p>
         {isActive ? <IoMdArrowDropup size={20} className='icon'/> : <IoMdArrowDropdown size={20} className='icon'/>}
       </div>
       {isActive && (
         <div className="dropdown-content">
-          {options && options.map((option, idx) => (
+          {options.length >= 1 && options.map((option, idx) => (
             <div
               onClick={() => {
                 setSelected(option.label)

@@ -2,7 +2,8 @@ import React from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
-import TrackContainer from 'components/TrackContainer/TrackContainer'
+import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer'
+import './UserPlaylistDetail.css'
 
 function UserPlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
@@ -19,18 +20,24 @@ function UserPlaylistDetail() {
   }, [])
 
   return (
-    <div className="playlist-detail">
-      {similarityMethod ? <h1>{similarityMethod}</h1> : <p>No State</p>}
+    <div className="user-playlist-detail">
       {playlist ? 
         <>
           <div className='playlist-card'>
             <div className="playlist-header">
               <h2>{playlist.name}</h2>
-              <img src={playlist.images[0].url} alt="Playlist Image" />
+              <img src={playlist.images[0].url} alt="Playlist Cover" />
             </div>
           </div>
+          <div className="header">
+            <span className="num">#</span>
+            <span className="title">Title</span>
+            <span className="similarity">Similarity Score</span>
+            <span className="time">Time</span>
+          </div>
+          <hr></hr>
           <div className="tracks">
-            <TrackContainer 
+            <UserTrackContainer 
               tracks={playlist.tracks.items} 
               addPlaylist={true} 
               playlistId={playlistId}

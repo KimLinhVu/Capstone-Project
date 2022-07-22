@@ -39,12 +39,3 @@
   align-items: center;
   gap: 15px;
 }
-
-#add {
-  /* padding: 10px; */
-  border: 1px solid var(--light-border);
-  border-radius: 7px;
-  cursor: pointer;
-  color: black;
-}
-
