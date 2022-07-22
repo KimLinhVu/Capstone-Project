@@ -48,7 +48,7 @@ router.get('/login', (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`)
 })
 
-router.get('/callback', (req, res) => {
+router.get('/callback', (req, res, next) => {
   const code = req.query.code || null
 
   const data = querystring.stringify({
@@ -85,7 +85,7 @@ router.get('/callback', (req, res) => {
             /* redirect to react app on success */
             res.redirect(`http://localhost:3000/?${queryParams}`)
           } catch (error) {
-
+            next(error)
           }
         }
         storeInitialPlaylist()

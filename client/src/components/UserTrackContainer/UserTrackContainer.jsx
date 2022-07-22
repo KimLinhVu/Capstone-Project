@@ -91,6 +91,7 @@ function UserTrackContainer({
           <UserTrack 
             key={idx}
             similarityScore={item.similarity}
+            similarityMethod={similarityMethod === 0 ? 'cosine similarity' : 'own similarity'}
             vector={item.vector}
             trackNumber={idx}
             playlistId={originalPlaylistId}
