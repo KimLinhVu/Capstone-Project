@@ -24,7 +24,6 @@ function RecommendView () {
   useEffect(() => {
     const fetchUserProfile = async () => {
       setIsLoading(true)
-
       /* get current user profile and set location */
       const { data } = await getUserProfile()
       setProfile(data)
