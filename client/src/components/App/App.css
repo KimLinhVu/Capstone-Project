@@ -15,5 +15,7 @@
   --txt-light: #b3c1d8;
   --txt-dark: #314067;
   --light-border: #ccc;
-  --background-color: rgb(250, 249, 249);
+  --elements-pink: rgb(214, 112, 151);
+  --elements-darkpink: rgb(178, 84, 120);
+  --background-color: rgb(243, 240, 240);
 }

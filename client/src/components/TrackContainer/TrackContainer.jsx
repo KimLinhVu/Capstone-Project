@@ -1,78 +1,95 @@
-import React, { useEffect } from 'react'
-import Track from 'components/Track/Track'
-import { useState } from 'react'
-import { getArtistDetail } from 'utils/spotify'
+import React, { useEffect, useState } from 'react'
+import Tracks from 'utils/tracks';
+import { getTracksAudioFeatures } from 'utils/spotify';
 import { ToastContainer } from 'react-toastify';
+import Similarity from 'utils/similarity';
+import { getPlaylistTrackVector } from 'utils/playlist';
 import 'react-toastify/dist/ReactToastify.css';
 import './TrackContainer.css'
 
 function TrackContainer({
-  tracks,
   addPlaylist,
+  originalPlaylistId,
+  similarityMethod,
   playlistId
 }) {
-  const [genreArray, setGenreArray] = useState([])
+  const [tracks, setTracks] = useState(null)
+  const track = new Tracks()
+  const similar = new Similarity()
 
+  /* calculate similarity score for each track and sort */
+  /* implement filter by similarity score option */
   useEffect(() => {
-    const getArtistGenres = async () => {
-      /* creates array of artist ids as a parameter for Spotify API */
-      let artistArray = []
-      tracks.forEach(item => {
-        const artists = item.track.artists
-        artists.forEach(item => {
-          artistArray.push(item.id)
-        })
-      })
-  
-      while (artistArray.length > 0) {
-        /* requests artist information in increments of 50 */
-        let newArray = genreArray
-        let artistString = artistArray.splice(0, 50).join(',')
-        const { data } = await getArtistDetail(artistString)
-        
-        /* counts number of times each genre appears */
-        data.artists.forEach(item => {
-          item.genres.forEach(genre => {
-            let found = false
-            newArray.forEach(item => {
-              if (item.genre === genre) {
-                item.count += 1
-                found = true
-              }
-            })
-            if (!found) {
-              const newGenre = { genre: genre, count: 0}
-              newArray.push(newGenre)
-            }
-          })
-        })
-        newArray.sort((a, b) => {
-          return b.count - a.count
-        })
-        setGenreArray(oldArray => [...oldArray, newArray])
-      }
-    }
-    getArtistGenres()
-  }, [])
+    const getAllTracks = async () => {
+      /* fetches originalPlaylist track vector */
+      const result = await getPlaylistTrackVector(originalPlaylistId)
+      const vector = similar.convertObjectToVector(result.data)
+      
+      /* get all tracks in a user's playlist */
+      const allTracks = await track.getAllPlaylistTracks(playlistId)
 
+      /* gets track audio features for each track */
+      let trackIdArray = []
+      allTracks.forEach(item => {
+        trackIdArray.push(item.track.id)
+      })
+
+      /* initialize tracks array */
+      const tempTracks = []
+
+      while (trackIdArray.length > 0) {
+        let trackIdString = trackIdArray.splice(0, 100).join(',')
+        const { data } = await getTracksAudioFeatures(trackIdString)
+        console.log(data.audio_features)
+        data.audio_features.forEach(item => {
+          let tempTrackVector = {
+            acousticness: 0,
+            danceability: 0,
+            energy: 0,
+            instrumentalness: 0,
+            key: 0,
+            liveness: 0,
+            loudness: 0,
+            mode: 0,
+            speechiness: 0,
+            time_signature: 0,
+            valence: 0
+          }
+          if (item !== null) {
+            similar.createTrackObject(tempTrackVector, item)
+            const trackVectorArray = similar.convertObjectToVector(tempTrackVector)
+            console.log(trackVectorArray)
+            
+            let similarity = 0
+            if (similarityMethod === 0) {
+              similarity = similar.calculateCosineSimilarity(vector, trackVectorArray)
+            } else {
+              similarity = similar.calculateOwnSimilarity(vector, trackVectorArray)
+            }
+            console.log(similarity)
+            console.log(item.id)
+            tempTracks.push({ id: item.id, similarity: similarity})
+          }
+        })
+      }
+      console.log(tempTracks)
+    }
+    getAllTracks()
+  }, [])
+  
   return (
     <div className="track-container">
-      <div className="genres">
-        <h2>Top Genres in Playlist</h2>
-        {genreArray.slice(0, 5).map((item, idx) => {
-          return <p key={idx}>{item.genre}</p>
-        })}
-      </div>
       <div className="tracks">
-        {tracks.map((item, idx) => (
+        {/* {tracks.map((item, idx) => (
           <Track 
             key={idx} 
             track={item.track} 
             trackNumber={idx}
             addPlaylist={addPlaylist}
-            playlistId={playlistId}
+            playlistId={originalPlaylistId}
+            similarityMethod={similarityMethod}
           />
-        ))}
+        ))} */}
       </div>
       <ToastContainer
         position="top-center"
