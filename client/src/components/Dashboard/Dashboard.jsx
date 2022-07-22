@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import { accessToken, getCurrentUserProfile } from 'utils/spotify'
 import { getPlaylists, getCurrentPlaylists } from 'utils/playlist'
 import PlaylistView from 'components/PlaylistView/PlaylistView'
@@ -8,6 +8,9 @@ import Tracks from 'utils/tracks'
 import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
 import './Dashboard.css'
+import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
+
+export const DashboardContext = createContext()
 
 function Dashboard() {
   const [spotifyToken, setSpotifyToken] = useState(null)
@@ -25,6 +28,8 @@ function Dashboard() {
   const [favoriteShow, setFavoriteShow] = useState(false)
   const [followersShow, setFollowersShow] = useState(false)
   const [followingShow, setFollowingShow] = useState(false)
+  const [popupIsOpen, setPopupIsOpen] = useState(false)
+  const [userPopupId, setUserPopupId] = useState(null)
 
   const track = new Tracks()
   
@@ -41,7 +46,7 @@ function Dashboard() {
     if (accessToken) {
       fetchUserProfiles()
     }
-  }, [])
+  }, [refresh])
 
   useEffect(() => {
     const addUserPlaylist = async () => {      
@@ -130,51 +135,93 @@ function Dashboard() {
             </div>
             <hr />
           </div>
-          <div className={`playlist-tab ${playlistShow ? 'show' : ''}`}>
-            <PlaylistView
-              playlist={playlist}
-              selected={selected}
-              setSelected={setSelected}
-              setCurrentAddPlaylist={setCurrentAddPlaylist}
-              currentAddPlaylist={currentAddPlaylist}
-              playlistSearch={playlistSearch}
-              setPlaylistSearch={setPlaylistSearch}
-              displayPlaylist={displayPlaylist}
-              setPlaylist={setPlaylist}
-              spotifyName={spotifyProfile?.display_name}
-              refresh={refresh}
-              setRefresh={setRefresh}
+          {spotifyProfile && 
+            <ProfileCard 
+              spotifyProfile={spotifyProfile} 
+              profile={profile}
             />
-          </div>
-          <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
-            {spotifyProfile && (
-              <FavoriteView
+          }
+          <div className="dashboard-right">
+            <div className="nav">
+              <div className="links">
+                <button onClick={() => {
+                  setPlaylistShow(true)
+                  setFavoriteShow(false)
+                  setFollowersShow(false)
+                  setFollowingShow(false)
+                }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
+                <button onClick={() =>{
+                  setPlaylistShow(false)
+                  setFavoriteShow(true)
+                  setFollowersShow(false)
+                  setFollowingShow(false)
+                }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
+                <button onClick={() => {
+                  setPlaylistShow(false)
+                  setFavoriteShow(false)
+                  setFollowersShow(true)
+                  setFollowingShow(false)
+                }} className={`${followersShow ? 'tab-show' : ''}`}>Followers</button>
+                <button onClick={() => {
+                  setPlaylistShow(false)
+                  setFavoriteShow(false)
+                  setFollowersShow(false)
+                  setFollowingShow(true)
+                }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
+              </div>
+              <hr />
+            </div>
+            <div className={`playlist-tab ${playlistShow ? 'show' : ''}`}>
+              <PlaylistView
+                playlist={playlist}
+                selected={selected}
+                setSelected={setSelected}
+                setCurrentAddPlaylist={setCurrentAddPlaylist}
+                currentAddPlaylist={currentAddPlaylist}
+                playlistSearch={playlistSearch}
+                setPlaylistSearch={setPlaylistSearch}
+                displayPlaylist={displayPlaylist}
+                setPlaylist={setPlaylist}
+                spotifyName={spotifyProfile?.display_name}
                 refresh={refresh}
                 setRefresh={setRefresh}
-                spotifyProfile={spotifyProfile}
               />
-            )}
-          </div>
-          <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
-            {profile && (
-              <FollowersView 
-                profile={profile}
-                followers={true}
-              />
-            )}
-          </div>
-          <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
-            {profile && (
-                <FollowersView 
-                  profile={profile}
-                  followers={false}
+            </div>
+            <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
+              {spotifyProfile && (
+                <FavoriteView
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  spotifyProfile={spotifyProfile}
                 />
               )}
+            </div>
+            <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
+              {profile && (
+                <FollowersView 
+                  profile={profile}
+                  followers={true}
+                  setPopupIsOpen={setPopupIsOpen}
+                  setUserPopupId={setUserPopupId}
+                />
+              )}
+            </div>
+            <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
+              {profile && (
+                  <FollowersView 
+                    profile={profile}
+                    followers={false}
+                    setPopupIsOpen={setPopupIsOpen}
+                    setUserPopupId={setUserPopupId}
+                  />
+                )}
+            </div>
           </div>
-        </div>
-      </>)
-       : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
-    </div>
+        </>)
+        : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
+        {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId}/>}
+      </div>
+    </DashboardContext.Provider>
   )
 }
 

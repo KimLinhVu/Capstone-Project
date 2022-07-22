@@ -4,7 +4,9 @@ import './FollowersView.css'
 
 function FollowersView({
   profile,
-  followers
+  followers,
+  setPopupIsOpen,
+  setUserPopupId
 }) {
   const users = followers ? profile.followers : profile.following
   let userCards;
