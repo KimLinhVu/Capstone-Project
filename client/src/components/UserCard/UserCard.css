@@ -6,6 +6,7 @@
   border-radius: 5px;
   width: 172px;
   min-height: 250px;
+  cursor: pointer;
 }
 
 .user-card img {
