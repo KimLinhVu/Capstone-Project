@@ -4,7 +4,9 @@ import { getUserProfileById } from '../../utils/users'
 import './UserCard.css'
 
 function UserCard({
-  userId
+  userId,
+  setPopupIsOpen,
+  setUserPopupId
 }) {
   const [profile, setProfile] = useState(null)
   
@@ -17,7 +19,10 @@ function UserCard({
   }, [])
   
   return (
-    <div className='user-card'>
+    <div className='user-card' onClick={() => {
+      setUserPopupId(userId)
+      setPopupIsOpen(true)
+      }}>
       {profile && (
         <>
           <img src=''/>

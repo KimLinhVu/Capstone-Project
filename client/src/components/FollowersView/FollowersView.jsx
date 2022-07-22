@@ -4,7 +4,9 @@ import './FollowersView.css'
 
 function FollowersView({
   profile,
-  followers
+  followers,
+  setPopupIsOpen,
+  setUserPopupId
 }) {
   const users = followers ? profile.followers : profile.following
   return (
@@ -16,7 +18,7 @@ function FollowersView({
         <div className="playlists">
           {users.length !== 0 ? (
             users.map((item, idx) => {
-              return <UserCard key={idx} userId={item.userId} />
+              return <UserCard key={idx} userId={item.userId} setPopupIsOpen={setPopupIsOpen} setUserPopupId={setUserPopupId}/>
             })
           ): <p>No followers</p>}
         </div>
