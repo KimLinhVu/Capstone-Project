@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   location: Object,
   privacy: Boolean,
+  showFollowing: Boolean,
   following: Array,
   followers: Array,
   similarityMethod: Number

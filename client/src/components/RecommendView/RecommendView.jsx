@@ -21,31 +21,29 @@ function RecommendView() {
   const [isLoading, setIsLoading] = useState(true)
   const [userSearch, setUserSearch] = useState([])
   const { playlistId } = useParams()
-
   const similar = new Similarity()
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       setIsLoading(true)
+      
+      /* get current user profile and set location */
       const { data } = await getUserProfile()
       setProfile(data)
       setUserLocation(data.location.geometry.location)
-      setIsLoading(false)
-    }
-    const fetchUserTrackVector = async () => {
-      /* fetches playlist track vector */
-      const { data } = await getPlaylistTrackVector(playlistId)
-      setVector(data)
 
-      /* fetches all users in database and adds them to a location array */
-      setIsLoading(true)
-      const result = await getAllUsers()
+      /* fetches filtered users in database and adds them to a location array */
+      const result = await getAllUsers(data.followers)
       setAllUsers(result.data)
       const userArray = addUsersToLocationArray(result.data)
       setUsersLocationArray(userArray)
+
+      /* fetches playlist track vector */
+      const trackVector = await getPlaylistTrackVector(playlistId)
+      setVector(trackVector.data)
+
       setIsLoading(false)
     }
-    fetchUserTrackVector()
     fetchUserProfile()
   }, [])
 

@@ -1,12 +1,9 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { addUserFollowing, removeUserFollowing, addUserFollower, removeUserFollower } from 'utils/users'
 import './UserPlaylist.css'
 
 function UserPlaylist({
   user,
-  following,
   playlist,
   similarity,
   playlistId,
