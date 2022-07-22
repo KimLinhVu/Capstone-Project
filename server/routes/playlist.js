@@ -44,15 +44,13 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { playlist, spotifyId, userId } = req.body
-
-    playlist.forEach(async (playlist) => {
-      /* search for if playlist already exists */
-      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
+    for (let i = 0; i < playlist.length; i++) {
+      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist[i].id })
       if (!playlistItem) {
-        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false, favorite: false })
+        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i], added: false, favorite: false })
         await newPlaylist.save()
       }
-    })
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
