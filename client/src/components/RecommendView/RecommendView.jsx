@@ -35,8 +35,7 @@ function RecommendView() {
     const fetchUserTrackVector = async () => {
       /* fetches playlist track vector */
       const { data } = await getPlaylistTrackVector(playlistId)
-      const vector = similar.convertObjectToVector(data)
-      setVector(vector)
+      setVector(data)
 
       /* fetches all users in database and adds them to a location array */
       setIsLoading(true)
