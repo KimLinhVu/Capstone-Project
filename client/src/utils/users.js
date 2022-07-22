@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-export const getAllUsers = () => {
-  return axios.get('http://localhost:8888/users', {
+export const getAllUsers = (followers) => {
+  return axios.post('http://localhost:8888/users', {
+    followers: followers
+  }, {
     headers: {
       "x-access-token": localStorage.getItem('token')
     }
