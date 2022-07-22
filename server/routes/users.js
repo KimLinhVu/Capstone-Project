@@ -12,7 +12,7 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
     const allUsers = await Users.find({ _id: { $ne: userId }, privacy: false })
     res.json(allUsers)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -32,7 +32,7 @@ router.get('/profile-id', jwt.verifyJWT, async (req, res, next) => {
     const user = await Users.findOne({ _id: userId })
     res.json(user)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -42,7 +42,7 @@ router.get('/playlist', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, added: true })
     res.json(playlists)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -52,7 +52,7 @@ router.get('/location', jwt.verifyJWT, async (req, res, next) => {
     const user = await Users.findOne({ _id: userId })
     res.json(user.location)
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -67,7 +67,7 @@ router.post('/add-follower', jwt.verifyJWT, async (req, res, next) => {
     })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -83,7 +83,7 @@ router.post('/add-following', jwt.verifyJWT, async (req, res, next) => {
     })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -99,7 +99,7 @@ router.post('/remove-follower', jwt.verifyJWT, async (req, res, next) => {
     })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -115,7 +115,7 @@ router.post('/remove-following', jwt.verifyJWT, async (req, res, next) => {
     })
     res.status(200).json()
   } catch (error) {
-
+    next(error)
   }
 })
 
