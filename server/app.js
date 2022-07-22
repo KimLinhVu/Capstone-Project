@@ -82,7 +82,6 @@ app.post('/signup', async (req, res, next) => {
 
     /* randomly decide which similarity method user receives */
     const newUser = await new User({ username, password, location, privacy, following: [], followers: [] })
-    console.log(newUser.id)
 
     /* determine similarity method based on counter in id */
     const similarityMethod = similarity.getSimilarityMethod(newUser.id)
