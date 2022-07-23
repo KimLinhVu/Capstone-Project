@@ -1,23 +1,13 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
-import { getUserProfileById } from '../../utils/users'
 import './UserCard.css'
 
 function UserCard({
   userId,
+  user,
   setPopupIsOpen,
   setUserPopupId
 }) {
-  const [profile, setProfile] = useState(null)
-  
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const { data } = await getUserProfileById(userId)
-      setProfile(data)
-    }
-    getUserInfo()
-  }, [])
-  
+
   return (
     <div className='user-card' onClick={() => {
       setUserPopupId(userId)

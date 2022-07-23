@@ -1,6 +1,8 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import UserCard from 'components/UserCard/UserCard'
 import './FollowersView.css'
+import { getUserProfileById } from 'utils/users'
 
 function FollowersView({
   profile,
@@ -20,6 +22,7 @@ function FollowersView({
   }
   return (
     <div className="followers-view">
+      <input type="text" placeholder='Search Users' className='follower-searchbar' value={followerSearch} onChange={(e) => setFollowerSearch(e.target.value)}/>
       <div className="playlist-container">
         <div className="header">
           <h3>{followers ? `${profile.username}'s Followers` : 'Following'}</h3>
