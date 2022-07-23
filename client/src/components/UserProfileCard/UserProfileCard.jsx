@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { getUserProfileById } from 'utils/users'
 import Follower from 'utils/follower'
 import { DashboardContext } from 'components/Dashboard/Dashboard'
+import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
 
 function UserProfileCard({
@@ -10,18 +11,20 @@ function UserProfileCard({
   setPopupIsOpen
 }) {
   const [profile, setProfile] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(null)
   const follower = new Follower()
   const {refresh, setRefresh} = useContext(DashboardContext)
 
   useEffect(() => {
     const getUserProfile = async () => {
+      setIsLoading(true)
+      /* gets user-card profile */
       const { data } = await getUserProfileById(userId)
-      console.log(data)
       setProfile(data)
-
       follower.isUserFollowing(data, setIsFollowing)
 
+      setIsLoading(false)
     }
     getUserProfile()
   }, [])
@@ -30,14 +33,14 @@ function UserProfileCard({
     <div className="user-profile-card">
       <div id="overlay" onClick={() => setPopupIsOpen(false)}></div>
       <div className="profile-popup">
-        {profile ? (
+        {profile && !isLoading ? (
           <div className="profile-content">
             <h1>{profile.username}</h1>
             <p>Followers: {profile.followers.length}</p>
             <p>Location: {profile.location.formatted_address}</p>
             {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(profile, setIsFollowing, refresh, setRefresh)}>Unfollow {profile.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(profile, setIsFollowing, refresh, setRefresh)}>Follow {profile.username}</button>}
           </div>
-        ) : <h1>Loading...</h1>}
+        ) :  <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
     </div>
   )
