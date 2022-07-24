@@ -5,14 +5,33 @@
 }
 
 .recommend-view .users {
-  width: 40%;
+  margin-top: 80px;
+  width: 35%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow: auto;
+}
+
+.recommend-view .users .header{
+  margin: 10px 20px;
+}
+
+.recommend-view .users input {
+  border: 1px solid var(--light-border);
+  padding: 13px 20px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  width: 100%;
 }
 
 .recommend-view .map-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+}
+
+.recommend-view .no-users {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  font-size: 1.2rem;
 }

@@ -57,8 +57,11 @@ function UserPlaylist({
           <p>Similarity Score: {similarity}</p>
           <Link to={`/user/${playlist.id}`} state={data}><img src={playlist.images[0].url}/></Link>
         </div>
-      ) : null}
-    </div>
+      </div>
+      <div className="right">
+        <button className='similarity'>{similarity}</button>
+      </div>
+    </div></Link>
   )
 }
 
