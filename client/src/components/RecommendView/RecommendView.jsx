@@ -19,6 +19,7 @@ function RecommendView () {
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [userSearch, setUserSearch] = useState([])
+  const [sortSimilarityHigh, setSortSimilarityHigh] = useState(false)
   const { playlistId } = useParams()
 
   useEffect(() => {
