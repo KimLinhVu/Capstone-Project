@@ -15,8 +15,6 @@ function ProfileCard({
   profile
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const uploadedImage = useRef(null)
-  const imageUploader = useRef(null)
   const navigate = useNavigate()
   
   const open = Boolean(anchorEl);
