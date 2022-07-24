@@ -21,6 +21,8 @@ function UserTrack({
   const [add, setAdd] = useState(true)
   let trackButton
 
+  console.log(track.preview_url)
+
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
     
