@@ -51,6 +51,7 @@ function UserPlaylistDetail() {
   }, [popupIsOpen])
 
   return (
+    <><NavBar />
     <div className="user-playlist-detail">
       {playlist ? 
         <div>
