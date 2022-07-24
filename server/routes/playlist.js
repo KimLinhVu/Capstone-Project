@@ -139,8 +139,8 @@ router.post('/remove-favorite', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
-/* updates similarity count */
-router.post('/similarityCount', jwt.verifyJWT, async (req, res, next) => {
+/* adds to similarity count */
+router.post('/addSimilarityCount', jwt.verifyJWT, async (req, res, next) => {
   try {
     const { similarityMethod } = req.body
 
@@ -153,6 +153,23 @@ router.post('/similarityCount', jwt.verifyJWT, async (req, res, next) => {
     } else {
       /* increment similarity count by one */
       await SimilarityCount.findOneAndUpdate({ similarityMethod }, { $inc: { count: 1 } })
+    }
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* removes from similarity count */
+router.post('/removeSimilarityCount', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const { similarityMethod } = req.body
+
+    /* check to see if similaritymethod counter has been created yet */
+    const found = await SimilarityCount.findOne({ similarityMethod })
+    if (!found) {
+      /* decrement similarity count by one */
+      await SimilarityCount.findOneAndUpdate({ similarityMethod }, { $inc: { count: -1 } })
     }
     res.status(200).json()
   } catch (error) {

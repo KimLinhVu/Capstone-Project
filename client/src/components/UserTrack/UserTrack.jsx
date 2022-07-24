@@ -1,8 +1,9 @@
 import React from 'react'
-import { addTrackToPlaylist } from 'utils/spotify'
+import { useState } from 'react';
+import { addTrackToPlaylist, removeTrackFromPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
-import { AiFillPlusCircle } from "react-icons/ai";
-import { addSimilarityMethodCount } from 'utils/playlist';
+import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { addSimilarityMethodCount, removeSimilarityMethodCount} from 'utils/playlist';
 import Tracks from 'utils/tracks';
 import './UserTrack.css'
 
@@ -13,20 +14,35 @@ function UserTrack({
   trackNumber,
   track,
 }) {
+  const [add, setAdd] = useState(true)
   const tracks = new Tracks()
 
-  console.log(track.preview_url)
+  console.log(track.uri)
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
     
     /* sends success or error toast */
     if (res.status === 201) {
+      setAdd(false)
       /* add to similarity method counter */
       await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
     } else {
       notifyError('Error adding track')
+    }
+  }
+
+  const removeTrack = async () => {
+    const res = await removeTrackFromPlaylist(playlistId, track.uri)
+    /* sends success or error toast */
+    if (res.status === 200) {
+      setAdd(true)
+      /* remove from similarity method counter */
+      await removeSimilarityMethodCount(similarityMethod)
+      notifySuccess('Track removed successfully')
+    } else {
+      notifyError('Error removing track')
     }
   }
   
@@ -47,7 +63,7 @@ function UserTrack({
       {track.preview_url !== null ? (
         <audio controls src={track.preview_url}></audio>
       ) : <p>No preview available</p>}
-      <AiFillPlusCircle onClick={addTrack} id='add'/>
+      {add ? <AiFillPlusCircle onClick={addTrack} className='icon' size={30}/> : <AiFillMinusCircle onClick={removeTrack} className='icon' size={30}/>}
     </div>
   )
 }

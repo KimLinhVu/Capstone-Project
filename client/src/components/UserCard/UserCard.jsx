@@ -13,7 +13,7 @@ function UserCard({
       setUserPopupId(userId)
       setPopupIsOpen(true)
       }}>
-      <img src=''/>
+      <img src={require('img/blueflower.jpeg')}/>
       {user ? (
         <div className='user-info'>
         <p className='username'>{user.username}</p>

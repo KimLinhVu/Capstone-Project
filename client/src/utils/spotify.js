@@ -132,3 +132,16 @@ export const getTracksAudioFeatures = async (ids) => {
 export const getTrackAudioFeatures = async (id) => {
   return axios.get(`/audio-features/${id}`)
 }
+
+export const removeTrackFromPlaylist = async (playlistId, trackUri) => {
+  console.log(trackUri)
+  return axios.delete(`/playlists/${playlistId}/tracks`, {
+    data: {
+      tracks: [
+        {
+          uri: trackUri
+        }
+      ]
+    }
+  })
+}
