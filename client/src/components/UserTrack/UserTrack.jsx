@@ -15,6 +15,8 @@ function UserTrack({
 }) {
   const tracks = new Tracks()
 
+  console.log(track.preview_url)
+
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
     
@@ -42,6 +44,9 @@ function UserTrack({
       <div className="time">
         <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
       </div>
+      {track.preview_url !== null ? (
+        <audio controls src={track.preview_url}></audio>
+      ) : <p>No preview available</p>}
       <AiFillPlusCircle onClick={addTrack} id='add'/>
     </div>
   )

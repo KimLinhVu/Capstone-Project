@@ -17,17 +17,18 @@ function UserPlaylist({
   }
 
   return (
-    <div className='user-playlist'>
-      <h2>{user.username}</h2>
-      {playlist ? (
-        <div className='playlist-card'>
-          <p>{playlist.name}</p>
-          <p>Similarity Method: {similarityMethod === 0 ? 'Cosine' : 'Own'}</p>
-          <p>Similarity Score: {similarity}</p>
-          <Link to={`/user/${playlist.id}`} state={data}><img src={playlist.images[0].url}/></Link>
+    <Link to={`/user/${playlist.id}`} state={data} style={{textDecoration: 'none'}}><div className='user-playlist'>
+      <div className="left">
+        <img src={playlist.images[0].url}/>
+        <div className="info">
+          <span className='username'>{user.username}</span>
+          <span className="playlist-title">{playlist.name}</span>
         </div>
-      ) : null}
-    </div>
+      </div>
+      <div className="right">
+        <button className='similarity'>{similarity}</button>
+      </div>
+    </div></Link>
   )
 }
 

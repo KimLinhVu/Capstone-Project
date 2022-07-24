@@ -7,19 +7,21 @@ import UserPlaylist from 'components/UserPlaylist/UserPlaylist'
 import Similarity from 'utils/similarity'
 import Map from 'components/Map/Map'
 import ReactLoading from 'react-loading'
+import NavBar from 'components/NavBar/NavBar'
 import "./RecommendView.css"
 
 function RecommendView() {
   const [profile, setProfile] = useState(null)
   const [allUsers, setAllUsers] = useState(null)
   const [currentUsers, setCurrentUsers] = useState([])
-  const [displayUsers, setDisplayUsers] = useState(null)
+  const [displayUsers, setDisplayUsers] = useState([])
   const [users, setUsers] = useState([])
   const [userLocation, setUserLocation] = useState(null)
   const [usersLocationArray, setUsersLocationArray] = useState([])
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [userSearch, setUserSearch] = useState([])
+  const [sortSimilarityHigh, setSortSimilarityHigh] = useState(false)
   const { playlistId } = useParams()
   const similar = new Similarity()
 
@@ -83,10 +85,13 @@ function RecommendView() {
 
   return (
     <div className="recommend-view">
+      <NavBar />
       <div className="users">
-        <h2>Users</h2>
-        <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
-        {displayUsers ? displayUsers.map((item, idx) => {
+        <div className="header">
+          <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+        </div>
+        {console.log(displayUsers)}
+        {displayUsers?.length !== 0 && displayUsers !== null ? displayUsers?.map((item, idx) => {
           return (
             <UserPlaylist 
               key={idx}
@@ -99,7 +104,7 @@ function RecommendView() {
               playlistId={playlistId}
             />
           )
-        }) : <p>No Users Found</p> }
+        }) : <p className='no-users'>No Users Found</p> }
       </div>
       {!isLoading ? (
         <Map 
