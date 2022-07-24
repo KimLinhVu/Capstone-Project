@@ -1,8 +1,7 @@
 import React from 'react'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
-import { getUserProfile } from 'utils/users'
 import { MdLocationOn } from 'react-icons/md'
 import { FaSpotify } from 'react-icons/fa'
 import { IoMdSettings } from 'react-icons/io'
@@ -16,8 +15,6 @@ function ProfileCard({
   profile
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const uploadedImage = useRef(null)
-  const imageUploader = useRef(null)
   const navigate = useNavigate()
   
   const open = Boolean(anchorEl);

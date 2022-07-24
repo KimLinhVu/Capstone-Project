@@ -48,3 +48,7 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.user-track .icon {
+  cursor: pointer;
+}

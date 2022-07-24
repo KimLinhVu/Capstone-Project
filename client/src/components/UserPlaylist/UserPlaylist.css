@@ -7,6 +7,7 @@
   padding: 13px 22px;
   text-decoration: none;
   border: .6px solid var(--background-color);
+  background: white;
 }
 
 .user-playlist:hover {

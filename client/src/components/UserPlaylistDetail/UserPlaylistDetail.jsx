@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer'
+import NavBar from 'components/NavBar/NavBar'
 import ReactLoading from 'react-loading'
 import Follower from 'utils/follower'
 import './UserPlaylistDetail.css'
@@ -32,6 +33,7 @@ function UserPlaylistDetail() {
   }, [])
 
   return (
+    <><NavBar />
     <div className="user-playlist-detail">
       {playlist ? 
         <div>
