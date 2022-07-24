@@ -4,7 +4,6 @@ import UserTrack from 'components/UserTrack/UserTrack';
 import { getTracksAudioFeatures } from 'utils/spotify';
 import { ToastContainer } from 'react-toastify';
 import Similarity from 'utils/similarity';
-import { getPlaylistTrackVector } from 'utils/playlist';
 import ReactLoading from 'react-loading'
 import 'react-toastify/dist/ReactToastify.css';
 import './UserTrackContainer.css'
@@ -12,7 +11,10 @@ import './UserTrackContainer.css'
 function UserTrackContainer({
   originalPlaylistId,
   similarityMethod,
-  playlistId
+  playlistId,
+  vector,
+  setPopupIsOpen,
+  setUserTrack
 }) {
   const [tracks, setTracks] = useState(null)
   const [trackDetails, setTrackDetails] = useState(null)
@@ -25,10 +27,7 @@ function UserTrackContainer({
   useEffect(() => {
     const getAllTracks = async () => {
       setIsLoading(true)
-      /* fetches originalPlaylist track vector */
-      const result = await getPlaylistTrackVector(originalPlaylistId)
-      const vector = result.data
-      
+
       /* get all tracks in a user's playlist */
       const allTracks = await track.getAllPlaylistTracks(playlistId)
 
@@ -92,10 +91,13 @@ function UserTrackContainer({
             key={idx}
             similarityScore={item.similarity}
             similarityMethod={similarityMethod === 0 ? 'cosine similarity' : 'own similarity'}
-            vector={item.vector}
             trackNumber={idx}
             playlistId={originalPlaylistId}
             track={trackDetails[idx]}
+            vector={vector}
+            userTrackVector={item.vector}
+            setPopupIsOpen={setPopupIsOpen}
+            setUserTrack={setUserTrack}
           />
         )) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>

@@ -8,7 +8,9 @@ function UserPlaylist({
   playlist,
   similarity,
   playlistId,
-  similarityMethod
+  similarityMethod,
+  vector,
+  userVector
 }) {
   const [isFollowing, setIsFollowing] = useState()
   let followButton;

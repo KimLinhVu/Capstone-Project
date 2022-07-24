@@ -1,7 +1,9 @@
-.user-playlist-detail {
-  display: flex;
-  flex-direction: column;
+.user-playlist-detail .content {
   padding: 0 5%;
+  padding-top: 80px;
+}
+
+.user-playlist-detail .chart {
 }
 
 .user-playlist-detail .header {

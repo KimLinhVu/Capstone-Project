@@ -83,6 +83,15 @@ function Dashboard() {
     setDisplayPlaylist(newArray)
   }, [playlistSearch])
 
+  /* prevent scrolling when popup is open */
+  useEffect(() => {
+    if (popupIsOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'scroll'
+    }
+  }, [popupIsOpen])
+
   const convertToOptionsArray = (playlist) => {
     const newArray = []
     playlist?.forEach(item => {

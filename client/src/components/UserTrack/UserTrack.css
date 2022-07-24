@@ -5,6 +5,7 @@
   align-items: center;
   color: var(--txt-med);
   background: white;
+  cursor: pointer;
 }
 
 .user-track:hover {
@@ -51,4 +52,5 @@
 
 .user-track .icon {
   cursor: pointer;
+  z-index: 10;
 }

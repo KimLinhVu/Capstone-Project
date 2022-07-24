@@ -54,7 +54,7 @@ function Map({
           similarity = similar.calculateOwnSimilarity(vector, userVector)
         }
         
-        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity}
+        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity, userVector: userVector}
         setUsers(old => [...old, newTrackObject])
       })
     })

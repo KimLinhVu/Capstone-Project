@@ -6,15 +6,20 @@ import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer
 import NavBar from 'components/NavBar/NavBar'
 import ReactLoading from 'react-loading'
 import Follower from 'utils/follower'
+import LineChart from 'components/LineChart/LineChart'
+import ChartPopup from 'components/ChartPopup/ChartPopup'
 import './UserPlaylistDetail.css'
 
 function UserPlaylistDetail() {
+  const [userPlaylist, setUserPlaylist] = useState(null)
+  const [userTrack, setUserTrack] = useState(null)
   const [playlist, setPlaylist] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false)
+  const [popupIsOpen, setPopupIsOpen] = useState(false)
   const { playlistId } = useParams()
   const location = useLocation()
-  const {similarityMethod, originalPlaylistId, user } = location.state
+  const {similarityMethod, originalPlaylistId, user, vector, userVector } = location.state
   const follower = new Follower()
 
   useEffect(() => {
@@ -26,14 +31,26 @@ function UserPlaylistDetail() {
     }
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
-      setPlaylist(data)
+      setUserPlaylist(data)
+
+      const res = await getPlaylistDetail(originalPlaylistId)
+      setPlaylist(res.data)
+      
     }
     isUserFollowing()
     fetchPlaylist()
   }, [])
 
+  /* prevent scrolling when popup is open */
+  useEffect(() => {
+    if (popupIsOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'scroll'
+    }
+  }, [popupIsOpen])
+
   return (
-    <><NavBar />
     <div className="user-playlist-detail">
       {playlist ? 
         <div>
