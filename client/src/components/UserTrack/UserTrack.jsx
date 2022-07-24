@@ -13,11 +13,13 @@ function UserTrack({
   similarityMethod,
   trackNumber,
   track,
+  vector,
+  userTrackVector,
+  setPopupIsOpen,
+  setUserTrack
 }) {
   const [add, setAdd] = useState(true)
   const tracks = new Tracks()
-
-  console.log(track.uri)
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
@@ -47,7 +49,10 @@ function UserTrack({
   }
   
   return (
-    <div className="user-track">
+    <div className="user-track" onClick={() => {
+      setPopupIsOpen(true)
+      setUserTrack({ vector: userTrackVector, name: track.name})
+    }}>
       <span className='num'>{trackNumber + 1}</span>
       <div className="song">
         <img src={track.album.images[0].url} alt="Track Image"/>
@@ -63,7 +68,13 @@ function UserTrack({
       {track.preview_url !== null ? (
         <audio controls src={track.preview_url}></audio>
       ) : <p>No preview available</p>}
-      {add ? <AiFillPlusCircle onClick={addTrack} className='icon' size={30}/> : <AiFillMinusCircle onClick={removeTrack} className='icon' size={30}/>}
+      {add ? <AiFillPlusCircle onClick={(e) => {
+        addTrack()
+        e.stopPropagation()
+      }} className='icon' size={30}/> : <AiFillMinusCircle onClick={(e) => {
+        removeTrack()
+        e.stopPropagation()
+      }} className='icon' size={30}/>}
     </div>
   )
 }

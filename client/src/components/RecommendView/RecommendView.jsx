@@ -90,7 +90,6 @@ function RecommendView() {
         <div className="header">
           <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
         </div>
-        {console.log(displayUsers)}
         {displayUsers?.length !== 0 && displayUsers !== null ? displayUsers?.map((item, idx) => {
           return (
             <UserPlaylist 
@@ -102,6 +101,8 @@ function RecommendView() {
               similarityMethod={profile.similarityMethod}
               userId={item.playlist.userId}
               playlistId={playlistId}
+              vector={vector}
+              userVector={item.userVector}
             />
           )
         }) : <p className='no-users'>No Users Found</p> }

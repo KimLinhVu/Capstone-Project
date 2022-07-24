@@ -134,7 +134,6 @@ export const getTrackAudioFeatures = async (id) => {
 }
 
 export const removeTrackFromPlaylist = async (playlistId, trackUri) => {
-  console.log(trackUri)
   return axios.delete(`/playlists/${playlistId}/tracks`, {
     data: {
       tracks: [

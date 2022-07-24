@@ -7,13 +7,17 @@ function UserPlaylist({
   playlist,
   similarity,
   playlistId,
-  similarityMethod
+  similarityMethod,
+  vector,
+  userVector
 }) {
 
   const data = {
     similarityMethod: similarityMethod,
     originalPlaylistId: playlistId,
     user: user,
+    vector: vector,
+    userVector: userVector
   }
 
   return (
