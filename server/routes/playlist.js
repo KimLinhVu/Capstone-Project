@@ -45,13 +45,14 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { playlist, spotifyId, userId } = req.body
-    for (let i = 0; i < playlist.length; i++) {
-      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist[i].id })
+    const promises = playlist.map(async (playlist) => {
+      const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
       if (!playlistItem) {
-        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist[i].id, playlist: playlist[i], added: false, favorite: false })
+        const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false, favorite: false })
         await newPlaylist.save()
       }
-    }
+    })
+    await Promise.all(promises)
     res.status(200).json()
   } catch (error) {
     next(error)
