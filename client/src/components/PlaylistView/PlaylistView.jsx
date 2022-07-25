@@ -123,6 +123,7 @@ function PlaylistView({
                 refresh={refresh}
                 setRefresh={setRefresh}
                 setIsLoading={setIsLoading}
+                otherUser={false}
               />
             )) : <p>No Playlists Found</p>}
           </div>) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}

@@ -19,7 +19,7 @@ function UserPlaylistDetail() {
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const { playlistId } = useParams()
   const location = useLocation()
-  const {similarityMethod, originalPlaylistId, user, vector, userVector } = location.state
+  const {similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const follower = new Follower()
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function UserPlaylistDetail() {
     <div className="user-playlist-detail">
       <NavBar />
       <div className="content">
-        <div className="chart">
+        {/* <div className="chart">
           {playlist && userPlaylist ? (
             <LineChart 
               trackVector={vector} 
@@ -63,34 +63,54 @@ function UserPlaylistDetail() {
               playlistName={playlist.name}
             />
           ) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
-        </div>
+        </div> */}
         {userPlaylist && !isLoading ? 
           <>
-            <div className='playlist-card'>
-              <div className="playlist-header">
+            <div className="header">
+              <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
+              <div className="playlist-header-info">
+                <p>PLAYLIST</p>
                 <h2>{userPlaylist.name}</h2>
-                <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
+                <p>Owner: {userPlaylist.owner.display_name}</p>
+                <div className="buttons">
+                  <button onClick={() => {
+                    setPopupIsOpen(true)
+                    setUserTrack({ vector: userVector, name: userPlaylist.name})
+                  }} className='view-features'>View Audio Features</button>
+                  {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>}
+                </div>
               </div>
             </div>
-            {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>}
-            <div className="header">
-              <span className="num">#</span>
-              <span className="title">Title</span>
-              <span className="similarity">Similarity Score</span>
-              <span className="time">Time</span>
-            </div>
-            <hr></hr>
-            <div className="tracks">
-              <UserTrackContainer 
-                tracks={userPlaylist.tracks.items} 
-                addPlaylist={true} 
-                playlistId={playlistId}
-                originalPlaylistId={originalPlaylistId}
-                vector={vector}
-                similarityMethod={similarityMethod}
-                setPopupIsOpen={setPopupIsOpen}
-                setUserTrack={setUserTrack}
-              />
+            <div className="playlist-detail-content">
+              {/* <div className="left">
+                <div className="details">
+                  <p><span>Owner</span> {userPlaylist.owner.display_name}</p>
+                  <p><span>Followers</span> {userPlaylist.followers.total}</p>
+                  <p><span>Privacy</span> {userPlaylist.public ? 'public' : 'private'}</p>
+                  <p><span>Songs</span> {userPlaylist.tracks.total}</p>
+                </div>
+              </div> */}
+              <div className="right">
+                <div className="track-header">
+                  <span className="num">#</span>
+                  <span className="title">Title</span>
+                  <span className="similarity">Similarity</span>
+                  <span className="preview">Preview</span>
+                </div>
+                <hr></hr>
+                <div className="tracks">
+                  <UserTrackContainer 
+                    tracks={userPlaylist.tracks.items} 
+                    addPlaylist={true} 
+                    playlistId={playlistId}
+                    originalPlaylistId={originalPlaylistId}
+                    vector={vector}
+                    similarityMethod={similarityMethod}
+                    setPopupIsOpen={setPopupIsOpen}
+                    setUserTrack={setUserTrack}
+                  />
+                </div>
+              </div>
             </div>
           </>
         : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}

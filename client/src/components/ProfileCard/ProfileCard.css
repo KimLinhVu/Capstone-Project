@@ -8,7 +8,7 @@
   position: absolute;
   padding: 30px;
   width: 400px;
-  height: 80%;
+  height: fit-content;
   align-self: flex-start;
   margin-top: 100px;
   margin-left: 50px;
@@ -22,7 +22,8 @@
 
 .profile-card .profile-picture {
   align-self: center;
-  width: 250px;
+  min-width: 250px;
+  min-height: 200px;
   border-radius: 50%;
 }
 
@@ -75,12 +76,12 @@
   border-radius: 6px;
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-color: var(--elements-pink);
+  background-color: rgb(78, 139, 78);
   transition: 200ms ease-in-out;
 }
 
 .profile-card .spotify-profile-btn:hover {
-  background-color: var(--elements-darkpink);
+  background-color: rgb(49, 92, 49);
   transform: translateY(-3px);
 }
 

@@ -50,14 +50,23 @@ function Dashboard() {
 
   useEffect(() => {
     const addUserPlaylist = async () => {      
-      // /* get user's profile */
+      /* get user's profile */
       const prof = await getCurrentUserProfile()
 
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
-      track.sortOptionsTracks(options)
-      setPlaylist(options)
+      
+      /* filter out playlist that don't belong to spotifyId */
+      const filterOptions = options.filter((item) => {
+        if (item.value.spotifyId !== item.value.playlist.owner.id) {
+          return false
+        } else {
+          return true
+        }
+      })
+      track.sortOptionsTracks(filterOptions)
+      setPlaylist(filterOptions)
 
       /* retrieve playlists that spotify user has added to their profile */
       const currentResult = await getCurrentPlaylists(prof.data.id)

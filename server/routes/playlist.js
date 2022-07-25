@@ -17,6 +17,17 @@ router.get('/playlists', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+/* returns all favorited playlists belonging to a userId */
+router.get('/user-playlists', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.headers['user-id']
+    const playlists = await Playlist.find({ userId, added: true, favorite: true })
+    res.json(playlists)
+  } catch (error) {
+    next(error)
+  }
+})
+
 /* returns all favorited playlists belonging to spotify user */
 router.get('/favorites', jwt.verifyJWT, async (req, res, next) => {
   try {

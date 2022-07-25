@@ -27,7 +27,7 @@
   padding: 3px;
 }
 
-.playlist-detail .recommend-btn, .remove-playlist-btn {
+.playlist-detail .recommend-btn {
   padding: 10px 20px;
   font-size: 1.5rem;
   background: var(--elements-pink);
@@ -39,12 +39,7 @@
   transition: 200ms ease-in-out;
 }
 
-.playlist-detail .remove-playlist-btn {
-  margin-left: 5px;
-  background: rgb(197, 14, 84);
-}
-
-.playlist-detail .recommend-btn:hover, .remove-playlist-btn:hover {
+.playlist-detail .recommend-btn:hover {
   box-shadow: 0 0 13px 0px rgba(155, 155, 161, 0.7);
   transform: translateY(-3px);
 }

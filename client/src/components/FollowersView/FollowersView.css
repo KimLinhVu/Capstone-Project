@@ -9,3 +9,10 @@
   border-radius: 6px;
   width: 40%;
 }
+
+.followers-view .playlists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-left: 15px;
+}

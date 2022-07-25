@@ -19,10 +19,10 @@ function UserTrack({
   setUserTrack
 }) {
   const [add, setAdd] = useState(true)
-  const tracks = new Tracks()
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
+    console.log(res)
     
     /* sends success or error toast */
     if (res.status === 201) {
@@ -31,8 +31,10 @@ function UserTrack({
       await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
     } else {
+      console.log('error')
       notifyError('Error adding track')
     }
+    console.log('here')
   }
 
   const removeTrack = async () => {
@@ -61,13 +63,17 @@ function UserTrack({
           <span className='artist'>{track.artists[0].name}</span>
         </div>
       </div>
-      <span className="similarity">{similarityScore.toFixed(2)}</span>
-      <div className="time">
+      {/* <div className="time">
         <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
+      </div> */}
+      <div className="similarity">
+        <span>{similarityScore.toFixed(2)}</span>
       </div>
-      {track.preview_url !== null ? (
-        <audio controls src={track.preview_url}></audio>
-      ) : <p>No preview available</p>}
+      <div className="preview">
+        {track.preview_url !== null ? (
+          <audio controls src={track.preview_url}></audio>
+        ) : <p className='no-preview'>No preview available</p>}
+      </div>
       {add ? <AiFillPlusCircle onClick={(e) => {
         addTrack()
         e.stopPropagation()

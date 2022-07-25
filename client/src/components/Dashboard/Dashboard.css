@@ -58,7 +58,8 @@
   padding-bottom: 20px;
   margin-top: 10px;
   margin-right: 50px;
-  transition: 100ms ease-in-out;
+  transition: 200ms ease-in-out;
+  border-bottom: 3px solid transparent;
 }
 
 .dashboard .Dropdown-control, .Dropdown-menu {
