@@ -53,7 +53,6 @@ function PlaylistDetail() {
               <p>{playlist.description}</p>
               <div className="buttons">
                 <Link to={`/recommend/${playlist.id}`}><button className='recommend-btn'>recommend me</button></Link>
-                {/* <button className='remove-playlist-btn' onClick={removePlaylist}>REMOVE</button> */}
               </div>
             </div>
           </div>

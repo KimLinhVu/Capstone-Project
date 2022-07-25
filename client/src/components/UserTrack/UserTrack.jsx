@@ -63,9 +63,6 @@ function UserTrack({
           <span className='artist'>{track.artists[0].name}</span>
         </div>
       </div>
-      {/* <div className="time">
-        <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
-      </div> */}
       <div className="similarity">
         <span>{similarityScore.toFixed(2)}</span>
       </div>

@@ -54,16 +54,6 @@ function UserPlaylistDetail() {
     <div className="user-playlist-detail">
       <NavBar />
       <div className="content">
-        {/* <div className="chart">
-          {playlist && userPlaylist ? (
-            <LineChart 
-              trackVector={vector} 
-              userTrackVector={userVector}
-              userPlaylistName={userPlaylist.name}
-              playlistName={playlist.name}
-            />
-          ) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
-        </div> */}
         {userPlaylist && !isLoading ? 
           <>
             <div className="header">
@@ -82,14 +72,6 @@ function UserPlaylistDetail() {
               </div>
             </div>
             <div className="playlist-detail-content">
-              {/* <div className="left">
-                <div className="details">
-                  <p><span>Owner</span> {userPlaylist.owner.display_name}</p>
-                  <p><span>Followers</span> {userPlaylist.followers.total}</p>
-                  <p><span>Privacy</span> {userPlaylist.public ? 'public' : 'private'}</p>
-                  <p><span>Songs</span> {userPlaylist.tracks.total}</p>
-                </div>
-              </div> */}
               <div className="right">
                 <div className="track-header">
                   <span className="num">#</span>
