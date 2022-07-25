@@ -7,25 +7,150 @@
 }
 
 .user-playlist-detail .header {
+  position: absolute;
+  display: flex;
+  margin: 115px 250px;
+}
+
+.user-playlist-detail .header img {
+  width: 300px;
+  height: 300px;
+  box-shadow: 0 0 13px 0px rgba(1, 1, 14, 0.7);
+}
+
+.user-playlist-detail .header .playlist-header-info {
+  margin-left: 50px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.user-playlist-detail .playlist-detail-content {
+  padding: 270px 50px 50px 82px;
+  width: 80%;
+  margin: auto;
+  margin-top: 12.8%;
+  background: white;
+  display: flex;
+  border-radius: 10px;
+}
+
+.user-playlist-detail .buttons {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.user-playlist-detail .buttons .view-features {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background: var(--elements-pink);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  margin-bottom: 10px;
+}
+
+.user-playlist-detail .buttons .follow, .unfollow {
+  padding: 10px 20px;
+  font-size: .8rem;
+  background: rgb(78, 139, 78);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.user-playlist-detail .buttons .unfollow {
+  background: rgb(210, 63, 63);
+}
+
+.user-playlist-detail .left .details {
+  box-shadow: 0px 0px 7px 0px rgba(186, 186, 187, 0.7);
+  background: var(--background-color);
+  width: 290px;
+  padding: 15px 20px 5px 20px;
+  border-radius: 7px;
+}
+
+.user-playlist-detail .right {
+  /* margin-left: 55px; */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user-playlist-detail .track-header {
   display: flex;
   font-size: 0.9rem;
   text-transform: uppercase;
   padding: 10px 16px;
   color: var(--txt-med);
+  width: 100%;
 }
 
 .user-playlist-detail hr {
   color: var(--txt-med);
+  width: 100%;
 }
 
-.user-playlist-detail .title, .similarity {
+.user-playlist-detail .track-header .title {
+  flex: 3;
+  margin-left: 20px;
+}
+
+.user-playlist-detail .similarity {
   flex: 3;
 }
 
 .user-playlist-detail .num {
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
-.user-playlist-detail .time {
-  flex: .5;
+.user-playlist-detail .track-header .similarity {
+  margin-left: 40px;
+}
+
+.user-playlist-detail .similarity {
+  flex: 1.5;
+  text-align: left;
+}
+
+.user-playlist-detail .track-header .preview {
+  flex: 2;
+  text-align: center;
+  margin-right: 50px;
+}
+
+/* text styling */
+.user-playlist-detail .left .details p{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.user-playlist-detail .left .details span{
+  font-weight: 600;
+  font-size: 15px;
+  color: black;
+}
+
+.user-playlist-detail p {
+  color: rgb(100, 99, 99);
+  font-size: 1.2rem;
+  letter-spacing: .3px;
+}
+
+.user-playlist-detail .header h2 {
+  font-weight: 500;
+  font-size: 3.3rem;
 }

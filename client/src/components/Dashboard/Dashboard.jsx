@@ -55,7 +55,6 @@ function Dashboard () {
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
-
       /* filter out playlist that don't belong to spotifyId */
       const filterOptions = options.filter((item) => {
         if (item.value.spotifyId !== item.value.playlist.owner.id) {

@@ -25,6 +25,7 @@
 .user-playlist .left img {
   width: 60px;
   min-height: 60px;
+  max-height: 60px;
   border-radius: 10px;
 }
 

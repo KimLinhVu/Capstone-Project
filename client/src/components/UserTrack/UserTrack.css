@@ -1,11 +1,13 @@
 .user-track {
   display: flex;
   flex-direction: row;
-  padding: 10px 15px;
+  padding: 5px 15px;
   align-items: center;
   color: var(--txt-med);
   background: white;
   cursor: pointer;
+  border-bottom: .5px solid var(--light-border);
+  min-height: 80px;
 }
 
 .user-track:hover {
@@ -19,7 +21,8 @@
 
 .user-track .song img {
   margin-right: 10px;
-  width: 45px;
+  max-width: 45px;
+  max-height: 45px;
 }
 
 .user-track .song .song-info {
@@ -36,18 +39,18 @@
 }
 
 .user-track .similarity {
-  flex: 3;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-left: 60px;
+  flex: 1.5;
 }
 
 .user-track .num {
-  margin-right: 10px;
+  flex: .2;
 }
 
-.user-track .time {
-  display: flex;
-  flex: .4;
-  justify-content: space-between;
-  align-items: center;
+.user-track .preview {
+  flex: 2;
 }
 
 .user-track .icon {

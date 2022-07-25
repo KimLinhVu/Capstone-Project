@@ -25,6 +25,16 @@ function FollowersView({
         newArray.push(data)
       })
       await Promise.all(promises)
+      console.log(newArray)
+
+      /* filter out private users */
+      newArray = newArray.filter(user => {
+        if (user.privacy && !user.showFollowing) {
+          return false
+        }
+        return true
+      })
+
       setUsers(newArray)
       setDisplayUsers(newArray)
     }

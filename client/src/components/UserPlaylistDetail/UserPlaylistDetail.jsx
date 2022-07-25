@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { getPlaylistDetail } from 'utils/spotify'
@@ -54,7 +52,7 @@ function UserPlaylistDetail () {
       <NavBar />
       <div className="content">
         {userPlaylist && !isLoading
-          ? <div>
+          ? <>
             <div className="header">
               <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
               <div className="playlist-header-info">
@@ -93,7 +91,7 @@ function UserPlaylistDetail () {
                 </div>
               </div>
             </div>
-          </div>
+          </>
           : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
       {popupIsOpen && userTrack &&
