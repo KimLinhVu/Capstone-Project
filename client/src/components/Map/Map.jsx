@@ -63,6 +63,8 @@ function Map({
         /* use random similarity method associated with user */
         let similarity = 0
         if (similarityMethod === 0) {
+          console.log(vector)
+          console.log(userVector)
           similarity = similar.calculateCosineSimilarity(vector, userVector)
         } else {
           similarity = similar.calculateOwnSimilarity(vector, userVector)
