@@ -1,12 +1,14 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import TrackContainer from 'components/TrackContainer/TrackContainer'
 
-function UserPlaylistDetal() {
+function UserPlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
-  const { playlistId, originalPlaylistId } = useParams()
+  const { playlistId } = useParams()
+  const location = useLocation()
+  const {similarityMethod, originalPlaylistId} = location.state
 
   useEffect(() => {
     const fetchPlaylist = async () => {
@@ -18,6 +20,7 @@ function UserPlaylistDetal() {
 
   return (
     <div className="playlist-detail">
+      {similarityMethod ? <h1>{similarityMethod}</h1> : <p>No State</p>}
       {playlist ? 
         <>
           <div className='playlist-card'>
@@ -30,7 +33,9 @@ function UserPlaylistDetal() {
             <TrackContainer 
               tracks={playlist.tracks.items} 
               addPlaylist={true} 
-              playlistId={originalPlaylistId}
+              playlistId={playlistId}
+              originalPlaylistId={originalPlaylistId}
+              similarityMethod={similarityMethod}
             />
           </div>
         </>
@@ -39,4 +44,4 @@ function UserPlaylistDetal() {
   )
 }
 
-export default UserPlaylistDetal
+export default UserPlaylistDetail
