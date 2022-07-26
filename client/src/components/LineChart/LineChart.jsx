@@ -12,9 +12,6 @@ function LineChart({
 
   defaults.plugins.title.color = 'rgb(0,0,0)'
   defaults.plugins.tooltip.enabled = true
-
-  console.log(trackVector)
-  console.log(userTrackVector)
   
   const options = {
     responsive: true,
