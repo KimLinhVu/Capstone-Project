@@ -29,7 +29,6 @@ function UserProfileCard({
 
       /* get user's added playlists */
       const result = await getUserPlaylists(userId)
-      console.log(result.data)
       setPlaylists(result.data)
 
       setIsLoading(false)

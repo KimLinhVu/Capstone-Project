@@ -22,7 +22,6 @@ function UserTrack({
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
-    console.log(res)
     
     /* sends success or error toast */
     if (res.status === 201) {
@@ -31,10 +30,8 @@ function UserTrack({
       await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
     } else {
-      console.log('error')
       notifyError('Error adding track')
     }
-    console.log('here')
   }
 
   const removeTrack = async () => {
