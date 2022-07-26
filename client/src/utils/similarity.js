@@ -1,4 +1,18 @@
-export default class Similarity {
+class Similarity {
+  scaleValueObject = {
+    acousticness: 1.5,
+    danceability: 1.8,
+    energy: 2,
+    instrumentalness: 1.5,
+    key: .5,
+    liveness: .3,
+    loudness: .5,
+    mode: .5,
+    speechiness: 1.5,
+    time_signature: .5,
+    valence: 2
+  }
+
   normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
@@ -6,11 +20,7 @@ export default class Similarity {
   }
 
   convertObjectToVector = (trackObject) => {
-    let resultArray = []
-    Object.keys(trackObject).forEach(key => {
-      resultArray.push(trackObject[key])
-    })
-    return resultArray
+    return Object.values(trackObject)
   }
 
   createTrackObject = (tempTrackVector, item) => {
@@ -32,6 +42,8 @@ export default class Similarity {
   }
 
   calculateCosineSimilarity = (a, b) => {
+    a = this.convertObjectToVector(a)
+    b = this.convertObjectToVector(b)
     if (JSON.stringify(a) === JSON.stringify(b)) {
       return 0
     }
@@ -45,6 +57,10 @@ export default class Similarity {
     }
     mA = Math.sqrt(mA)
     mB = Math.sqrt(mB)
+    /* return 100 if one or both vectors are zero vectors */
+    if ((mA * mB) === 0) {
+      return 100
+    }
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
     const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
     return normalized
@@ -72,32 +88,22 @@ export default class Similarity {
     /* calculates similarity based on difference between values
     in same position 
     range from 0 - 100; closer to 0 means more similar */
+    a = this.convertObjectToVector(a)
+    b = this.convertObjectToVector(b)
     let differenceSum = 0
-    let scaleSum = 0
-    /* set up scale values 
-    0 - acousticness
-    1 - danceability
-    2 - energy
-    3 - instrumentalness
-    4 - key
-    5 - liveness
-    6 - loudness
-    7 - mode
-    8 - speechiness
-    9 - time_signature
-    10 - valence
-    */
     let maxValue = 0
-    const scaleValues = [1.5, 1.8, 2, 1.5, .5, .3, .5, .5, 1.5, .5, 2]
+    const scaleValueArray = this.convertObjectToVector(this.scaleValueObject)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
-      a[i] >= b[i] ? maxValue += scaleValues[i] * a[i] : maxValue += scaleValues[i] * b[i] 
+      a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i] 
 
       /* scale difference based on how important each value is */
-      difference *= scaleValues[i]
+      difference *= scaleValueArray[i]
       differenceSum += difference
     }
     /* scale differenceSum to between 0-100 */
     return this.normalizeData(differenceSum, 0, maxValue, 100)
   }
 }
+
+module.exports = Similarity

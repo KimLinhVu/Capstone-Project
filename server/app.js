@@ -4,6 +4,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const similarity = require('./utils/similarity')
 require('dotenv').config()
 
 const app = express()
@@ -80,10 +81,13 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* randomly decide which similarity method user receives */
-    const similarityMethod = Math.round(Math.random())
+    const newUser = new User({ username, password, location, privacy, following: [], followers: [] })
 
-    const newUser = await new User({ username, password, location, privacy, following: [], followers: [], similarityMethod })
-    await newUser.save()
+    /* determine similarity method based on counter in id */
+    const similarityMethod = similarity.getSimilarityMethod(newUser.id)
+    const user = new User({ username, password, location, privacy, following: [], followers: [], similarityMethod })
+
+    await user.save()
     res.status(200).json()
   } catch (error) {
     next(error)

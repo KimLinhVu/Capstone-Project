@@ -2,13 +2,14 @@ import React from 'react'
 import { addTrackToPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle } from "react-icons/ai";
+import { addSimilarityMethodCount } from 'utils/playlist';
 import Tracks from 'utils/tracks';
 import './UserTrack.css'
 
 function UserTrack({
   playlistId,
   similarityScore,
-  vector,
+  similarityMethod,
   trackNumber,
   track,
 }) {
@@ -16,8 +17,11 @@ function UserTrack({
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
+    
     /* sends success or error toast */
     if (res.status === 201) {
+      /* add to similarity method counter */
+      await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
     } else {
       notifyError('Error adding track')
