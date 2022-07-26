@@ -1,10 +1,9 @@
-import React from 'react'
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
 import ReactLoading from 'react-loading'
 
-function Map({
+function Map ({
   userLocation,
   allUsers,
   usersLocationArray,
@@ -18,16 +17,16 @@ function Map({
   const [onLoad, setOnLoad] = useState(true)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   })
 
-  let markerArray = [userLocation]
+  const markerArray = [userLocation]
   const center = useMemo(() => (userLocation), [])
 
   const options = {
     streetViewControl: false,
-    fullscreenControl: false,
-    
+    fullscreenControl: false
+
   }
 
   const onBoundsChanged = () => {
@@ -67,8 +66,8 @@ function Map({
         } else {
           similarity = similar.calculateOwnSimilarity(vector, userVector)
         }
-        
-        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity, userVector: userVector}
+
+        const newTrackObject = { user, playlist, similarityScore: similarity, userVector }
         setUsers(old => [...old, newTrackObject])
       })
     })
@@ -92,14 +91,14 @@ function Map({
         setMap(map)
       }}
     >
-      <Marker 
+      <Marker
         position={center}
         label='User Location'
         onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
       />
       {allUsers?.map((user, idx) => {
         const position = user.location.geometry.location
-        
+
         /* checks if marker already exists on map */
         const found = markerArray.some(obj => obj.lat === position.lat && obj.lng === position.lng)
 
@@ -107,9 +106,9 @@ function Map({
         if (!found) {
           markerArray.push(position)
           return (
-          <Marker 
-            key={idx} 
-            position={position} 
+          <Marker
+            key={idx}
+            position={position}
             label={user.location.name}
             onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
           />)

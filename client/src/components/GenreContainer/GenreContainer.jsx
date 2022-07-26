@@ -1,9 +1,8 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getArtistDetail } from '../../utils/spotify'
 import './GenreContainer.css'
 
-function GenreContainer({
+function GenreContainer ({
   tracks
 }) {
   const [genreArray, setGenreArray] = useState([])
@@ -11,20 +10,20 @@ function GenreContainer({
   useEffect(() => {
     const getArtistGenres = async () => {
       /* creates array of artist ids as a parameter for Spotify API */
-      let artistArray = []
+      const artistArray = []
       tracks.forEach(item => {
         const artists = item.track.artists
         artists.forEach(item => {
           artistArray.push(item.id)
         })
       })
-  
+
       while (artistArray.length > 0) {
         /* requests artist information in increments of 50 */
-        let newArray = genreArray
-        let artistString = artistArray.splice(0, 50).join(',')
+        const newArray = genreArray
+        const artistString = artistArray.splice(0, 50).join(',')
         const { data } = await getArtistDetail(artistString)
-        
+
         /* counts number of times each genre appears */
         data.artists.forEach(item => {
           item.genres.forEach(genre => {
@@ -36,7 +35,7 @@ function GenreContainer({
               }
             })
             if (!found) {
-              const newGenre = { genre: genre, count: 0}
+              const newGenre = { genre, count: 0 }
               newArray.push(newGenre)
             }
           })

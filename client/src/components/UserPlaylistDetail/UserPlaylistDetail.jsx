@@ -1,16 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer'
 import NavBar from 'components/NavBar/NavBar'
 import ReactLoading from 'react-loading'
 import Follower from 'utils/follower'
-import LineChart from 'components/LineChart/LineChart'
 import ChartPopup from 'components/ChartPopup/ChartPopup'
 import './UserPlaylistDetail.css'
 
-function UserPlaylistDetail() {
+function UserPlaylistDetail () {
   const [userPlaylist, setUserPlaylist] = useState(null)
   const [userTrack, setUserTrack] = useState(null)
   const [playlist, setPlaylist] = useState(null)
@@ -19,7 +17,7 @@ function UserPlaylistDetail() {
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const { playlistId } = useParams()
   const location = useLocation()
-  const {similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
+  const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const follower = new Follower()
 
   useEffect(() => {
@@ -35,7 +33,6 @@ function UserPlaylistDetail() {
 
       const res = await getPlaylistDetail(originalPlaylistId)
       setPlaylist(res.data)
-      
     }
     isUserFollowing()
     fetchPlaylist()
@@ -54,8 +51,8 @@ function UserPlaylistDetail() {
     <div className="user-playlist-detail">
       <NavBar />
       <div className="content">
-        {userPlaylist && !isLoading ? 
-          <>
+        {userPlaylist && !isLoading
+          ? <>
             <div className="header">
               <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
               <div className="playlist-header-info">
@@ -65,7 +62,7 @@ function UserPlaylistDetail() {
                 <div className="buttons">
                   <button onClick={() => {
                     setPopupIsOpen(true)
-                    setUserTrack({ vector: userVector, name: userPlaylist.name})
+                    setUserTrack({ vector: userVector, name: userPlaylist.name })
                   }} className='view-features'>View Audio Features</button>
                   {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>}
                 </div>
@@ -81,9 +78,9 @@ function UserPlaylistDetail() {
                 </div>
                 <hr></hr>
                 <div className="tracks">
-                  <UserTrackContainer 
-                    tracks={userPlaylist.tracks.items} 
-                    addPlaylist={true} 
+                  <UserTrackContainer
+                    tracks={userPlaylist.tracks.items}
+                    addPlaylist={true}
                     playlistId={playlistId}
                     originalPlaylistId={originalPlaylistId}
                     vector={vector}
@@ -95,12 +92,12 @@ function UserPlaylistDetail() {
               </div>
             </div>
           </>
-        : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
-      {popupIsOpen && userTrack && 
-        <ChartPopup 
-          setPopupIsOpen={setPopupIsOpen} 
-          trackVector={vector} 
+      {popupIsOpen && userTrack &&
+        <ChartPopup
+          setPopupIsOpen={setPopupIsOpen}
+          trackVector={vector}
           userTrack={userTrack}
           playlistName={playlist?.name}
         />

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getAllUsers, getUserProfile } from 'utils/users'
 import { useParams } from 'react-router-dom'
 import { getPlaylistTrackVector } from 'utils/playlist'
@@ -8,9 +7,9 @@ import Similarity from 'utils/similarity'
 import Map from 'components/Map/Map'
 import ReactLoading from 'react-loading'
 import NavBar from 'components/NavBar/NavBar'
-import "./RecommendView.css"
+import './RecommendView.css'
 
-function RecommendView() {
+function RecommendView () {
   const [profile, setProfile] = useState(null)
   const [allUsers, setAllUsers] = useState(null)
   const [currentUsers, setCurrentUsers] = useState([])
@@ -21,14 +20,13 @@ function RecommendView() {
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [userSearch, setUserSearch] = useState([])
-  const [sortSimilarityHigh, setSortSimilarityHigh] = useState(false)
   const { playlistId } = useParams()
   const similar = new Similarity()
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       setIsLoading(true)
-      
+
       /* get current user profile and set location */
       const { data } = await getUserProfile()
       setProfile(data)
@@ -54,7 +52,7 @@ function RecommendView() {
       setDisplayUsers(null)
     } else {
       /* sorts users array by similarity score */
-      let newArray = users.sort((a, b) => {
+      const newArray = users.sort((a, b) => {
         return a.similarityScore - b.similarityScore
       })
       setCurrentUsers(newArray)
@@ -69,14 +67,14 @@ function RecommendView() {
   }, [userSearch])
 
   const addUsersToLocationArray = (users) => {
-    let resultArray = []
+    const resultArray = []
     users.forEach(user => {
       const locationName = user.location.name
       const location = user.location.geometry.location
       const newObj = {
-        locationName: locationName,
-        location: location,
-        user: user
+        locationName,
+        location,
+        user
       }
       resultArray.push(newObj)
     })
@@ -90,9 +88,10 @@ function RecommendView() {
         <div className="header">
           <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
         </div>
-        {displayUsers?.length !== 0 && displayUsers !== null ? displayUsers?.map((item, idx) => {
-          return (
-            <UserPlaylist 
+        {displayUsers?.length !== 0 && displayUsers !== null
+          ? displayUsers?.map((item, idx) => {
+            return (
+            <UserPlaylist
               key={idx}
               following={profile.following}
               user={item.user.user}
@@ -104,11 +103,13 @@ function RecommendView() {
               vector={vector}
               userVector={item.userVector}
             />
-          )
-        }) : <p className='no-users'>No Users Found</p> }
+            )
+          })
+          : <p className='no-users'>No Users Found</p> }
       </div>
-      {!isLoading ? (
-        <Map 
+      {!isLoading
+        ? (
+        <Map
           userLocation={userLocation}
           allUsers={allUsers}
           usersLocationArray={usersLocationArray}
@@ -118,7 +119,8 @@ function RecommendView() {
           similarityMethod={profile?.similarityMethod}
           setIsLoading={setIsLoading}
         />
-      ): <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+          )
+        : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
     </div>
   )
 }

@@ -12,7 +12,7 @@ import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 
 export const DashboardContext = createContext()
 
-function Dashboard() {
+function Dashboard () {
   const [spotifyToken, setSpotifyToken] = useState(null)
   const [profile, setProfile] = useState(null)
   const [spotifyProfile, setSpotifyProfile] = useState(null)
@@ -20,10 +20,9 @@ function Dashboard() {
   const [currentPlaylist, setCurrentPlaylist] = useState([])
   const [displayPlaylist, setDisplayPlaylist] = useState([])
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
-  const [selected, setSelected] = useState("Add A Playlist")
+  const [selected, setSelected] = useState('Add A Playlist')
   const [playlistSearch, setPlaylistSearch] = useState('')
   const [refresh, setRefresh] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [playlistShow, setPlaylistShow] = useState(true)
   const [favoriteShow, setFavoriteShow] = useState(false)
   const [followersShow, setFollowersShow] = useState(false)
@@ -32,7 +31,7 @@ function Dashboard() {
   const [userPopupId, setUserPopupId] = useState(null)
 
   const track = new Tracks()
-  
+
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
@@ -49,14 +48,14 @@ function Dashboard() {
   }, [refresh])
 
   useEffect(() => {
-    const addUserPlaylist = async () => {      
+    const addUserPlaylist = async () => {
       /* get user's profile */
       const prof = await getCurrentUserProfile()
 
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
-      
+
       /* filter out playlist that don't belong to spotifyId */
       const filterOptions = options.filter((item) => {
         if (item.value.spotifyId !== item.value.playlist.owner.id) {
@@ -73,9 +72,9 @@ function Dashboard() {
 
       /* sort playlists alphabetically */
       currentResult.data.sort((a, b) => {
-        if(a.playlist.name.toLowerCase() < b.playlist.name.toLowerCase()) { return -1; }
-        if(a.playlist.name.toLowerCase() > b.playlist.name.toLowerCase()) { return 1; }
-        return 0;
+        if (a.playlist.name.toLowerCase() < b.playlist.name.toLowerCase()) { return -1 }
+        if (a.playlist.name.toLowerCase() > b.playlist.name.toLowerCase()) { return 1 }
+        return 0
       })
       setCurrentPlaylist(currentResult.data)
       setDisplayPlaylist(currentResult.data)
@@ -83,7 +82,6 @@ function Dashboard() {
     if (accessToken) {
       addUserPlaylist()
     }
-    
   }, [currentAddPlaylist, refresh])
 
   useEffect(() => {
@@ -110,16 +108,17 @@ function Dashboard() {
   }
 
   return (
-    <DashboardContext.Provider value={{setRefresh, refresh}}>
+    <DashboardContext.Provider value={{ setRefresh, refresh }}>
       <div className="dashboard">
-        {spotifyToken ? (
+        {spotifyToken
+          ? (
         <>
           <div className="carousel">
             {/* Background Image */}
           </div>
-          {spotifyProfile && 
-            <ProfileCard 
-              spotifyProfile={spotifyProfile} 
+          {spotifyProfile &&
+            <ProfileCard
+              spotifyProfile={spotifyProfile}
               profile={profile}
             />
           }
@@ -132,7 +131,7 @@ function Dashboard() {
                   setFollowersShow(false)
                   setFollowingShow(false)
                 }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
-                <button onClick={() =>{
+                <button onClick={() => {
                   setPlaylistShow(false)
                   setFavoriteShow(true)
                   setFollowersShow(false)
@@ -180,7 +179,7 @@ function Dashboard() {
             </div>
             <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
               {profile && (
-                <FollowersView 
+                <FollowersView
                   profile={profile}
                   followers={true}
                   setPopupIsOpen={setPopupIsOpen}
@@ -190,17 +189,17 @@ function Dashboard() {
             </div>
             <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
               {profile && (
-                  <FollowersView 
+                  <FollowersView
                     profile={profile}
                     followers={false}
                     setPopupIsOpen={setPopupIsOpen}
                     setUserPopupId={setUserPopupId}
                   />
-                )}
+              )}
             </div>
           </div>
         </>)
-        : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
+          : <a className="App-link" href="http://localhost:8888/spotify/login/">Log Into Spotify</a>}
         {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId}/>}
       </div>
     </DashboardContext.Provider>

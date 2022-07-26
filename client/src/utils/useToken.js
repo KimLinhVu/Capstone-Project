@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-function useToken() {
+function useToken () {
   const getToken = () => {
     const token = localStorage.getItem('token')
     return token
@@ -20,8 +20,8 @@ function useToken() {
 
   return {
     setToken: saveToken,
-    token: token,
-    clearToken: clearToken
+    token,
+    clearToken
   }
 }
 

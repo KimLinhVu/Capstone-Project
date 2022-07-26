@@ -1,16 +1,14 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getFavoritePlaylists } from 'utils/playlist'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 import ReactLoading from 'react-loading'
 import './FavoriteView.css'
 
-function FavoriteView({
+function FavoriteView ({
   spotifyProfile,
   refresh,
   setRefresh
 }) {
-
   const [displayFavorites, setDisplayFavorites] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -23,17 +21,19 @@ function FavoriteView({
     }
     fetchPlaylists()
   }, [refresh])
-  
+
   return (
     <div className="favorite-view">
       <div className='playlist-container'>
         <div className="header">
           <h3>{spotifyProfile.display_name}'s Favorites</h3>
         </div>
-        {displayFavorites && !isLoading ? (
+        {displayFavorites && !isLoading
+          ? (
           <div className="playlists">
-          {displayFavorites.length !== 0 ? displayFavorites.map((item, idx) => (
-            <PlaylistCard 
+          {displayFavorites.length !== 0
+            ? displayFavorites.map((item, idx) => (
+            <PlaylistCard
               key={idx}
               favorite={item.favorite}
               playlist={item.playlist}
@@ -41,8 +41,10 @@ function FavoriteView({
               setRefresh={setRefresh}
               setIsLoading={setIsLoading}
             />
-          )) : <p>No Favorites Found</p>}
-        </div>) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+            ))
+            : <p>No Favorites Found</p>}
+        </div>)
+          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
     </div>
   )

@@ -54,7 +54,7 @@ class Similarity {
     for (let i = 0; i < a.length; i++) {
       vectorSum += Math.pow(a[i] - b[i], 2)
     }
-    let distance = Math.sqrt(vectorSum)
+    const distance = Math.sqrt(vectorSum)
     return distance
   }
 
@@ -68,12 +68,12 @@ class Similarity {
 
   calculateOwnSimilarity = (a, b) => {
     /* calculates similarity based on difference between values
-    in same position 
+    in same position
     range from 0 - 100; closer to 0 means more similar */
     a = this.convertObjectToVector(a)
     b = this.convertObjectToVector(b)
     let differenceSum = 0
-    /* set up scale values 
+    /* set up scale values
     acousticness
     danceability
     energy
@@ -92,18 +92,18 @@ class Similarity {
       danceability: 1.8,
       energy: 2,
       instrumentalness: 1.5,
-      key: .5,
-      liveness: .3,
-      loudness: .5,
-      mode: .5,
+      key: 0.5,
+      liveness: 0.3,
+      loudness: 0.5,
+      mode: 0.5,
       speechiness: 1.5,
-      time_signature: .5,
+      time_signature: 0.5,
       valence: 2
     }
     const scaleValueArray = this.convertObjectToVector(scaleValueObject)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
-      a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i] 
+      a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i]
 
       /* scale difference based on how important each value is */
       difference *= scaleValueArray[i]

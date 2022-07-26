@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './UserPlaylist.css'
 
-function UserPlaylist({
+function UserPlaylist ({
   user,
   playlist,
   similarity,
@@ -11,17 +11,16 @@ function UserPlaylist({
   vector,
   userVector
 }) {
-
   const data = {
-    similarityMethod: similarityMethod,
+    similarityMethod,
     originalPlaylistId: playlistId,
-    user: user,
-    vector: vector,
-    userVector: userVector
+    user,
+    vector,
+    userVector
   }
 
   return (
-    <Link to={`/user/${playlist.id}`} state={data} style={{textDecoration: 'none'}}><div className='user-playlist'>
+    <Link to={`/user/${playlist.id}`} state={data} style={{ textDecoration: 'none' }}><div className='user-playlist'>
       <div className="left">
         <img src={playlist.images[0].url}/>
         <div className="info">

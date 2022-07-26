@@ -4,7 +4,7 @@ const LOCALSTORAGE_KEYS = {
   accessToken: 'spotify_access_token',
   refreshToken: 'spotify_refresh_token',
   expireTime: 'spotify_token_expire_time',
-  timestamp: 'spotify_token_timestamp',
+  timestamp: 'spotify_token_timestamp'
 }
 
 // Map to retrieve localStorage values
@@ -12,8 +12,8 @@ const LOCALSTORAGE_VALUES = {
   accessToken: localStorage.getItem(LOCALSTORAGE_KEYS.accessToken),
   refreshToken: localStorage.getItem(LOCALSTORAGE_KEYS.refreshToken),
   expireTime: localStorage.getItem(LOCALSTORAGE_KEYS.expireTime),
-  timestamp: localStorage.getItem(LOCALSTORAGE_KEYS.timestamp),
-};
+  timestamp: localStorage.getItem(LOCALSTORAGE_KEYS.timestamp)
+}
 
 const hasTokenExpired = () => {
   const { accessToken, timestamp, expireTime } = LOCALSTORAGE_VALUES
@@ -40,7 +40,7 @@ export const logoutSpotify = () => {
 
 const refreshToken = async () => {
   try {
-    if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' || 
+    if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' ||
       (Date.now() - Number(LOCALSTORAGE_VALUES.timestamp) / 1000) < 1000) {
       console.error('No refresh token available')
       logoutSpotify()
@@ -52,7 +52,7 @@ const refreshToken = async () => {
 
     window.location.reload()
   } catch (err) {
-    
+
   }
 }
 
@@ -62,7 +62,7 @@ const getAccessToken = () => {
   const queryParams = {
     [LOCALSTORAGE_KEYS.accessToken]: urlParams.get('access_token'),
     [LOCALSTORAGE_KEYS.refreshToken]: urlParams.get('refresh_token'),
-    [LOCALSTORAGE_KEYS.expireTime]: urlParams.get('expires_in')   
+    [LOCALSTORAGE_KEYS.expireTime]: urlParams.get('expires_in')
   }
   const hasError = urlParams.get('error')
 
@@ -90,7 +90,7 @@ export const accessToken = getAccessToken()
 
 /* axios global request headers */
 axios.defaults.baseURL = 'https://api.spotify.com/v1'
-axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
+axios.defaults.headers.Authorization = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
 export const getCurrentUserProfile = async () => {

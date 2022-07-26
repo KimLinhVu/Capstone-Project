@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getUserProfileById } from 'utils/users'
 import Follower from 'utils/follower'
 import { DashboardContext } from 'components/Dashboard/Dashboard'
@@ -8,7 +7,7 @@ import './UserProfileCard.css'
 import { getUserPlaylists } from 'utils/playlist'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 
-function UserProfileCard({
+function UserProfileCard ({
   userId,
   setPopupIsOpen
 }) {
@@ -17,7 +16,7 @@ function UserProfileCard({
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(null)
   const follower = new Follower()
-  const {refresh, setRefresh} = useContext(DashboardContext)
+  const { refresh, setRefresh } = useContext(DashboardContext)
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -40,7 +39,8 @@ function UserProfileCard({
     <div className="user-profile-card">
       <div id="overlay" onClick={() => setPopupIsOpen(false)}></div>
       <div className="profile-popup">
-        {profile && !isLoading ? (
+        {profile && !isLoading
+          ? (
           <>
             <div className="profile-content">
               <h1>{profile.username}</h1>
@@ -50,8 +50,8 @@ function UserProfileCard({
             </div>
             <div className="playlists">
               { playlists?.map((item, idx) => (
-                <PlaylistCard 
-                  key={idx} 
+                <PlaylistCard
+                  key={idx}
                   playlist={item.playlist}
                   setIsLoading={setIsLoading}
                   refresh={refresh}
@@ -61,7 +61,8 @@ function UserProfileCard({
               ))}
             </div>
           </>
-        ) :  <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+            )
+          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
     </div>
   )
