@@ -16,7 +16,7 @@ function GenreContainer ({
           return artist.id
         })
       )).flat()
-  
+
       while (artistArray.length > 0) {
         /* requests artist information in increments of 50 */
         const newArray = genreArray
