@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
 import { getUserProfile } from 'utils/users'
@@ -13,9 +13,11 @@ import './ProfileCard.css'
 
 function ProfileCard({
   spotifyProfile,
+  profile
 }) {
-  const [profile, setProfile] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null);
+  const uploadedImage = useRef(null)
+  const imageUploader = useRef(null)
   const navigate = useNavigate()
   
   const open = Boolean(anchorEl);
@@ -26,19 +28,28 @@ function ProfileCard({
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data } = await getUserProfile()
-      setProfile(data)
+  const handleImageUpload = (e) => {
+    const [file] = e.target.files
+    if (file) {
+      const reader = new FileReader()
+      const {current} = uploadedImage
+      current.file = file
+      reader.onload = (e) => {
+        current.src = e.target.result
+      }
+      reader.readAsDataURL(file)
     }
-    fetchUserProfile()
-  }, [])
+  }
 
   return (
     <div className='profile-card'>
       {profile && (
         <>
-          {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Picture" /> : null}
+          {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : null}
+          {/* <input onChange={handleImageUpload} ref={imageUploader}type='file' accept='image/*' multiple='false'/>
+          <div className="profile-picture-container" onClick={() => imageUploader.current.click()}>
+            <img ref={uploadedImage} className='profile-picture'/>
+          </div> */}
           <div className="user-info">
             <div className="header">
               <h1 className='username'>{profile.username}</h1>

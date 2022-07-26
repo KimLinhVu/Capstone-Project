@@ -5,7 +5,10 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   location: Object,
-  privacy: Boolean
+  privacy: Boolean,
+  following: Array,
+  followers: Array,
+  similarityMethod: Number
 })
 
 userSchema.pre('save', async function (next) {
