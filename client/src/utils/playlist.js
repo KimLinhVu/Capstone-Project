@@ -3,8 +3,8 @@ import axios from 'axios'
 export const getPlaylists = (spotifyId) => {
   return axios.get('/playlist/playlists', {
     headers: {
-      "x-access-token": localStorage.getItem('token'),
-      "spotify-id": spotifyId
+      'x-access-token': localStorage.getItem('token'),
+      'spotify-id': spotifyId
     }
   })
 }
@@ -12,8 +12,8 @@ export const getPlaylists = (spotifyId) => {
 export const getUserPlaylists = (userId) => {
   return axios.get('http://localhost:8888/playlist/user-playlists', {
     headers: {
-      "x-access-token": localStorage.getItem('token'),
-      "user-id": userId
+      'x-access-token': localStorage.getItem('token'),
+      'user-id': userId
     }
   })
 }
@@ -21,8 +21,8 @@ export const getUserPlaylists = (userId) => {
 export const getFavoritePlaylists = (spotifyId) => {
   return axios.get('/playlist/favorites', {
     headers: {
-      "x-access-token": localStorage.getItem('token'),
-      "spotify-id": spotifyId
+      'x-access-token': localStorage.getItem('token'),
+      'spotify-id': spotifyId
     }
   })
 }
@@ -30,8 +30,8 @@ export const getFavoritePlaylists = (spotifyId) => {
 export const getCurrentPlaylists = (spotifyId) => {
   return axios.get('/playlist/current', {
     headers: {
-      "x-access-token": localStorage.getItem('token'),
-      "spotify-id": spotifyId
+      'x-access-token': localStorage.getItem('token'),
+      'spotify-id': spotifyId
     }
   })
 }
@@ -42,7 +42,7 @@ export const addPlaylists = (playlist, spotifyId) => {
     spotifyId: spotifyId
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -52,9 +52,9 @@ export const addPlaylistToProfile = (playlist) => {
     playlist: playlist
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
-  }) 
+  })
 }
 
 export const removePlaylistFromProfile = (playlistId) => {
@@ -62,7 +62,7 @@ export const removePlaylistFromProfile = (playlistId) => {
     playlistId: playlistId
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -73,7 +73,7 @@ export const addTrackVector = (playlistId, trackVector) => {
     trackVector: trackVector
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -81,8 +81,8 @@ export const addTrackVector = (playlistId, trackVector) => {
 export const getPlaylistTrackVector = (playlistId) => {
   return axios.get('/playlist/get-track-vector', {
     headers: {
-      "x-access-token": localStorage.getItem('token'),
-      "playlist-id": playlistId
+      'x-access-token': localStorage.getItem('token'),
+      'playlist-id': playlistId
     }
   })
 }
@@ -92,7 +92,7 @@ export const addFavoritePlaylist = (playlistId) => {
     playlistId: playlistId,
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -102,7 +102,7 @@ export const removeFavoritePlaylist = (playlistId) => {
     playlistId: playlistId,
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -112,7 +112,7 @@ export const addSimilarityMethodCount = (similarityMethod) => {
     similarityMethod: similarityMethod
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }
@@ -122,7 +122,7 @@ export const removeSimilarityMethodCount = (similarityMethod) => {
     similarityMethod: similarityMethod
   }, {
     headers: {
-      "x-access-token": localStorage.getItem('token')
+      'x-access-token': localStorage.getItem('token')
     }
   })
 }

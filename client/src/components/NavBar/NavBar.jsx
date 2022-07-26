@@ -1,23 +1,22 @@
-import React from 'react'
-import { useState } from 'react';
-import { logoutSpotify } from 'utils/spotify';
-import Avatar from '@mui/material/Avatar';
-import { Link, useNavigate } from 'react-router-dom';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import React, { useState } from 'react'
+import { logoutSpotify } from 'utils/spotify'
+import Avatar from '@mui/material/Avatar'
+import { Link, useNavigate } from 'react-router-dom'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import './NavBar.css'
 
-function NavBar() {
-  const [anchorEl, setAnchorEl] = useState(null);
+function NavBar () {
+  const [anchorEl, setAnchorEl] = useState(null)
   const navigate = useNavigate()
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl)
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <div className="nav-bar">
@@ -29,7 +28,7 @@ function NavBar() {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          'aria-labelledby': 'basic-button'
         }}
       >
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>

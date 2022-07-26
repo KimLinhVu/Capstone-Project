@@ -1,10 +1,9 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import UserCard from 'components/UserCard/UserCard'
 import './FollowersView.css'
 import { getUserProfileById } from 'utils/users'
 
-function FollowersView({
+function FollowersView ({
   profile,
   followers,
   setPopupIsOpen,

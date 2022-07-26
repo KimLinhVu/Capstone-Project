@@ -1,18 +1,16 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Dropdown from 'components/Dropdown/Dropdown'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 import { getPlaylistDetail, getTracksAudioFeatures } from 'utils/spotify'
-import { addTrackVector } from 'utils/playlist'
-import { addPlaylistToProfile } from 'utils/playlist'
-import { AiFillPlusCircle } from "react-icons/ai";
-import { Tooltip  } from '@mui/material'
+import { addTrackVector, addPlaylistToProfile } from 'utils/playlist'
+import { AiFillPlusCircle } from 'react-icons/ai'
+import { Tooltip } from '@mui/material'
 import ReactLoading from 'react-loading'
 import Similarity from 'utils/similarity'
 import Tracks from 'utils/tracks'
 import './PlaylistView.css'
 
-function PlaylistView({
+function PlaylistView ({
   playlist,
   selected,
   setSelected,
@@ -36,9 +34,9 @@ function PlaylistView({
       /* calculate track vector for playlist */
       const { data } = await getPlaylistDetail(currentAddPlaylist.playlistId)
       setPlaylist(data)
-      
+
       /* create string of track Ids to use in Spotify API */
-      let trackIdArray = []
+      const trackIdArray = []
       const tracks = await track.getAllPlaylistTracks(data.id)
       tracks.forEach(item => {
         trackIdArray.push(item.track.id)
@@ -46,7 +44,7 @@ function PlaylistView({
 
       /* receive track audio features for each track and store in an array */
       let trackArrayLength = trackIdArray.length
-      let tempTrackVector = {
+      const tempTrackVector = {
         acousticness: 0,
         danceability: 0,
         energy: 0,
@@ -60,7 +58,7 @@ function PlaylistView({
         valence: 0
       }
       while (trackIdArray.length > 0) {
-        let trackIdString = trackIdArray.splice(0, 100).join(',')
+        const trackIdString = trackIdArray.splice(0, 100).join(',')
         const { data } = await getTracksAudioFeatures(trackIdString)
         // eslint-disable-next-line no-loop-func
         data.audio_features.forEach(item => {
@@ -78,11 +76,11 @@ function PlaylistView({
       })
       /* store track-vector in playlist database */
       await addTrackVector(currentAddPlaylist.playlistId, tempTrackVector)
-      
+
       /* adds selected playlist to user's profile */
       await addPlaylistToProfile(currentAddPlaylist)
       setCurrentAddPlaylist(null)
-      playlist.length <= 1 ? setSelected('No playlist available') : setSelected("Add a playlist")
+      playlist.length <= 1 ? setSelected('No playlist available') : setSelected('Add a playlist')
 
       setIsLoading(false)
     }
@@ -94,8 +92,9 @@ function PlaylistView({
       <div className="playlist-header">
         <input type="text" placeholder='Search For A Playlist' className='playlist-searchbar' value={playlistSearch} onChange={(e) => setPlaylistSearch(e.target.value)}/>
         <div className='playlist-action'>
-          {playlist ? (
-            <Dropdown 
+          {playlist
+            ? (
+            <Dropdown
              options={playlist}
              selected={selected}
              setSelected={setSelected}
@@ -103,7 +102,8 @@ function PlaylistView({
              refresh={refresh}
              isLoading={isLoading}
            />
-          ) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+              )
+            : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
           <Tooltip title='Add Playlist'>
             <button className="add-playlist-btn" disabled={currentAddPlaylist === null} onClick={handleAddPlaylistOnClick}><AiFillPlusCircle size={45} className='icon'/></button>
           </Tooltip>
@@ -113,10 +113,12 @@ function PlaylistView({
           <div className="header">
             <h3>{spotifyName}'s Playlists</h3>
           </div>
-          {displayPlaylist && !isLoading ? (
+          {displayPlaylist && !isLoading
+            ? (
             <div className="playlists">
-            {displayPlaylist.length !== 0 ? displayPlaylist.map((item, idx) => (
-              <PlaylistCard 
+            {displayPlaylist.length !== 0
+              ? displayPlaylist.map((item, idx) => (
+              <PlaylistCard
                 key={idx}
                 favorite={item.favorite}
                 playlist={item.playlist}
@@ -125,8 +127,10 @@ function PlaylistView({
                 setIsLoading={setIsLoading}
                 otherUser={false}
               />
-            )) : <p>No Playlists Found</p>}
-          </div>) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+              ))
+              : <p>No Playlists Found</p>}
+          </div>)
+            : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
     </div>
   )

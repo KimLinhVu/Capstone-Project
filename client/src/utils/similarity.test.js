@@ -62,5 +62,5 @@ test('test calculate euclidean distance', () => {
   const a = [0.333, 0.675, 0.616, 0.001]
   const b = [0.242, 0.730, 0.432, 0.017]
   const similar = new Similarity()
-  expect(similar.calculateEuclideanDistance(a, b)).toBeCloseTo(.2131, 4)
+  expect(similar.calculateEuclideanDistance(a, b)).toBeCloseTo(0.2131, 4)
 })

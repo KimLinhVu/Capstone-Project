@@ -1,19 +1,19 @@
-import { getPlaylistItems, getTracksDetails } from "./spotify";
+import { getPlaylistItems, getTracksDetails } from './spotify'
 
 export default class Tracks {
   sortOptionsTracks = (options) => {
     options.sort((a, b) => {
-      if(a.label.toLowerCase() < b.label.toLowerCase()) { return -1; }
-      if(a.label.toLowerCase() > b.label.toLowerCase()) { return 1; }
-      return 0;
+      if (a.label.toLowerCase() < b.label.toLowerCase()) { return -1 }
+      if (a.label.toLowerCase() > b.label.toLowerCase()) { return 1 }
+      return 0
     })
   }
 
   getAllPlaylistTracks = async (playlistId) => {
     let offset = 0
     let tracks = await getPlaylistItems(playlistId, offset)
-    let allTracks = tracks.data.items.map(item => { return item })
-    
+    const allTracks = tracks.data.items.map(item => { return item })
+
     while (tracks.data.items.length > 0) {
       offset += tracks.data.items.length
       tracks = await getPlaylistItems(playlistId, offset)
@@ -24,10 +24,10 @@ export default class Tracks {
 
   getAllTrackDetails = async (tracks) => {
     let trackArray = []
-    let trackIds = tracks.map(item => { return item.id })
+    const trackIds = tracks.map(item => { return item.id })
 
     while (trackIds.length > 0) {
-      let trackIdString = trackIds.splice(0, 50).join(',')
+      const trackIdString = trackIds.splice(0, 50).join(',')
 
       const { data } = await getTracksDetails(trackIdString)
       trackArray = data.tracks.map(item => { return item })
@@ -36,28 +36,8 @@ export default class Tracks {
   }
 
   convertDuration = (millis) => {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-  }
-
-  getAllTrackDetails = async (tracks) => {
-    let trackIds = []
-    let trackArray = []
-    tracks.forEach(item => trackIds.push(item.id))
-
-    while (trackIds.length > 0) {
-      let trackIdString = trackIds.splice(0, 50).join(',')
-
-      const { data } = await getTracksDetails(trackIdString)
-      data.tracks.forEach(item => trackArray.push(item))
-    }
-    return trackArray
-  }
-
-  convertDuration = (millis) => {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    const minutes = Math.floor(millis / 60000)
+    const seconds = ((millis % 60000) / 1000).toFixed(0)
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
   }
 }

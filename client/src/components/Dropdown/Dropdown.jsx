@@ -1,10 +1,9 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import {IoMdArrowDropdown, IoMdArrowDropup} from 'react-icons/io'
+import React, { useState, useEffect } from 'react'
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import Tracks from 'utils/tracks'
-import "./Dropdown.css"
+import './Dropdown.css'
 
-function Dropdown({
+function Dropdown ({
   options,
   selected,
   setSelected,
@@ -17,10 +16,10 @@ function Dropdown({
 
   useEffect(() => {
     if (options.length === 0) {
-      setSelected("No playlist available")
+      setSelected('No playlist available')
     } else {
       /* sort options array alphabetically */
-      setSelected("Add a playlist")
+      setSelected('Add a playlist')
       track.sortOptionsTracks(options)
     }
   }, [refresh])
@@ -39,7 +38,7 @@ function Dropdown({
                 setSelected(option.label)
                 setCurrentAddPlaylist(option.value)
                 setIsActive(false)
-              }} 
+              }}
               className="dropdown-item"
               key={idx}
             >
@@ -53,4 +52,3 @@ function Dropdown({
 }
 
 export default Dropdown
-

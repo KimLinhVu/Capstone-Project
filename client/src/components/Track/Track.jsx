@@ -2,7 +2,7 @@ import React from 'react'
 import Tracks from 'utils/tracks'
 import './Track.css'
 
-function Track({
+function Track ({
   track,
   trackNumber
 }) {
