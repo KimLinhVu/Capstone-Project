@@ -1,18 +1,4 @@
 class Similarity {
-  scaleValueObject = {
-    acousticness: 1.5,
-    danceability: 1.8,
-    energy: 2,
-    instrumentalness: 1.5,
-    key: .5,
-    liveness: .3,
-    loudness: .5,
-    mode: .5,
-    speechiness: 1.5,
-    time_signature: .5,
-    valence: 2
-  }
-
   normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
@@ -57,10 +43,6 @@ class Similarity {
     }
     mA = Math.sqrt(mA)
     mB = Math.sqrt(mB)
-    /* return 100 if one or both vectors are zero vectors */
-    if ((mA * mB) === 0) {
-      return 100
-    }
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
     const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
     return normalized
@@ -91,8 +73,34 @@ class Similarity {
     a = this.convertObjectToVector(a)
     b = this.convertObjectToVector(b)
     let differenceSum = 0
+    /* set up scale values 
+    acousticness
+    danceability
+    energy
+    instrumentalness
+    key
+    liveness
+    loudness
+    mode
+    speechiness
+    time_signature
+    valence
+    */
     let maxValue = 0
-    const scaleValueArray = this.convertObjectToVector(this.scaleValueObject)
+    const scaleValueObject = {
+      acousticness: 1.5,
+      danceability: 1.8,
+      energy: 2,
+      instrumentalness: 1.5,
+      key: .5,
+      liveness: .3,
+      loudness: .5,
+      mode: .5,
+      speechiness: 1.5,
+      time_signature: .5,
+      valence: 2
+    }
+    const scaleValueArray = this.convertObjectToVector(scaleValueObject)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
       a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i] 

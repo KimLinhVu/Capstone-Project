@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test:similarity": "jest -i utils/similarity.test.js -t",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

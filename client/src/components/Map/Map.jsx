@@ -15,6 +15,7 @@ function Map({
   setIsLoading
 }) {
   const [map, setMap] = useState(null)
+  const [onLoad, setOnLoad] = useState(true)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -27,6 +28,19 @@ function Map({
     streetViewControl: false,
     fullscreenControl: false,
     
+  }
+
+  const onBoundsChanged = () => {
+    setIsLoading(true)
+    /* check which markers are currently in view of map bounds */
+    setUsers([])
+    markerArray?.forEach(item => {
+      const inBounds = map?.getBounds()?.contains(item)
+      if (inBounds) {
+        handleMarkerOnClick(item)
+      }
+    })
+    setIsLoading(false)
   }
 
   if (!isLoaded) {
@@ -60,18 +74,6 @@ function Map({
     })
   }
 
-  const onBoundsChanged = () => {
-    setIsLoading(true)
-    /* check which markers are currently in view of map bounds */
-    markerArray.forEach(item => {
-      const inBounds = map?.getBounds().contains(item)
-      if (inBounds) {
-        handleMarkerOnClick(item)
-      }
-    })
-    setIsLoading(false)
-  }
-
   return (
     <GoogleMap
       zoom={8}
@@ -79,6 +81,13 @@ function Map({
       options={options}
       mapContainerClassName="map-container"
       onZoomChanged={onBoundsChanged}
+      onDragEnd={onBoundsChanged}
+      onBoundsChanged={() => {
+        if (onLoad) {
+          onBoundsChanged()
+          setOnLoad(false)
+        }
+      }}
       onLoad={map => {
         setMap(map)
       }}

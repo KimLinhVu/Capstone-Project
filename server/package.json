@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test:similarity": "jest -i utils/similarity.test.js -t",
+    "test": "jest",
     "start": "node server",
     "dev": "nodemon server"
   },
