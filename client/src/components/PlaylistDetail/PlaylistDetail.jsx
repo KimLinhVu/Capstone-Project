@@ -39,11 +39,9 @@ function PlaylistDetail() {
             <div className="playlist-header-info">
               <p>PLAYLIST</p>
               <h2>{playlist.name}</h2>
-              {/* <p>BY: {playlist.owner.display_name}</p> */}
               <p>{playlist.description}</p>
               <div className="buttons">
                 <Link to={`/recommend/${playlist.id}`}><button className='recommend-btn'>recommend me</button></Link>
-                {/* <button className='remove-playlist-btn' onClick={removePlaylist}>REMOVE</button> */}
               </div>
             </div>
           </div>

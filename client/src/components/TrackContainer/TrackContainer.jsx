@@ -40,7 +40,6 @@ function TrackContainer({
       while (trackIdArray.length > 0) {
         let trackIdString = trackIdArray.splice(0, 100).join(',')
         const { data } = await getTracksAudioFeatures(trackIdString)
-        console.log(data.audio_features)
         data.audio_features.forEach(item => {
           let tempTrackVector = {
             acousticness: 0,
@@ -58,7 +57,6 @@ function TrackContainer({
           if (item !== null) {
             similar.createTrackObject(tempTrackVector, item)
             const trackVectorArray = similar.convertObjectToVector(tempTrackVector)
-            console.log(trackVectorArray)
             
             let similarity = 0
             if (similarityMethod === 0) {
@@ -66,13 +64,10 @@ function TrackContainer({
             } else {
               similarity = similar.calculateOwnSimilarity(vector, trackVectorArray)
             }
-            console.log(similarity)
-            console.log(item.id)
             tempTracks.push({ id: item.id, similarity: similarity})
           }
         })
       }
-      console.log(tempTracks)
     }
     getAllTracks()
   }, [])
@@ -80,16 +75,6 @@ function TrackContainer({
   return (
     <div className="track-container">
       <div className="tracks">
-        {/* {tracks.map((item, idx) => (
-          <Track 
-            key={idx} 
-            track={item.track} 
-            trackNumber={idx}
-            addPlaylist={addPlaylist}
-            playlistId={originalPlaylistId}
-            similarityMethod={similarityMethod}
-          />
-        ))} */}
       </div>
       <ToastContainer
         position="top-center"
