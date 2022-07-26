@@ -8,6 +8,8 @@ import { addPlaylistToProfile } from 'utils/playlist'
 import { AiFillPlusCircle } from "react-icons/ai";
 import { Tooltip  } from '@mui/material'
 import ReactLoading from 'react-loading'
+import Similarity from 'utils/similarity'
+import Tracks from 'utils/tracks'
 import './PlaylistView.css'
 
 function PlaylistView({
@@ -25,6 +27,8 @@ function PlaylistView({
   setRefresh
 }) {
   const [isLoading, setIsLoading] = useState(false)
+  const similar = new Similarity()
+  const track = new Tracks()
 
   const handleAddPlaylistOnClick = () => {
     const addPlaylist = async () => {
@@ -35,10 +39,9 @@ function PlaylistView({
       
       /* create string of track Ids to use in Spotify API */
       let trackIdArray = []
-      const tracks = data.tracks.items
+      const tracks = await track.getAllPlaylistTracks(data.id)
       tracks.forEach(item => {
-        const id = item.track.id
-        trackIdArray.push(id)
+        trackIdArray.push(item.track.id)
       })
 
       /* receive track audio features for each track and store in an array */
@@ -53,7 +56,6 @@ function PlaylistView({
         loudness: 0,
         mode: 0,
         speechiness: 0,
-        tempo: 0,
         time_signature: 0,
         valence: 0
       }
@@ -63,9 +65,7 @@ function PlaylistView({
         // eslint-disable-next-line no-loop-func
         data.audio_features.forEach(item => {
           if (item !== null) {
-            Object.keys(tempTrackVector).forEach(key => {
-              tempTrackVector[key] += item[key]
-            })
+            similar.createTrackObject(tempTrackVector, item)
           } else {
             trackArrayLength -= 1
           }
@@ -100,6 +100,7 @@ function PlaylistView({
              selected={selected}
              setSelected={setSelected}
              setCurrentAddPlaylist={setCurrentAddPlaylist}
+             refresh={refresh}
            />
           ) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
           <Tooltip title='Add Playlist'>

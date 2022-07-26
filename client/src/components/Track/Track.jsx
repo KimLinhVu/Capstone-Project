@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { addTrackToPlaylist, getTrackAudioFeatures } from 'utils/spotify'
-import { convertObjectToVector, calculateTrackSimilarity } from 'utils/similarity'
+import Similarity from 'utils/similarity'
 import { getPlaylistTrackVector } from 'utils/playlist'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle } from "react-icons/ai";
@@ -11,16 +11,18 @@ function Track({
   track,
   trackNumber,
   addPlaylist,
-  playlistId
+  playlistId,
+  similarityMethod
 }) {
   const [similarity, setSimilarity] = useState(null)
+  const similar = new Similarity()
 
   useEffect(() => {
     const getTrackFeatures = async () => {
       if (addPlaylist) {
         /* fetches playlist track vector */
         const result = await getPlaylistTrackVector(playlistId)
-        const vector = convertObjectToVector(result.data)
+        const vector = similar.convertObjectToVector(result.data)
         /* call spotify one track audio feature endpoint with track id */
         const { data } = await getTrackAudioFeatures(track.id)
         let tempTrackVector = {
@@ -33,18 +35,20 @@ function Track({
           loudness: 0,
           mode: 0,
           speechiness: 0,
-          tempo: 0,
           time_signature: 0,
           valence: 0
         }
-        Object.keys(tempTrackVector).forEach(key => {
-          tempTrackVector[key] = data[key]
-        })
-        const userVector = convertObjectToVector(tempTrackVector)
+        similar.createTrackObject(tempTrackVector, data)
+        const userVector = similar.convertObjectToVector(tempTrackVector)
 
-        const similarity = calculateTrackSimilarity(vector, userVector)
+        /* use user's similarity method here */
+        let similarity = 0
+        if (similarityMethod === 0) {
+          similarity = similar.calculateCosineSimilarity(vector, userVector)
+        } else {
+          similarity = similar.calculateOwnSimilarity(vector, userVector)
+        }
         setSimilarity(similarity.toFixed(2))
-        
       }
     }
     getTrackFeatures()
