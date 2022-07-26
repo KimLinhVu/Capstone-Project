@@ -46,10 +46,6 @@ function ProfileCard({
       {profile && (
         <>
           {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : null}
-          {/* <input onChange={handleImageUpload} ref={imageUploader}type='file' accept='image/*' multiple='false'/>
-          <div className="profile-picture-container" onClick={() => imageUploader.current.click()}>
-            <img ref={uploadedImage} className='profile-picture'/>
-          </div> */}
           <div className="user-info">
             <div className="header">
               <h1 className='username'>{profile.username}</h1>
