@@ -53,7 +53,7 @@ function App() {
                 </Protected>
               }
             />
-            <Route path="recommend/playlist/:playlistId/:originalPlaylistId" element=
+            <Route path="/user/:playlistId" element=
               {
                 <Protected token={token}>
                   <UserPlaylistDetail />
