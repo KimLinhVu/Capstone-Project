@@ -129,7 +129,7 @@
 }
 
 /* text styling */
-.user-playlist-detail .left .details p{
+.user-playlist-detail .left .details p {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -137,7 +137,7 @@
   margin-bottom: 16px;
 }
 
-.user-playlist-detail .left .details span{
+.user-playlist-detail .left .details span {
   font-weight: 600;
   font-size: 15px;
   color: black;

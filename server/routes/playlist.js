@@ -200,27 +200,26 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
 
     const allPlaylists = await Playlist.find({ _id: { $ne: userId }, added: true })
 
-    const promises = allPlaylists.map(async (item) => {
+    for (let i = 0; i < allPlaylists.length; i++) {
       /* see if entry already exists in db */
-      const found = await PlaylistSimilarity.findOne({ userId, firstPlaylistId: playlistId, secondPlaylistId: item.playlistId })
+      const found = await PlaylistSimilarity.findOne({ $or: [{ firstPlaylistId: playlistId, secondPlaylistId: allPlaylists[i].playlistId }, { firstPlaylistId: allPlaylists[i].playlistId, secondPlaylistId: playlistId }] })
 
       /* fetch both playlist track vectors */
       const firstVector = trackVector
-      const secondVector = item.trackVector
+      const secondVector = allPlaylists[i].trackVector
 
       const cosineSimilarityScore = similarity.calculateCosineSimilarity(firstVector, secondVector)
       const ownSimilarityScore = similarity.calculateOwnSimilarity(firstVector, secondVector)
 
-      /* if not found, calculate similarity score and save in db */
+      /* if not found, save new entry in db */
       if (!found) {
-        const newEntry = new PlaylistSimilarity({ userId, firstPlaylistId: playlistId, secondPlaylistId: item.playlistId, cosineSimilarityScore, ownSimilarityScore })
+        const newEntry = new PlaylistSimilarity({ firstPlaylistId: playlistId, secondPlaylistId: allPlaylists[i].playlistId, cosineSimilarityScore, ownSimilarityScore })
         await newEntry.save()
       } else {
         /* find one and update */
-        await PlaylistSimilarity.findOneAndUpdate({ userId, firstPlaylistId: playlistId, secondPlaylistId: item.playlistId }, { cosineSimilarityScore, ownSimilarityScore })
+        await PlaylistSimilarity.findOneAndUpdate({ $or: [{ firstPlaylistId: playlistId, secondPlaylistId: allPlaylists[i].playlistId }, { firstPlaylistId: allPlaylists[i].playlistId, secondPlaylistId: playlistId }] }, { cosineSimilarityScore, ownSimilarityScore })
       }
-    })
-    await Promise.all(promises)
+    }
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -230,12 +229,11 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
 /* returns similarity score between playlists */
 router.get('/get-similarity-score', jwt.verifyJWT, async (req, res, next) => {
   try {
-    const userId = req.userId
     const firstPlaylistId = req.headers['first-playlist-id']
     const secondPlaylistId = req.headers['second-playlist-id']
     const similarityMethod = req.headers['similarity-method']
 
-    const result = await PlaylistSimilarity.findOne({ userId, firstPlaylistId, secondPlaylistId })
+    const result = await PlaylistSimilarity.findOne({ $or: [{ firstPlaylistId, secondPlaylistId }, { firstPlaylistId: secondPlaylistId, secondPlaylistId: firstPlaylistId }] })
 
     if (similarityMethod === 0) {
       res.status(200).json(result.cosineSimilarityScore)

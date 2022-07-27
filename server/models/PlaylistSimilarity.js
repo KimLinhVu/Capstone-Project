@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const playlistSimilaritySchema = new mongoose.Schema({
-  userId: String,
   firstPlaylistId: String,
   secondPlaylistId: String,
   cosineSimilarityScore: Number,

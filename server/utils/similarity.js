@@ -46,19 +46,6 @@ class Similarity {
     a = this.convertObjectToVector(a)
     b = this.convertObjectToVector(b)
     let differenceSum = 0
-    /* set up scale values
-    acousticness
-    danceability
-    energy
-    instrumentalness
-    key
-    liveness
-    loudness
-    mode
-    speechiness
-    time_signature
-    valence
-    */
     let maxValue = 0
     const scaleValueObject = {
       acousticness: 1.5,

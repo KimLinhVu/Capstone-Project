@@ -42,7 +42,6 @@ const refreshToken = async () => {
   try {
     if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' ||
       (Date.now() - Number(LOCALSTORAGE_VALUES.timestamp) / 1000) < 1000) {
-      console.error('No refresh token available')
       logoutSpotify()
     }
     const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)

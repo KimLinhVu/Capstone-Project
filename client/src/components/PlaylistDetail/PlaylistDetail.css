@@ -67,9 +67,10 @@
 }
 
 .playlist-detail .buttons {
-  border-radius: 6px;
   margin-top: 30px;
-  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
 }
 
 .playlist-detail .recommend-btn {
@@ -82,11 +83,37 @@
   border-radius: 6px;
   cursor: pointer;
   transition: 200ms ease-in-out;
+  margin-bottom: 10px;
 }
 
 .playlist-detail .recommend-btn:hover {
   box-shadow: 0 0 13px 0px rgba(155, 155, 161, 0.7);
   transform: translateY(-3px);
+  background: var(--elements-darkpink);
+}
+
+.playlist-detail .resync {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: rgb(78, 139, 78);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.playlist-detail .resync:hover {
+  background: rgb(47, 84, 47);
+}
+
+.playlist-detail .disable:hover {
+  background-color: rgba(78, 139, 78, 0.649);
+}
+
+.playlist-detail .disable {
+  background: rgba(78, 139, 78, 0.649);
 }
 
 .playlist-detail .playlist-detail-content {

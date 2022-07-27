@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import Dropdown from 'components/Dropdown/Dropdown'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
-import { getPlaylistDetail, getTracksAudioFeatures } from 'utils/spotify'
 import { addTrackVector, addPlaylistToProfile, saveSimilarityScores } from 'utils/playlist'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import { Tooltip } from '@mui/material'
 import ReactLoading from 'react-loading'
 import Similarity from 'utils/similarity'
-import Tracks from 'utils/tracks'
 import './PlaylistView.css'
 
 function PlaylistView ({
@@ -26,68 +24,25 @@ function PlaylistView ({
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const similar = new Similarity()
-  const track = new Tracks()
 
-  const handleAddPlaylistOnClick = () => {
-    const addPlaylist = async () => {
-      setIsLoading(true)
-      /* calculate track vector for playlist */
-      const { data } = await getPlaylistDetail(currentAddPlaylist.playlistId)
-      setPlaylist(data)
+  const handleAddPlaylistOnClick = async () => {
+    setIsLoading(true)
 
-      /* create string of track Ids to use in Spotify API */
-      const trackIdArray = []
-      const tracks = await track.getAllPlaylistTracks(data.id)
-      tracks.forEach(item => {
-        trackIdArray.push(item.track.id)
-      })
+    /* creates a track vector object out of all tracks in a playlist */
+    const trackVector = await similar.createTrackVector(currentAddPlaylist.playlistId, setPlaylist)
 
-      /* receive track audio features for each track and store in an array */
-      let trackArrayLength = trackIdArray.length
-      const tempTrackVector = {
-        acousticness: 0,
-        danceability: 0,
-        energy: 0,
-        instrumentalness: 0,
-        key: 0,
-        liveness: 0,
-        loudness: 0,
-        mode: 0,
-        speechiness: 0,
-        time_signature: 0,
-        valence: 0
-      }
-      while (trackIdArray.length > 0) {
-        const trackIdString = trackIdArray.splice(0, 100).join(',')
-        const { data } = await getTracksAudioFeatures(trackIdString)
-        // eslint-disable-next-line no-loop-func
-        data.audio_features.forEach(item => {
-          if (item !== null) {
-            similar.createTrackObject(tempTrackVector, item)
-          } else {
-            trackArrayLength -= 1
-          }
-        })
-      }
+    /* store track-vector in playlist database */
+    await addTrackVector(currentAddPlaylist.playlistId, trackVector)
 
-      /* take average of all track vector quantities */
-      Object.keys(tempTrackVector).forEach(key => {
-        tempTrackVector[key] /= trackArrayLength
-      })
-      /* store track-vector in playlist database */
-      await addTrackVector(currentAddPlaylist.playlistId, tempTrackVector)
+    /* adds selected playlist to user's profile */
+    await addPlaylistToProfile(currentAddPlaylist)
+    setCurrentAddPlaylist(null)
+    playlist.length <= 1 ? setSelected('No playlist available') : setSelected('Add a playlist')
 
-      /* adds selected playlist to user's profile */
-      await addPlaylistToProfile(currentAddPlaylist)
-      setCurrentAddPlaylist(null)
-      playlist.length <= 1 ? setSelected('No playlist available') : setSelected('Add a playlist')
+    /* save similarity scores between all playlists in db */
+    await saveSimilarityScores(currentAddPlaylist.playlistId, trackVector)
 
-      /* save similarity scores between all playlists in db */
-      await saveSimilarityScores(currentAddPlaylist.playlistId, tempTrackVector)
-
-      setIsLoading(false)
-    }
-    addPlaylist()
+    setIsLoading(false)
   }
 
   return (
@@ -114,7 +69,7 @@ function PlaylistView ({
       </div>
         <div className='playlist-container'>
           <div className="header">
-            <h3>{spotifyName}'s Playlists</h3>
+            <h3>{spotifyName}&apos;s Playlists</h3>
           </div>
           {displayPlaylist && !isLoading
             ? (
