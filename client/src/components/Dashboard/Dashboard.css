@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   background: var(--background-color);
-  padding: 0 5%;
+  padding: 0% 5%;
   min-height: 100vh;
 }
 
@@ -30,7 +30,7 @@
 
 .dashboard .carousel {
   width: 100%;
-  background: url('/Users/kimlinh/CodePath/Project/Capstone-Project/client/img/lily.jpeg');
+  background: url('../../../img/lily.jpeg');
   background-size: cover;
   background-position: 5rem;
   height: 35vh;
@@ -38,8 +38,8 @@
 
 /* navlinks section */
 .dashboard .nav {
-  margin: 10px 0;
-  padding: 10px 0 0 0;
+  margin: 10px 0px;
+  padding: 10px 0px 0px 0px;
 }
 
 .dashboard .links {

@@ -88,39 +88,40 @@ const getAccessToken = () => {
 
 export const accessToken = getAccessToken()
 
-/* axios global request headers */
-axios.defaults.baseURL = 'https://api.spotify.com/v1'
-axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
-axios.defaults.headers['Content-Type'] = 'application/json'
+const instance = axios.create({
+  baseURL: 'https://api.spotify.com/v1'
+})
+instance.defaults.headers['Authorization'] = `Bearer ${accessToken}`
+instance.defaults.headers['Content-Type'] = 'application/json'
 
 export const getCurrentUserProfile = async () => {
-  return axios.get('/me')
+  return instance.get('/me')
 }
 
 export const getCurrentUserPlaylist = () => {
-  return axios.get('/me/playlists?limit=50')
+  return instance.get('/me/playlists?limit=50')
 }
 
 export const getPlaylistDetail = (playlistId) => {
-  return axios.get(`/playlists/${playlistId}`)
+  return instance.get(`/playlists/${playlistId}`)
 }
 
 export const getTrackDetail = (trackId) => {
-  return axios.get(`/tracks/${trackId}`)
+  return instance.get(`/tracks/${trackId}`)
 }
 
 export const getArtistDetail = (artistId) => {
-  return axios.get(`/artists?ids=${artistId}`)
+  return instance.get(`/artists?ids=${artistId}`)
 }
 
 export const addTrackToPlaylist = async (playlistId, trackUri) => {
-  return axios.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
+  return instance.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
 }
 
 export const getTracksAudioFeatures = async (ids) => {
-  return axios.get(`/audio-features?ids=${ids}`)
+  return instance.get(`/audio-features?ids=${ids}`)
 }
 
 export const getTrackAudioFeatures = async (id) => {
-  return axios.get(`/audio-features/${id}`)
+  return instance.get(`/audio-features/${id}`)
 }

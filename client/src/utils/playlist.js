@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+axios.defaults.baseURL = 'http://localhost:8888'
+
 export const getPlaylists = (spotifyId) => {
-  return axios.get('http://localhost:8888/playlist/playlists', {
+  return axios.get('/playlist/playlists', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "spotify-id": spotifyId
@@ -10,7 +12,7 @@ export const getPlaylists = (spotifyId) => {
 }
 
 export const getFavoritePlaylists = (spotifyId) => {
-  return axios.get('http://localhost:8888/playlist/favorites', {
+  return axios.get('/playlist/favorites', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "spotify-id": spotifyId
@@ -19,7 +21,7 @@ export const getFavoritePlaylists = (spotifyId) => {
 }
 
 export const getCurrentPlaylists = (spotifyId) => {
-  return axios.get('http://localhost:8888/playlist/current', {
+  return axios.get('/playlist/current', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "spotify-id": spotifyId
@@ -28,7 +30,7 @@ export const getCurrentPlaylists = (spotifyId) => {
 }
 
 export const addPlaylists = (playlist, spotifyId) => {
-  return axios.post('http://localhost:8888/playlist/', {
+  return axios.post('/playlist/', {
     playlist: playlist,
     spotifyId: spotifyId
   }, {
@@ -39,7 +41,7 @@ export const addPlaylists = (playlist, spotifyId) => {
 }
 
 export const addPlaylistToProfile = (playlist) => {
-  return axios.post('http://localhost:8888/playlist/add', {
+  return axios.post('/playlist/add', {
     playlist: playlist
   }, {
     headers: {
@@ -49,7 +51,7 @@ export const addPlaylistToProfile = (playlist) => {
 }
 
 export const removePlaylistFromProfile = (playlistId) => {
-  return axios.post('http://localhost:8888/playlist/remove', {
+  return axios.post('/playlist/remove', {
     playlistId: playlistId
   }, {
     headers: {
@@ -59,7 +61,7 @@ export const removePlaylistFromProfile = (playlistId) => {
 }
 
 export const addTrackVector = (playlistId, trackVector) => {
-  return axios.post('http://localhost:8888/playlist/add-track-vector', {
+  return axios.post('/playlist/add-track-vector', {
     playlistId: playlistId,
     trackVector: trackVector
   }, {
@@ -70,7 +72,7 @@ export const addTrackVector = (playlistId, trackVector) => {
 }
 
 export const getPlaylistTrackVector = (playlistId) => {
-  return axios.get('http://localhost:8888/playlist/get-track-vector', {
+  return axios.get('/playlist/get-track-vector', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "playlist-id": playlistId
@@ -79,7 +81,7 @@ export const getPlaylistTrackVector = (playlistId) => {
 }
 
 export const addFavoritePlaylist = (playlistId) => {
-  return axios.post('http://localhost:8888/playlist/add-favorite', {
+  return axios.post('/playlist/add-favorite', {
     playlistId: playlistId,
   }, {
     headers: {
@@ -89,7 +91,7 @@ export const addFavoritePlaylist = (playlistId) => {
 }
 
 export const removeFavoritePlaylist = (playlistId) => {
-  return axios.post('http://localhost:8888/playlist/remove-favorite', {
+  return axios.post('/playlist/remove-favorite', {
     playlistId: playlistId,
   }, {
     headers: {
