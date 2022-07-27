@@ -126,3 +126,14 @@ export const removeSimilarityMethodCount = (similarityMethod) => {
     }
   })
 }
+
+export const saveSimilarityScores = (playlistId, trackVector) => {
+  return axios.post('http://localhost:8888/playlist/save-similarity-score', {
+    playlistId,
+    trackVector
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Dropdown from 'components/Dropdown/Dropdown'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 import { getPlaylistDetail, getTracksAudioFeatures } from 'utils/spotify'
-import { addTrackVector, addPlaylistToProfile } from 'utils/playlist'
+import { addTrackVector, addPlaylistToProfile, saveSimilarityScores } from 'utils/playlist'
 import { AiFillPlusCircle } from 'react-icons/ai'
 import { Tooltip } from '@mui/material'
 import ReactLoading from 'react-loading'
@@ -81,6 +81,9 @@ function PlaylistView ({
       await addPlaylistToProfile(currentAddPlaylist)
       setCurrentAddPlaylist(null)
       playlist.length <= 1 ? setSelected('No playlist available') : setSelected('Add a playlist')
+
+      /* save similarity scores between all playlists in db */
+      await saveSimilarityScores(currentAddPlaylist.playlistId, tempTrackVector)
 
       setIsLoading(false)
     }

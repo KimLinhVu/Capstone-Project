@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
+import Similarity from 'utils/similarity'
 import ReactLoading from 'react-loading'
 
 function Map ({
   userLocation,
   allUsers,
   usersLocationArray,
-  vector,
+  playlistId,
   setUsers,
-  similar,
   similarityMethod,
   setIsLoading
 }) {
@@ -19,6 +19,7 @@ function Map ({
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   })
+  const similarity = new Similarity()
 
   const markerArray = [userLocation]
   const center = useMemo(() => (userLocation), [])
@@ -26,7 +27,6 @@ function Map ({
   const options = {
     streetViewControl: false,
     fullscreenControl: false
-
   }
 
   const onBoundsChanged = () => {
@@ -46,31 +46,30 @@ function Map ({
     return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
-  const handleMarkerOnClick = (location) => {
+  const handleMarkerOnClick = async (location) => {
+    setIsLoading(true)
     /* returns all users who are in the location of the marker clicked */
     const resultArray = usersLocationArray.filter(user => {
       return user.location.lat === location.lat && user.location.lng === location.lng
     })
 
-    /* calculate similarity score for each user's playlists */
-    resultArray.forEach(async (user) => {
+    /* fetch similarity score for each user's playlists */
+    const userPromises = resultArray.map(async (user) => {
       setUsers([])
       const { data } = await getUserPlaylists(user.user._id)
-      data?.forEach(playlist => {
+      const playlistPromises = data?.map(async (playlist) => {
         const userVector = playlist.trackVector
 
-        /* use random similarity method associated with user */
-        let similarity = 0
-        if (similarityMethod === 0) {
-          similarity = similar.calculateCosineSimilarity(vector, userVector)
-        } else {
-          similarity = similar.calculateOwnSimilarity(vector, userVector)
-        }
+        const res = await similarity.getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
+        const similarityScore = res.data
 
-        const newTrackObject = { user, playlist, similarityScore: similarity, userVector }
+        const newTrackObject = { user, playlist, similarityScore, userVector }
         setUsers(old => [...old, newTrackObject])
       })
+      await Promise.all(playlistPromises)
     })
+    await Promise.all(userPromises)
+    setIsLoading(false)
   }
 
   return (
