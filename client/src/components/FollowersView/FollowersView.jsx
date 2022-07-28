@@ -7,6 +7,15 @@ function FollowersView({
   followers
 }) {
   const users = followers ? profile.followers : profile.following
+  let userCards;
+
+  if (users.length === 0) {
+    userCards = <p>No followers</p>
+  } else {
+    userCards = users.map((item, idx) => {
+      return <UserCard key={idx} userId={item.userId} />
+    })
+  }
   return (
     <div className="followers-view">
       <div className="playlist-container">
@@ -14,11 +23,7 @@ function FollowersView({
           <h3>{followers ? `${profile.username}'s Followers` : 'Following'}</h3>
         </div>
         <div className="playlists">
-          {users.length !== 0 ? (
-            users.map((item, idx) => {
-              return <UserCard key={idx} userId={item.userId} />
-            })
-          ): <p>No followers</p>}
+          {userCards}
         </div>
       </div>
     </div>

@@ -13,10 +13,17 @@ function UserPlaylist({
   similarityMethod
 }) {
   const [isFollowing, setIsFollowing] = useState()
+  let followButton;
 
   const data = {
     similarityMethod: similarityMethod,
     originalPlaylistId: playlistId
+  }
+
+  if (isFollowing) {
+    followButton = <button className='unfollow' onClick={handleOnClickUnfollow}>Unfollow User</button>
+  } else {
+    followButton = <button className='follow' onClick={handleOnClickFollow}>Follow User</button>
   }
 
   useEffect(() => {
@@ -44,7 +51,7 @@ function UserPlaylist({
   return (
     <div className='user-playlist'>
       <h2>{user.username}</h2>
-      {isFollowing ? <button className='unfollow' onClick={handleOnClickUnfollow}>Unfollow User</button> : <button className='follow' onClick={handleOnClickFollow}>Follow User</button>}
+      {followButton}
       {playlist ? (
         <div className='playlist-card'>
           <p>{playlist.name}</p>

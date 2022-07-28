@@ -19,13 +19,13 @@ function UserCard({
   return (
     <div className='user-card'>
       {profile && (
-        <>
-          <img src=''/>
+        <div>
+          <img src='../../img/blueflower.jpeg' alt='profile placeholder'/>
           <div className='user-info'>
             <p className='username'>{profile.username}</p>
             <p className='location'>{profile.location.formatted_address}</p>
           </div>
-        </>
+        </div>
       )}
     </div>
   )
