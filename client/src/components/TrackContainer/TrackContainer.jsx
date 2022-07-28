@@ -29,9 +29,8 @@ function TrackContainer({
       const allTracks = await track.getAllPlaylistTracks(playlistId)
 
       /* gets track audio features for each track */
-      let trackIdArray = []
-      allTracks.forEach(item => {
-        trackIdArray.push(item.track.id)
+      const trackIdArray = allTracks.map(item => {
+        return item.track.id
       })
 
       /* initialize tracks array */

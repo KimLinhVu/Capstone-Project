@@ -6,17 +6,16 @@ function GenreContainer({
   tracks
 }) {
   const [genreArray, setGenreArray] = useState([])
+  const [topFiveGenres, setTopFiveGenres] = useState([])
 
   useEffect(() => {
     const getArtistGenres = async () => {
       /* creates array of artist ids as a parameter for Spotify API */
-      let artistArray = []
-      tracks.forEach(item => {
-        const artists = item.track.artists
-        artists.forEach(item => {
-          artistArray.push(item.id)
+      const artistArray = tracks.map(item => (
+        item.track.artists.map(artist => {
+          return artist.id
         })
-      })
+      )).flat()
   
       while (artistArray.length > 0) {
         /* requests artist information in increments of 50 */
@@ -48,11 +47,15 @@ function GenreContainer({
     }
     getArtistGenres()
   }, [])
+
+  useState(() => {
+    setTopFiveGenres(genreArray.slice(0, 5))
+  }, [genreArray])
   return (
     <div className="genre-container">
       <div className="genres">
         <h2>Top Genres in Playlist</h2>
-        {genreArray.slice(0, 5).map((item, idx) => {
+        {topFiveGenres.map((item, idx) => {
           return <p key={idx}>{item.genre}</p>
         })}
       </div>
