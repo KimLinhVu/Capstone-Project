@@ -4,7 +4,6 @@
   align-items: center;
   background: var(--background-color);
   padding: 0% 5%;
-  height: 100vh;
   min-height: 100vh;
 }
 
@@ -23,7 +22,7 @@
   display: none;
 }
 
-.dashboard .favorites-tab {
+.dashboard .favorites-tab, .followers-tab {
   width: 100%;
   padding: 10px 10px;
   display: none;
@@ -71,7 +70,7 @@
 }
 
 .dashboard .links .tab-show {
-  border-bottom: 3px solid rgb(214, 112, 151);
+  border-bottom: 3px solid var(--elements-pink);
 }
 
 .dashboard .nav hr {

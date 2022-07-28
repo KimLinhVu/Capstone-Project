@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { accessToken, getCurrentUserProfile } from 'utils/spotify'
-import { getPlaylists, getCurrentPlaylists, sortOptionsTracks } from 'utils/playlist'
+import { getPlaylists, getCurrentPlaylists } from 'utils/playlist'
 import PlaylistView from 'components/PlaylistView/PlaylistView'
 import FavoriteView from 'components/FavoriteView/FavoriteView'
 import ProfileCard from 'components/ProfileCard/ProfileCard'
+import Tracks from 'utils/tracks'
+import { getUserProfile } from 'utils/users'
+import FollowersView from 'components/FollowersView/FollowersView'
 import './Dashboard.css'
 
 function Dashboard() {
   const [spotifyToken, setSpotifyToken] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [spotifyProfile, setSpotifyProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
   const [currentPlaylist, setCurrentPlaylist] = useState([])
@@ -18,16 +22,23 @@ function Dashboard() {
   const [refresh, setRefresh] = useState(false)
   const [playlistShow, setPlaylistShow] = useState(true)
   const [favoriteShow, setFavoriteShow] = useState(false)
+  const [followersShow, setFollowersShow] = useState(false)
+  const [followingShow, setFollowingShow] = useState(false)
+
+  const track = new Tracks()
   
   /* get value of tokens out of the URL */
   useEffect(() => {
     setSpotifyToken(accessToken)
-    const fetchUserSpotifyProfile = async () => {
+    const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
+
+      const res = await getUserProfile()
+      setProfile(res.data)
     }
     if (accessToken) {
-      fetchUserSpotifyProfile()
+      fetchUserProfiles()
     }
   }, [])
 
@@ -39,7 +50,7 @@ function Dashboard() {
       /* retrieve playlist that belongs to user and store in playlist state */
       const result = await getPlaylists(prof.data.id)
       const options = convertToOptionsArray(result.data)
-      sortOptionsTracks(options)
+      track.sortOptionsTracks(options)
       setPlaylist(options)
 
       /* retrieve playlists that spotify user has added to their profile */
@@ -74,6 +85,13 @@ function Dashboard() {
     return newArray
   }
 
+  const closeAllTabs = () => {
+    setPlaylistShow(false)
+    setFavoriteShow(false)
+    setFollowersShow(false)
+    setFollowingShow(false)
+  }
+
   return (
     <div className="dashboard">
       {spotifyToken ? (
@@ -82,20 +100,30 @@ function Dashboard() {
           {/* Background Image */}
         </div>
         {spotifyProfile && 
-          <ProfileCard spotifyProfile={spotifyProfile} spotifyToken={spotifyToken}/>
+          <ProfileCard 
+            spotifyProfile={spotifyProfile} 
+            profile={profile}
+          />
         }
         <div className="dashboard-right">
           <div className="nav">
             <div className="links">
               <button onClick={() => {
+                closeAllTabs()
                 setPlaylistShow(true)
-                setFavoriteShow(false)
               }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
               <button onClick={() =>{
-                setPlaylistShow(false)
+                closeAllTabs()
                 setFavoriteShow(true)
               }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
-              <button>Followers</button>
+              <button onClick={() => {
+                closeAllTabs()
+                setFollowersShow(true)
+              }} className={`${followersShow ? 'tab-show' : ''}`}>Followers</button>
+              <button onClick={() => {
+                closeAllTabs()
+                setFollowingShow(true)
+              }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
             </div>
             <hr />
           </div>
@@ -123,6 +151,22 @@ function Dashboard() {
                 spotifyProfile={spotifyProfile}
               />
             )}
+          </div>
+          <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
+            {profile && (
+              <FollowersView 
+                profile={profile}
+                followers={true}
+              />
+            )}
+          </div>
+          <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
+            {profile && (
+                <FollowersView 
+                  profile={profile}
+                  followers={false}
+                />
+              )}
           </div>
         </div>
       </>)

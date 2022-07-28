@@ -14,6 +14,12 @@
   margin-left: 50px;
 }
 
+.profile-card .profile-picture-container {
+  height: "60px";
+  width: "60px";
+  border: 1px solid black;
+}
+
 .profile-card .profile-picture {
   align-self: center;
   width: 250px;
@@ -64,17 +70,17 @@
 .profile-card .spotify-profile-btn {
   display: flex;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   width: 100%;
   border-radius: 6px;
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-color: green;
+  background-color: var(--elements-pink);
   transition: 200ms ease-in-out;
 }
 
 .profile-card .spotify-profile-btn:hover {
-  background-color: rgb(26, 109, 26);
+  background-color: var(--elements-darkpink);
   transform: translateY(-3px);
 }
 

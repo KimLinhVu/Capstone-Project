@@ -19,7 +19,17 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
 router.get('/profile', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const user = await Users.findOne({ id: userId })
+    const user = await Users.findOne({ _id: userId })
+    res.json(user)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/profile-id', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.headers['user-id']
+    const user = await Users.findOne({ _id: userId })
     res.json(user)
   } catch (error) {
     next(error)
@@ -41,6 +51,69 @@ router.get('/location', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const user = await Users.findOne({ _id: userId })
     res.json(user.location)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/add-follower', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { otherUserId } = req.body
+    await Users.findOneAndUpdate({ _id: otherUserId }, {
+      $push: {
+        followers: { userId }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/add-following', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { otherUserId } = req.body
+
+    await Users.findOneAndUpdate({ _id: userId }, {
+      $push: {
+        following: { userId: otherUserId }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/remove-follower', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { otherUserId } = req.body
+
+    await Users.findOneAndUpdate({ _id: otherUserId }, {
+      $pull: {
+        followers: { userId }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/remove-following', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { otherUserId } = req.body
+
+    await Users.findOneAndUpdate({ _id: userId }, {
+      $pull: {
+        following: { userId: otherUserId }
+      }
+    })
+    res.status(200).json()
   } catch (error) {
     next(error)
   }
