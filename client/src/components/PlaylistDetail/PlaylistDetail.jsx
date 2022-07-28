@@ -33,7 +33,7 @@ function PlaylistDetail() {
     <div className="playlist-detail">
       <NavBar />
       {playlist ? 
-        <>
+        <div>
           <div className='header'>
             <img src={playlist.images[0].url} alt="Playlist Image" />
             <div className="playlist-header-info">
@@ -63,7 +63,7 @@ function PlaylistDetail() {
               <GenreContainer tracks={playlist.tracks.items}/>
             </div>
           </div>
-      </>
+      </div>
       : <h1>Loading...</h1>}
   </div>
   )
