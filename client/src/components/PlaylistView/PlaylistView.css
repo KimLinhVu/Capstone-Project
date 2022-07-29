@@ -8,14 +8,14 @@
 .playlist-view .playlist-header .add-playlist-btn {
   border: none;
   background-color: transparent;
-  color: green;
+  color: var(--elements-pink);
   cursor: pointer;
   margin-left: 20px;
   transition: 200ms ease-in-out;
 }
 
 .playlist-view .playlist-header .add-playlist-btn:hover {
-  color: rgb(26, 109, 26);
+  color: var(--elements-darkpink);
 }
 
 .playlist-view .playlist-header .playlist-searchbar {
@@ -50,7 +50,7 @@
   padding-left: 15px;
 }
 
-.playlist-view .playlist-container .header {
+.playlist-container .header {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -63,6 +63,6 @@
   align-self: center;
 }
 
-.playlist-view h3 {
+.playlist-container h3 {
   font-weight: 600;
 }

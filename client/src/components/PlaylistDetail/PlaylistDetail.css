@@ -5,16 +5,96 @@
   min-height: 100vh;
 }
 
+.playlist-detail .header {
+  position: absolute;
+  display: flex;
+  margin: 115px 250px;
+}
+
+.playlist-detail .header img {
+  width: 300px;
+  height: 300px;
+  box-shadow: 0px 0px 13px 0px rgba(1, 1, 14, 0.7);
+}
+
+.playlist-detail .header .playlist-header-info {
+  margin-left: 50px;
+  margin-top: 30px;
+}
+
+.playlist-detail .buttons {
+  border-radius: 6px;
+  margin-top: 30px;
+  padding: 3px;
+}
+
+.playlist-detail .recommend-btn, .remove-playlist-btn {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  background: var(--elements-pink);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.playlist-detail .remove-playlist-btn {
+  margin-left: 5px;
+  background: rgb(197, 14, 84);
+}
+
+.playlist-detail .recommend-btn:hover, .remove-playlist-btn:hover {
+  box-shadow: 0px 0px 13px 0px rgba(155, 155, 161, 0.7);
+  transform: translateY(-3px);
+}
+
 .playlist-detail .playlist-detail-content {
-  padding: 0% 5%;
-  margin-top: 58px;
+  padding: 270px 82px;
+  width: 80%;
+  margin: auto;
+  margin-top: 12.8%;
+  background: white;
+  display: flex;
+  border-radius: 10px;
 }
 
-.playlist-detail .playlist-card {
-  width: 500px;
+.playlist-detail .left .details {
+  box-shadow: 0px 0px 13px 0px rgba(217, 217, 223, 0.7);
+  width: 290px;
+  padding: 15px 20px 5px 20px;
+  border-radius: 6px;
 }
 
-.playlist-detail .playlist-card img {
-  width: 350px;
-  height: 350px;
+.playlist-detail .right {
+  margin-left: 55px;
+  display: flex;
+  flex-direction: row;
+}
+
+/* text styling */
+.playlist-detail .left .details p{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.playlist-detail .left .details span{
+  font-weight: 600;
+  font-size: 15px;
+  color: black;
+}
+
+.playlist-detail p {
+  color: rgb(100, 99, 99);
+  font-size: 1.2rem;
+  letter-spacing: .3px;
+}
+
+.playlist-detail .header h2 {
+  font-weight: 500;
+  font-size: 3.3rem;
 }

@@ -1,8 +1,7 @@
 .playlist-card {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  background: rgba(239, 236, 236, 0.529);
+  background: var(--background-color);
   padding: 10px 0px 0px 10px;
   border-radius: 5px;
   width: 172px;
