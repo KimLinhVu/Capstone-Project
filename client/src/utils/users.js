@@ -81,3 +81,15 @@ export const removeUserFollowing = (otherUserId) => {
     }
   })
 }
+
+export const updateUserSettings = (username, location, privacy) => {
+  return axios.post('http://localhost:8888/settings', {
+    username: username,
+    location: location,
+    privacy: privacy
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

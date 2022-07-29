@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { ToastContainer } from 'react-toastify'
-import Switch from 'react-switch'
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios'
 
 const libraries = ['places']
@@ -15,7 +16,7 @@ function Signup() {
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(null)
-  const [privacyChecked, setPrivacyChecked] = useState(false)
+  const [privacy, setPrivacy] = useState(false)
   const navigate = useNavigate()
 
   /* set up Google Map Places autocomplete */
@@ -30,12 +31,12 @@ function Signup() {
   
   const handleOnSubmitSignup = async () => {
     try {
-      const res = await axios.post('http://localhost:8888/signup',
+      await axios.post('http://localhost:8888/signup',
       {
         username: username,
         password: password,
         location: place,
-        privacy: privacyChecked
+        privacy: privacy
       })
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
@@ -63,11 +64,6 @@ function Signup() {
       setPlace(null)
       notifyError('Please enter a valid City/State')
     }
-  }
-
-  /* handle privacy switch */
-  const handlePrivacySwitch = () => {
-    setPrivacyChecked(!privacyChecked)
   }
   
   return (
@@ -98,22 +94,7 @@ function Signup() {
         <input type="text" placeholder='Enter your Location' onChange={() => {setPlace(null)}}/>
       </Autocomplete>
       <div className="switch">
-        <span>Public</span>
-        <Switch
-          onChange={handlePrivacySwitch}
-          checked={privacyChecked}
-          className="react-switch"
-          onColor="#86d3ff"
-          onHandleColor="#2693e6"
-          handleDiameter={30}
-          uncheckedIcon={false}
-          checkedIcon={false}
-          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-          height={20}
-          width={48}
-        />
-        <span>Private</span>
+        <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
       </div>
       <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
       <ToastContainer

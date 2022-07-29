@@ -4,6 +4,7 @@ import Login from 'components/Login/Login'
 import Signup from 'components/Signup/Signup'
 import Dashboard from 'components/Dashboard/Dashboard'
 import { Protected } from 'components/Protected'
+import Settings from 'components/Settings/Settings'
 import PlaylistDetail from 'components/PlaylistDetail/PlaylistDetail'
 import useToken from 'utils/useToken'
 import RecommendView from 'components/RecommendView/RecommendView'
@@ -25,6 +26,11 @@ function App() {
                   setToken={setToken}
                   clearToken={clearToken}
                 />
+              }
+            />
+            <Route path="/settings" element=
+              {
+                <Settings />
               }
             />
             <Route path="/" element=

@@ -52,7 +52,7 @@ function ProfileCard({
               >
                 <MenuItem onClick={() => navigate('/login')}>Logout</MenuItem>
                 <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
-                <MenuItem onClick={handleClose}>Change Settings</MenuItem>
+                <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>
               </Menu>
             </div>
             <div className="location">
