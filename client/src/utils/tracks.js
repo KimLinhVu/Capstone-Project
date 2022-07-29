@@ -23,15 +23,14 @@ export default class Tracks {
   }
 
   getAllTrackDetails = async (tracks) => {
-    let trackIds = []
     let trackArray = []
-    tracks.forEach(item => trackIds.push(item.id))
+    let trackIds = tracks.map(item => { return item.id })
 
     while (trackIds.length > 0) {
       let trackIdString = trackIds.splice(0, 50).join(',')
 
       const { data } = await getTracksDetails(trackIdString)
-      data.tracks.forEach(item => trackArray.push(item))
+      trackArray = data.tracks.map(item => { return item })
     }
     return trackArray
   }
