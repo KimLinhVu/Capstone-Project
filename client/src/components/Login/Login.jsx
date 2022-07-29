@@ -38,17 +38,19 @@ function Login({
 
   return (
     <div className="login">
-      <h1>Login</h1>
-      <label>
-        <p>Username</p>
-        <input type="text" name="user" placeholder='Enter username' onChange={(e) => setUsername(e.target.value)} value={username}/>
-      </label>
-      <label>
-        <p>Password</p>
-        <input type="password" name='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} value={password}/>
-      </label>
-      <button className='login-btn' onClick={handleOnSubmitLogin}>Log In</button>
-      <Link to="/signup"><p className='register'>Register Now</p></Link>
+      <div className="content">
+        <h1>Login</h1>
+        <label>
+          <p>Username</p>
+          <input type="text" name="user" onChange={(e) => setUsername(e.target.value)} value={username}/>
+        </label>
+        <label>
+          <p>Password</p>
+          <input type="password" name='password' onChange={(e) => setPassword(e.target.value)} value={password}/>
+        </label>
+        <button className='login-btn' onClick={handleOnSubmitLogin}>Login</button>
+        <Link to="/signup"><p className='register'>Register Now</p></Link>
+      </div>
       <ToastContainer
         position="top-center"
         limit={1}

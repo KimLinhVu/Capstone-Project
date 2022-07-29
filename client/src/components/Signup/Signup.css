@@ -20,3 +20,8 @@
   background-color: rgb(108, 177, 108);
   cursor: pointer;
 }
+
+.signup h1 {
+  font-weight: 600;
+  font-size: 40px;
+}
