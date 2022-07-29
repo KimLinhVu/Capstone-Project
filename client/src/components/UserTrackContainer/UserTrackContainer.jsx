@@ -70,7 +70,7 @@ function UserTrackContainer ({
       }
       /* sort tempTracks by similarity score */
       tempTracks.sort((a, b) => {
-        return a.similarity - b.similarity
+        return b.similarity - a.similarity
       })
       const trackDetailArray = await track.getAllTrackDetails(tempTracks)
       setTrackDetails(trackDetailArray)

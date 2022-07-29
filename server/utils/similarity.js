@@ -36,7 +36,7 @@ class Similarity {
     mB = Math.sqrt(mB)
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
     const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
-    return normalized
+    return 100 - normalized
   }
 
   calculateOwnSimilarity = (a, b) => {
@@ -70,7 +70,7 @@ class Similarity {
       differenceSum += difference
     }
     /* scale differenceSum to between 0-100 */
-    return this.normalizeData(differenceSum, 0, maxValue, 100)
+    return 100 - this.normalizeData(differenceSum, 0, maxValue, 100)
   }
 }
 
