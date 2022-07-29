@@ -13,6 +13,7 @@ function FollowersView({
   const [followerSearch, setFollowerSearch] = useState('')
   const [users, setUsers] = useState(null)
   const [displayUsers, setDisplayUsers] = useState([])
+  let userCards
 
   const userArray = followers ? profile.followers : profile.following
 
@@ -34,6 +35,14 @@ function FollowersView({
     const newArray = users?.filter(item => { return item.username.toLowerCase().includes(followerSearch.toLowerCase()) })
     setDisplayUsers(newArray)
   }, [followerSearch, profile])
+
+  if (displayUsers?.length === 0) {
+    userCards = <p>No Users Found</p>
+  } else {
+    userCards = displayUsers?.map((item, idx) => {
+      return <UserCard key={idx} userId={item._id} user={item} setPopupIsOpen={setPopupIsOpen} setUserPopupId={setUserPopupId}/>
+    })
+  }
   
   return (
     <div className="followers-view">
@@ -43,11 +52,7 @@ function FollowersView({
           <h3>{followers ? `${profile.username}'s Followers` : 'Following'}</h3>
         </div>
         <div className="playlists">
-          {displayUsers?.length !== 0 ? (
-            displayUsers?.map((item, idx) => {
-              return <UserCard key={idx} userId={item._id} user={item} setPopupIsOpen={setPopupIsOpen} setUserPopupId={setUserPopupId}/>
-            })
-          ): <p>No Users Found</p>}
+          {userCards}
         </div>
       </div>
     </div>

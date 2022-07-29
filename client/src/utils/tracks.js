@@ -10,17 +10,16 @@ export default class Tracks {
   }
 
   getAllPlaylistTracks = async (playlistId) => {
-    let allTracks = []
     let offset = 0
     let tracks = await getPlaylistItems(playlistId, offset)
-    tracks.data.items.forEach(item => allTracks.push(item))
+    let allTracks = tracks.data.items.map(item => { return item })
     
     while (tracks.data.items.length > 0) {
       offset += tracks.data.items.length
       tracks = await getPlaylistItems(playlistId, offset)
-      tracks.data.items.forEach(item => allTracks.push(item))
+      allTracks.push(tracks.data.items.map(item => { return item }))
     }
-    return allTracks
+    return allTracks.flat()
   }
 
   getAllTrackDetails = async (tracks) => {

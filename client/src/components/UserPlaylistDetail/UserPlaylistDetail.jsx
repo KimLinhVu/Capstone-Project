@@ -22,6 +22,8 @@ function UserPlaylistDetail() {
   const {similarityMethod, originalPlaylistId, user, vector, userVector } = location.state
   const follower = new Follower()
 
+  let followButton
+
   useEffect(() => {
     /* get following list of current user */
     const isUserFollowing = async () => {
@@ -50,6 +52,12 @@ function UserPlaylistDetail() {
     }
   }, [popupIsOpen])
 
+  if (isFollowing) {
+    followButton = <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button>
+  } else {
+    followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>
+  }
+
   return (
     <div className="user-playlist-detail">
       <NavBar />
@@ -72,7 +80,7 @@ function UserPlaylistDetail() {
                 <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
               </div>
             </div>
-            {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>}
+            {followButton}
             <div className="header">
               <span className="num">#</span>
               <span className="title">Title</span>
