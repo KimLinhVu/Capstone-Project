@@ -11,7 +11,7 @@ function GenreContainer({
   useEffect(() => {
     const getArtistGenres = async () => {
       /* creates array of artist ids as a parameter for Spotify API */
-      const artistArray = tracks.map(item => (
+      const artistArray = tracks.flatMap(item => (
         item.track.artists.map(artist => {
           return artist.id
         })
