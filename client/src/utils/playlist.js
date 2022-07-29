@@ -99,7 +99,7 @@ export const removeFavoritePlaylist = (playlistId) => {
 }
 
 export const addSimilarityMethodCount = (similarityMethod) => {
-  return axios.post('http://localhost:8888/playlist/addSimilarityCount', {
+  return axios.post('/playlist/addSimilarityCount', {
     similarityMethod: similarityMethod
   }, {
     headers: {
@@ -109,7 +109,7 @@ export const addSimilarityMethodCount = (similarityMethod) => {
 }
 
 export const removeSimilarityMethodCount = (similarityMethod) => {
-  return axios.post('http://localhost:8888/playlist/removeSimilarityCount', {
+  return axios.post('/playlist/removeSimilarityCount', {
     similarityMethod: similarityMethod
   }, {
     headers: {

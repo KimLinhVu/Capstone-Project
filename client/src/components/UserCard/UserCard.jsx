@@ -1,3 +1,4 @@
+
 import React from 'react'
 import './UserCard.css'
 
@@ -13,15 +14,13 @@ function UserCard({
       setUserPopupId(userId)
       setPopupIsOpen(true)
       }}>
-      {profile && (
-        <div>
-          <img src='../../img/blueflower.jpeg' alt='profile placeholder'/>
-          <div className='user-info'>
-            <p className='username'>{profile.username}</p>
-            <p className='location'>{profile.location.formatted_address}</p>
-          </div>
-        </div>
-      )}
+      <img src={require('img/blueflower.jpeg')}/>
+      {user ? (
+        <div className='user-info'>
+        <p className='username'>{user.username}</p>
+        <p className='location'>{user.location.formatted_address}</p>
+      </div>
+      ) : null}
     </div>
   )
 }

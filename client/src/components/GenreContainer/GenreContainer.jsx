@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { getArtistDetail } from '../../utils/spotify'
-import './GenreContainer.css'
 
 function GenreContainer({
   tracks
