@@ -19,6 +19,7 @@ function UserTrack({
   setUserTrack
 }) {
   const [add, setAdd] = useState(true)
+  let trackButton
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
@@ -46,6 +47,18 @@ function UserTrack({
       notifyError('Error removing track')
     }
   }
+
+  if (add) {
+    trackButton = <AiFillPlusCircle onClick={(e) => {
+      addTrack()
+      e.stopPropagation()
+    }} className='icon' size={30}/>
+  } else {
+    trackButton = <AiFillMinusCircle onClick={(e) => {
+      removeTrack()
+      e.stopPropagation()
+    }} className='icon' size={30}/>
+  }
   
   return (
     <div className="user-track" onClick={() => {
@@ -68,13 +81,7 @@ function UserTrack({
           <audio controls src={track.preview_url}></audio>
         ) : <p className='no-preview'>No preview available</p>}
       </div>
-      {add ? <AiFillPlusCircle onClick={(e) => {
-        addTrack()
-        e.stopPropagation()
-      }} className='icon' size={30}/> : <AiFillMinusCircle onClick={(e) => {
-        removeTrack()
-        e.stopPropagation()
-      }} className='icon' size={30}/>}
+      {trackButton}
     </div>
   )
 }

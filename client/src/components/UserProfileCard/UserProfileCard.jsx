@@ -41,7 +41,7 @@ function UserProfileCard({
       <div id="overlay" onClick={() => setPopupIsOpen(false)}></div>
       <div className="profile-popup">
         {profile && !isLoading ? (
-          <>
+          <div>
             <div className="profile-content">
               <h1>{profile.username}</h1>
               <p>Followers: {profile.followers.length}</p>
@@ -60,7 +60,7 @@ function UserProfileCard({
                 />
               ))}
             </div>
-          </>
+          </div>
         ) :  <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
     </div>

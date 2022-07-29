@@ -22,7 +22,7 @@ function UserPlaylistDetail() {
     <div className="playlist-detail">
       {similarityMethod ? <h1>{similarityMethod}</h1> : <p>No State</p>}
       {playlist ? 
-        <>
+        <div>
           <div className='playlist-card'>
             <div className="playlist-header">
               <h2>{playlist.name}</h2>
@@ -38,7 +38,7 @@ function UserPlaylistDetail() {
               similarityMethod={similarityMethod}
             />
           </div>
-        </>
+        </div>
       : null}
     </div>
   )
