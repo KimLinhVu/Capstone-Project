@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
-import Similarity from 'utils/similarity'
+import { getSimilarityScore } from 'utils/playlist'
 import ReactLoading from 'react-loading'
 
 function Map ({
@@ -19,7 +19,6 @@ function Map ({
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   })
-  const similarity = new Similarity()
 
   const markerArray = [userLocation]
   const center = useMemo(() => (userLocation), [])
@@ -60,7 +59,7 @@ function Map ({
       const playlistPromises = data?.map(async (playlist) => {
         const userVector = playlist.trackVector
 
-        const res = await similarity.getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
+        const res = await getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
         const similarityScore = res.data
 
         const newTrackObject = { user, playlist, similarityScore, userVector }

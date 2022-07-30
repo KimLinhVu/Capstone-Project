@@ -1,8 +1,4 @@
-import axios from 'axios'
-import { getTracksAudioFeatures, getPlaylistDetail } from './spotify'
-import Tracks from 'utils/tracks'
-
-export default class Similarity {
+class Similarity {
   scaleValueObject = {
     acousticness: 1.5,
     danceability: 1.8,
@@ -17,55 +13,6 @@ export default class Similarity {
     valence: 2
   }
 
-  createTrackVector = async (playlistId, setPlaylist) => {
-    const track = new Tracks()
-    const { data } = await getPlaylistDetail(playlistId)
-    if (setPlaylist) {
-      setPlaylist(data)
-    }
-
-    /* create string of track Ids to use in Spotify API */
-    const trackIdArray = []
-    const tracks = await track.getAllPlaylistTracks(data.id)
-    tracks.forEach(item => {
-      trackIdArray.push(item.track.id)
-    })
-
-    /* receive track audio features for each track and store in an array */
-    let trackArrayLength = trackIdArray.length
-    const tempTrackVector = {
-      acousticness: 0,
-      danceability: 0,
-      energy: 0,
-      instrumentalness: 0,
-      key: 0,
-      liveness: 0,
-      loudness: 0,
-      mode: 0,
-      speechiness: 0,
-      time_signature: 0,
-      valence: 0
-    }
-    while (trackIdArray.length > 0) {
-      const trackIdString = trackIdArray.splice(0, 100).join(',')
-      const { data } = await getTracksAudioFeatures(trackIdString)
-      // eslint-disable-next-line no-loop-func
-      data.audio_features.forEach(item => {
-        if (item !== null) {
-          this.createTrackObject(tempTrackVector, item)
-        } else {
-          trackArrayLength -= 1
-        }
-      })
-    }
-
-    /* take average of all track vector quantities */
-    Object.keys(tempTrackVector).forEach(key => {
-      tempTrackVector[key] /= trackArrayLength
-    })
-    return tempTrackVector
-  }
-
   normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
@@ -76,29 +23,11 @@ export default class Similarity {
     return Object.values(trackObject)
   }
 
-  createTrackObject = (tempTrackVector, item) => {
-    Object.keys(tempTrackVector).forEach(key => {
-      let itemValue = item[key]
-      /* scale certain values down to 0-1 */
-      if (key === 'key') {
-        const scaledValue = this.normalizeData(item[key], 0, 11, 1)
-        itemValue = scaledValue
-      } else if (key === 'loudness') {
-        const scaledValue = this.normalizeData(item[key], -60, 0, 1)
-        itemValue = scaledValue
-      } else if (key === 'time_signature') {
-        const scaledValue = this.normalizeData(item[key], 3, 7, 1)
-        itemValue = scaledValue
-      }
-      tempTrackVector[key] += itemValue
-    })
-  }
-
   calculateCosineSimilarity = (a, b) => {
     a = this.convertObjectToVector(a)
     b = this.convertObjectToVector(b)
     if (JSON.stringify(a) === JSON.stringify(b)) {
-      return 0
+      return 100
     }
     let dotproduct = 0
     let mA = 0
@@ -110,6 +39,9 @@ export default class Similarity {
     }
     mA = Math.sqrt(mA)
     mB = Math.sqrt(mB)
+    if ((mA * mB) === 0) {
+      return 0
+    }
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
     const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
     return 100 - normalized
@@ -153,15 +85,6 @@ export default class Similarity {
     /* scale differenceSum to between 0-100 */
     return 100 - this.normalizeData(differenceSum, 0, maxValue, 100)
   }
-
-  getSimilarityScore = (firstPlaylistId, secondPlaylistId, similarityMethod) => {
-    return axios.get('/playlist/get-similarity-score', {
-      headers: {
-        'x-access-token': localStorage.getItem('token'),
-        'first-playlist-id': firstPlaylistId,
-        'second-playlist-id': secondPlaylistId,
-        'similarity-method': similarityMethod
-      }
-    })
-  }
 }
+
+module.exports = Similarity

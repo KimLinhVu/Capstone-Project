@@ -12,6 +12,7 @@ class Similarity {
     time_signature: 0.5,
     valence: 2
   }
+
   getSimilarityMethod = async (newUserId) => {
     const id = await newUserId.toString()
     const val = parseInt(id.slice(18, 25), 16)

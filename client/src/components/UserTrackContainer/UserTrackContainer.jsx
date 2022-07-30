@@ -57,7 +57,7 @@ function UserTrackContainer ({
             valence: 0
           }
           if (item !== null) {
-            similar.createTrackObject(tempTrackVector, item)
+            track.createTrackObject(tempTrackVector, item)
 
             let similarity = 0
             if (similarityMethod === 0) {

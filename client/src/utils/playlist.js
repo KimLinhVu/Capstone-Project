@@ -137,3 +137,14 @@ export const saveSimilarityScores = (playlistId, trackVector) => {
     }
   })
 }
+
+export const getSimilarityScore = (firstPlaylistId, secondPlaylistId, similarityMethod) => {
+  return axios.get('/playlist/get-similarity-score', {
+    headers: {
+      'x-access-token': localStorage.getItem('token'),
+      'first-playlist-id': firstPlaylistId,
+      'second-playlist-id': secondPlaylistId,
+      'similarity-method': similarityMethod
+    }
+  })
+}

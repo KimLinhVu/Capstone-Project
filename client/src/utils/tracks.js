@@ -1,6 +1,75 @@
-import { getPlaylistItems, getTracksDetails } from './spotify'
+import { getPlaylistItems, getTracksDetails, getTracksAudioFeatures, getPlaylistDetail } from './spotify'
+import Similarity from './similarity'
 
 export default class Tracks {
+  similar = new Similarity()
+
+  createTrackVector = async (playlistId, setPlaylist) => {
+    const { data } = await getPlaylistDetail(playlistId)
+    if (setPlaylist) {
+      setPlaylist(data)
+    }
+
+    /* create string of track Ids to use in Spotify API */
+    const trackIdArray = []
+    const tracks = await this.getAllPlaylistTracks(data.id)
+    tracks.forEach(item => {
+      trackIdArray.push(item.track.id)
+    })
+
+    /* receive track audio features for each track and store in an array */
+    let trackArrayLength = trackIdArray.length
+    const tempTrackVector = {
+      acousticness: 0,
+      danceability: 0,
+      energy: 0,
+      instrumentalness: 0,
+      key: 0,
+      liveness: 0,
+      loudness: 0,
+      mode: 0,
+      speechiness: 0,
+      time_signature: 0,
+      valence: 0
+    }
+    while (trackIdArray.length > 0) {
+      const trackIdString = trackIdArray.splice(0, 100).join(',')
+      const { data } = await getTracksAudioFeatures(trackIdString)
+      // eslint-disable-next-line no-loop-func
+      data.audio_features.forEach(item => {
+        if (item !== null) {
+          this.createTrackObject(tempTrackVector, item)
+        } else {
+          trackArrayLength -= 1
+        }
+      })
+    }
+
+    /* take average of all track vector quantities */
+    Object.keys(tempTrackVector).forEach(key => {
+      tempTrackVector[key] /= trackArrayLength
+    })
+    return tempTrackVector
+  }
+
+  createTrackObject = (tempTrackVector, item) => {
+    Object.keys(tempTrackVector).forEach(key => {
+      let itemValue = item[key]
+      /* scale certain values down to 0-1 */
+      if (key === 'key') {
+        const scaledValue = this.similar.normalizeData(item[key], 0, 11, 1)
+        itemValue = scaledValue
+      } else if (key === 'loudness') {
+        const scaledValue = this.similar.normalizeData(item[key], -60, 0, 1)
+        itemValue = scaledValue
+      } else if (key === 'time_signature') {
+        const scaledValue = this.similar.normalizeData(item[key], 3, 7, 1)
+        itemValue = scaledValue
+      }
+      tempTrackVector[key] += itemValue
+    })
+  }
+
   sortOptionsTracks = (options) => {
     options.sort((a, b) => {
       if (a.label.toLowerCase() < b.label.toLowerCase()) { return -1 }

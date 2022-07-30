@@ -10,7 +10,6 @@ import './PlaylistDetail.css'
 import { addTrackVector, saveSimilarityScores } from 'utils/playlist'
 import { ToastContainer } from 'react-toastify'
 import { notifyError, notifySuccess } from 'utils/toast'
-import Similarity from 'utils/similarity'
 
 function PlaylistDetail () {
   const [playlist, setPlaylist] = useState(null)
@@ -19,7 +18,6 @@ function PlaylistDetail () {
   const [resyncIsLoading, setResyncIsLoading] = useState(false)
   const { playlistId } = useParams()
   const track = new Tracks()
-  const similar = new Similarity()
 
   useEffect(() => {
     const fetchPlaylistInformation = async () => {
@@ -40,7 +38,7 @@ function PlaylistDetail () {
     setResyncIsLoading(true)
 
     /* recalculate track vector and similarity scores */
-    const trackVector = await similar.createTrackVector(playlistId, setPlaylist)
+    const trackVector = await track.createTrackVector(playlistId, setPlaylist)
 
     /* save trackvector and recalculate similarity scores between all playlists */
     const trackRes = await addTrackVector(playlistId, trackVector)
