@@ -31,20 +31,22 @@
   padding: 10px 20px;
   width: 400px;
   border-radius: 20px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   border: 1px solid rgb(181, 178, 178);
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .login .login-btn {
   border: none;
-  padding: 5px 20px;
-  border-radius: 3px;
-  background-color: rgb(108, 177, 108);
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  width: 400px;
+  background-color: rgb(156, 174, 217);
   cursor: pointer;
   font-size: 1.1rem;
   color: white;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .login button:hover {
@@ -52,7 +54,7 @@
 }
 
 .login h1 {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 2.5rem;
   margin-bottom: 20px;
 }

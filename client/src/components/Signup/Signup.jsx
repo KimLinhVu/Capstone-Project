@@ -68,35 +68,40 @@ function Signup() {
   
   return (
     <div className="signup">
-      <h1>Sign Up</h1>
-      <input 
-        type="text" 
-        name='user' 
-        placeholder='Enter username' 
-        onChange={(e) => setUsername(e.target.value)} 
-        value={username}
-      />
-      <input 
-        type="text" 
-        name='password' 
-        placeholder='Enter password' 
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-
-      />
-      <Autocomplete 
-        types={['locality']} 
-        restrictions={{ country: ['us'] }}
-        onLoad={onLoad}
-        onPlaceChanged={onPlaceChanged}
-      >
-        <input type="text" placeholder='Enter your Location' onChange={() => {setPlace(null)}}/>
-      </Autocomplete>
-      <div className="switch">
-        <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
+      <div className="content">
+        <h1>Sign Up</h1>
+        <label>
+          <p>Username</p>
+          <input 
+            type="text" 
+            name='user' 
+            onChange={(e) => setUsername(e.target.value)} 
+            value={username}
+          />
+        </label>
+        <label>
+          <p>Password</p>
+          <input 
+            type="text" 
+            name='password' 
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          />
+        </label>
+        <Autocomplete 
+          types={['locality']} 
+          restrictions={{ country: ['us'] }}
+          onLoad={onLoad}
+          onPlaceChanged={onPlaceChanged}
+        >
+          <input type="text" placeholder='Enter your Location' onChange={() => {setPlace(null)}}/>
+        </Autocomplete>
+        <div className="switch">
+          <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
+        </div>
+        <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
       </div>
-      <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
       <ToastContainer
         position="top-center"
         limit={1}
