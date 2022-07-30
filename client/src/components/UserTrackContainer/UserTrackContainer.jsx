@@ -14,7 +14,8 @@ function UserTrackContainer ({
   playlistId,
   vector,
   setPopupIsOpen,
-  setUserTrack
+  setUserTrack,
+  filterSimilarity
 }) {
   const [tracks, setTracks] = useState(null)
   const [trackDetails, setTrackDetails] = useState(null)
@@ -68,6 +69,7 @@ function UserTrackContainer ({
       tempTracks.sort((a, b) => {
         return b.similarity - a.similarity
       })
+
       const trackDetailArray = await track.getAllTrackDetails(tempTracks)
       setTrackDetails(trackDetailArray)
       setTracks(tempTracks)
@@ -76,6 +78,15 @@ function UserTrackContainer ({
     }
     getAllTracks()
   }, [])
+
+  useEffect(() => {
+    if (tracks && trackDetails) {
+      const tempTracks = tracks.slice().reverse()
+      const trackDetailArray = trackDetails.slice().reverse()
+      setTrackDetails(trackDetailArray)
+      setTracks(tempTracks)
+    }
+  }, [filterSimilarity])
 
   return (
     <div className="user-track-container">
