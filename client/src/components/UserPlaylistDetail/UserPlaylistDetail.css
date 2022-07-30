@@ -89,7 +89,7 @@
   display: flex;
   font-size: 0.9rem;
   text-transform: uppercase;
-  padding: 10px 16px;
+  padding: 5px 16px;
   color: var(--txt-med);
   width: 100%;
 }
@@ -115,10 +115,27 @@
 .user-playlist-detail .track-header .similarity {
   margin-left: 40px;
 }
+ 
+.user-playlist-detail .similarity-container {
+  margin-right: 120px;
+  display: flex;
+  flex-direction: row;
+}
 
 .user-playlist-detail .similarity {
   flex: 1.5;
   text-align: left;
+}
+
+.user-playlist-detail .filter {
+  color: var(--elements-pink);
+  font-size: 28px;
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+
+.user-playlist-detail .filter:hover {
+  color: var(--elements-darkpink);
 }
 
 .user-playlist-detail .track-header .preview {
