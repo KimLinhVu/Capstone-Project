@@ -20,6 +20,8 @@ function UserPlaylistDetail () {
   const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const follower = new Follower()
 
+  let followButton
+
   useEffect(() => {
     /* get following list of current user */
     const isUserFollowing = async () => {
@@ -47,6 +49,17 @@ function UserPlaylistDetail () {
     }
   }, [popupIsOpen])
 
+  const handleViewFeaturesOnClick = () => {
+    setPopupIsOpen(true)
+    setUserTrack({ vector: userVector, name: userPlaylist.name })
+  }
+
+  if (isFollowing) {
+    followButton = <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button>
+  } else {
+    followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>
+  }
+
   return (
     <div className="user-playlist-detail">
       <NavBar />
@@ -60,11 +73,8 @@ function UserPlaylistDetail () {
                 <h2>{userPlaylist.name}</h2>
                 <p>Owner: {userPlaylist.owner.display_name}</p>
                 <div className="buttons">
-                  <button onClick={() => {
-                    setPopupIsOpen(true)
-                    setUserTrack({ vector: userVector, name: userPlaylist.name })
-                  }} className='view-features'>View Audio Features</button>
-                  {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>}
+                  <button onClick={handleViewFeaturesOnClick} className='view-features'>View Audio Features</button>
+                  {followButton}
                 </div>
               </div>
             </div>
