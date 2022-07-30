@@ -12,27 +12,27 @@ export default class Tracks {
   getAllPlaylistTracks = async (playlistId) => {
     let offset = 0
     let tracks = await getPlaylistItems(playlistId, offset)
-    const allTracks = tracks.data.items.map(item => { return item })
+    const allTracks = tracks.data.items.map(item => item)
 
     while (tracks.data.items.length > 0) {
       offset += tracks.data.items.length
       tracks = await getPlaylistItems(playlistId, offset)
-      allTracks.push(tracks.data.items.map(item => { return item }))
+      allTracks.push(tracks.data.items.map(item => item))
     }
     return allTracks.flat()
   }
 
   getAllTrackDetails = async (tracks) => {
-    let trackArray = []
-    const trackIds = tracks.map(item => { return item.id })
+    const trackArray = []
+    const trackIds = tracks.map(item => item.id)
 
     while (trackIds.length > 0) {
       const trackIdString = trackIds.splice(0, 50).join(',')
 
       const { data } = await getTracksDetails(trackIdString)
-      trackArray = data.tracks.map(item => { return item })
+      trackArray.push(data.tracks.map(item => item))
     }
-    return trackArray
+    return trackArray.flat()
   }
 
   convertDuration = (millis) => {
