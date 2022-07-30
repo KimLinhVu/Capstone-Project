@@ -87,7 +87,7 @@ function PlaylistDetail () {
             </div>
           </div>
       </div>
-        : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+        : <ReactLoading color='#B1A8A6' type='spin' className='playlist-loading'/>}
       <ToastContainer
         position="top-center"
         limit={1}

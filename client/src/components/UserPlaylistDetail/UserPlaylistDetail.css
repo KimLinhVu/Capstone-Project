@@ -127,6 +127,12 @@
   margin-right: 50px;
 }
 
+.playlist-loading {
+  margin-top: 50vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* text styling */
 .user-playlist-detail .left .details p {
   display: flex;

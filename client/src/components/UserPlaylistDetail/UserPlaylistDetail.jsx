@@ -92,7 +92,7 @@ function UserPlaylistDetail () {
               </div>
             </div>
           </>
-          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+          : <ReactLoading color='#B1A8A6' type='spin' className='playlist-loading'/>}
       </div>
       {popupIsOpen && userTrack &&
         <ChartPopup

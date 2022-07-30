@@ -59,12 +59,7 @@ function UserTrackContainer ({
           if (item !== null) {
             track.createTrackObject(tempTrackVector, item)
 
-            let similarity = 0
-            if (similarityMethod === 0) {
-              similarity = similar.calculateCosineSimilarity(vector, tempTrackVector)
-            } else {
-              similarity = similar.calculateOwnSimilarity(vector, tempTrackVector)
-            }
+            const similarity = similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
             tempTracks.push({ id: item.id, similarity, vector: tempTrackVector })
           }
         })

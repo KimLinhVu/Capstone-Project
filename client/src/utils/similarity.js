@@ -13,6 +13,14 @@ class Similarity {
     valence: 2
   }
 
+  getSimilarityScore = (similarityMethod, vector, userVector) => {
+    if (similarityMethod === 0) {
+      return this.calculateCosineSimilarity(vector, userVector)
+    } else {
+      return this.calculateOwnSimilarity(vector, userVector)
+    }
+  }
+
   normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
@@ -45,24 +53,6 @@ class Similarity {
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
     const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
     return 100 - normalized
-  }
-
-  /* look into multi-vari option */
-  calculateEuclideanDistance = (a, b) => {
-    let vectorSum = 0
-    for (let i = 0; i < a.length; i++) {
-      vectorSum += Math.pow(a[i] - b[i], 2)
-    }
-    const distance = Math.sqrt(vectorSum)
-    return distance
-  }
-
-  calculateManhattanDistance = (a, b) => {
-    let result = 0
-    for (let i = 0; i < a.length; i++) {
-      result += Math.abs(a[i] - b[i])
-    }
-    return result
   }
 
   calculateOwnSimilarity = (a, b) => {
