@@ -51,7 +51,7 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
     const playlists = await Playlist.find({ userId, spotifyId, added: true })
     res.json(playlists)
   } catch (error) {
-
+    next(error)
   }
 })
 

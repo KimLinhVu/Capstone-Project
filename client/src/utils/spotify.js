@@ -39,20 +39,16 @@ export const logoutSpotify = () => {
 }
 
 const refreshToken = async () => {
-  try {
-    if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' ||
+  if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' ||
       (Date.now() - Number(LOCALSTORAGE_VALUES.timestamp) / 1000) < 1000) {
-      logoutSpotify()
-    }
-    const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)
-
-    localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
-    localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
-
-    window.location.reload()
-  } catch (err) {
-
+    logoutSpotify()
   }
+  const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)
+
+  localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
+  localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
+
+  window.location.reload()
 }
 
 const getAccessToken = () => {
