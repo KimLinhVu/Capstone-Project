@@ -3,6 +3,20 @@ import { getTracksAudioFeatures, getPlaylistDetail } from './spotify'
 import Tracks from 'utils/tracks'
 
 export default class Similarity {
+  scaleValueObject = {
+    acousticness: 1.5,
+    danceability: 1.8,
+    energy: 2,
+    instrumentalness: 1.5,
+    key: 0.5,
+    liveness: 0.3,
+    loudness: 0.5,
+    mode: 0.5,
+    speechiness: 1.5,
+    time_signature: 0.5,
+    valence: 2
+  }
+
   createTrackVector = async (playlistId, setPlaylist) => {
     const track = new Tracks()
     const { data } = await getPlaylistDetail(playlistId)
@@ -127,20 +141,7 @@ export default class Similarity {
     b = this.convertObjectToVector(b)
     let differenceSum = 0
     let maxValue = 0
-    const scaleValueObject = {
-      acousticness: 1.5,
-      danceability: 1.8,
-      energy: 2,
-      instrumentalness: 1.5,
-      key: 0.5,
-      liveness: 0.3,
-      loudness: 0.5,
-      mode: 0.5,
-      speechiness: 1.5,
-      time_signature: 0.5,
-      valence: 2
-    }
-    const scaleValueArray = this.convertObjectToVector(scaleValueObject)
+    const scaleValueArray = this.convertObjectToVector(this.scaleValueObject)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
       a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i]
@@ -154,7 +155,7 @@ export default class Similarity {
   }
 
   getSimilarityScore = (firstPlaylistId, secondPlaylistId, similarityMethod) => {
-    return axios.get('http://localhost:8888/playlist/get-similarity-score', {
+    return axios.get('/playlist/get-similarity-score', {
       headers: {
         'x-access-token': localStorage.getItem('token'),
         'first-playlist-id': firstPlaylistId,

@@ -51,7 +51,7 @@ function FollowersView ({
       return <UserCard key={idx} userId={item._id} user={item} setPopupIsOpen={setPopupIsOpen} setUserPopupId={setUserPopupId}/>
     })
   }
-  
+
   return (
     <div className="followers-view">
       <input type="text" placeholder='Search Users' className='follower-searchbar' value={followerSearch} onChange={(e) => setFollowerSearch(e.target.value)}/>

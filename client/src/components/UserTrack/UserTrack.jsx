@@ -11,7 +11,6 @@ function UserTrack ({
   similarityMethod,
   trackNumber,
   track,
-  vector,
   userTrackVector,
   setPopupIsOpen,
   setUserTrack

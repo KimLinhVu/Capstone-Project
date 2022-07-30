@@ -27,7 +27,7 @@ function ProfileCard ({
   return (
     <div className='profile-card'>
       {profile && (
-        <>
+        <div>
           {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : null}
           <div className="user-info">
             <div className="header">
@@ -71,7 +71,7 @@ function ProfileCard ({
             </div>
           </div>
           <a className='spotify-profile-btn' href={spotifyProfile.external_urls.spotify} target="_blank" rel="noreferrer">See Spotify Profile</a>
-        </>
+        </div>
       )}
     </div>
   )

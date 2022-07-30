@@ -38,8 +38,8 @@ export const getCurrentPlaylists = (spotifyId) => {
 
 export const addPlaylists = (playlist, spotifyId) => {
   return axios.post('/playlist/', {
-    playlist: playlist,
-    spotifyId: spotifyId
+    playlist,
+    spotifyId
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -49,7 +49,7 @@ export const addPlaylists = (playlist, spotifyId) => {
 
 export const addPlaylistToProfile = (playlist) => {
   return axios.post('/playlist/add', {
-    playlist: playlist
+    playlist
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -59,7 +59,7 @@ export const addPlaylistToProfile = (playlist) => {
 
 export const removePlaylistFromProfile = (playlistId) => {
   return axios.post('/playlist/remove', {
-    playlistId: playlistId
+    playlistId
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -69,8 +69,8 @@ export const removePlaylistFromProfile = (playlistId) => {
 
 export const addTrackVector = (playlistId, trackVector) => {
   return axios.post('/playlist/add-track-vector', {
-    playlistId: playlistId,
-    trackVector: trackVector
+    playlistId,
+    trackVector
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -89,7 +89,7 @@ export const getPlaylistTrackVector = (playlistId) => {
 
 export const addFavoritePlaylist = (playlistId) => {
   return axios.post('/playlist/add-favorite', {
-    playlistId: playlistId,
+    playlistId
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -99,7 +99,7 @@ export const addFavoritePlaylist = (playlistId) => {
 
 export const removeFavoritePlaylist = (playlistId) => {
   return axios.post('/playlist/remove-favorite', {
-    playlistId: playlistId,
+    playlistId
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -109,7 +109,7 @@ export const removeFavoritePlaylist = (playlistId) => {
 
 export const addSimilarityMethodCount = (similarityMethod) => {
   return axios.post('/playlist/addSimilarityCount', {
-    similarityMethod: similarityMethod
+    similarityMethod
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -119,7 +119,7 @@ export const addSimilarityMethodCount = (similarityMethod) => {
 
 export const removeSimilarityMethodCount = (similarityMethod) => {
   return axios.post('/playlist/removeSimilarityCount', {
-    similarityMethod: similarityMethod
+    similarityMethod
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')
@@ -128,7 +128,7 @@ export const removeSimilarityMethodCount = (similarityMethod) => {
 }
 
 export const saveSimilarityScores = (playlistId, trackVector) => {
-  return axios.post('http://localhost:8888/playlist/save-similarity-score', {
+  return axios.post('/playlist/save-similarity-score', {
     playlistId,
     trackVector
   }, {

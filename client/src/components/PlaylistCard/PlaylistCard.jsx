@@ -15,6 +15,7 @@ function PlaylistCard ({
   otherUser
 }) {
   const [active, setActive] = useState('')
+  let favoriteIcon
 
   const handleCloseOnClick = () => {
     setIsLoading(true)
@@ -33,6 +34,12 @@ function PlaylistCard ({
     setRefresh(!refresh)
   }
 
+  if (favorite) {
+    favoriteIcon = <MdOutlineFavorite size={30} className={'favorite-icon active'} onClick={handleRemoveFavorite}/>
+  } else {
+    favoriteIcon = <MdOutlineFavoriteBorder size={30} className={`favorite-icon ${active}`} onClick={handleAddFavorite}/>
+  }
+
   return (
     <div className='playlist-card' onMouseEnter={() => setActive('active')} onMouseLeave={() => setActive('')} >
       {!otherUser
@@ -42,7 +49,7 @@ function PlaylistCard ({
         : null}
       <Link to={`playlist/${playlist.id}`} className={otherUser ? 'disable' : ''}><img src={playlist.images[0].url} alt="Playlist Cover" className={otherUser ? 'disable' : ''}/></Link>
       <span className='title'>{playlist.name}</span>
-      {favorite ? <MdOutlineFavorite size={30} className={'favorite-icon active'} onClick={handleRemoveFavorite}/> : <MdOutlineFavoriteBorder size={30} className={`favorite-icon ${active}`} onClick={handleAddFavorite}/>}
+      {favoriteIcon}
     </div>
   )
 }

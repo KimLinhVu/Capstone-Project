@@ -1,5 +1,3 @@
-
-
 const Similarity = require('./similarity.js')
 
 test('returns 0 when track vectors are the same for cosine similarity', () => {

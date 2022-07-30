@@ -48,15 +48,18 @@ function GenreContainer ({
     getArtistGenres()
   }, [])
 
-  useState(() => {
+  useEffect(() => {
     setTopFiveGenres(genreArray.slice(0, 5))
   }, [genreArray])
+
   return (
     <div className="genre-container">
       <div className="genres">
-        {topFiveGenres.map((item, idx) => {
+      {topFiveGenres.map((item, idx) => {
+        if (item.genre !== undefined) {
           return <button key={idx}>{item.genre}</button>
-        })}
+        }
+      })}
       </div>
     </div>
   )

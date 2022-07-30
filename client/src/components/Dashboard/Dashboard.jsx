@@ -106,6 +106,13 @@ function Dashboard () {
     return newArray
   }
 
+  const closeAllTabs = () => {
+    setPlaylistShow(false)
+    setFavoriteShow(false)
+    setFollowersShow(false)
+    setFollowingShow(false)
+  }
+
   return (
     <DashboardContext.Provider value={{ setRefresh, refresh }}>
       <div className="dashboard">
@@ -125,27 +132,19 @@ function Dashboard () {
             <div className="nav">
               <div className="links">
                 <button onClick={() => {
+                  closeAllTabs()
                   setPlaylistShow(true)
-                  setFavoriteShow(false)
-                  setFollowersShow(false)
-                  setFollowingShow(false)
                 }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
                 <button onClick={() => {
-                  setPlaylistShow(false)
+                  closeAllTabs()
                   setFavoriteShow(true)
-                  setFollowersShow(false)
-                  setFollowingShow(false)
                 }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
                 <button onClick={() => {
-                  setPlaylistShow(false)
-                  setFavoriteShow(false)
+                  closeAllTabs()
                   setFollowersShow(true)
-                  setFollowingShow(false)
                 }} className={`${followersShow ? 'tab-show' : ''}`}>Followers</button>
                 <button onClick={() => {
-                  setPlaylistShow(false)
-                  setFavoriteShow(false)
-                  setFollowersShow(false)
+                  closeAllTabs()
                   setFollowingShow(true)
                 }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
               </div>

@@ -90,7 +90,7 @@ export const accessToken = getAccessToken()
 const instance = axios.create({
   baseURL: 'https://api.spotify.com/v1'
 })
-instance.defaults.headers['Authorization'] = `Bearer ${accessToken}`
+instance.defaults.headers.Authorization = `Bearer ${accessToken}`
 instance.defaults.headers['Content-Type'] = 'application/json'
 
 export const getCurrentUserProfile = async () => {
