@@ -1,0 +1,56 @@
+.user-track {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 15px;
+  align-items: center;
+  color: var(--txt-med);
+  background: white;
+  cursor: pointer;
+}
+
+.user-track:hover {
+  filter: brightness(.9);
+}
+
+.user-track .song {
+  display: flex;
+  flex: 3;
+}
+
+.user-track .song img {
+  margin-right: 10px;
+  width: 45px;
+}
+
+.user-track .song .song-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-track .title {
+  color: var(--txt-dark);
+}
+
+.user-track .artist {
+  font-size: .9em;
+}
+
+.user-track .similarity {
+  flex: 3;
+}
+
+.user-track .num {
+  margin-right: 10px;
+}
+
+.user-track .time {
+  display: flex;
+  flex: .4;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-track .icon {
+  cursor: pointer;
+  z-index: 10;
+}

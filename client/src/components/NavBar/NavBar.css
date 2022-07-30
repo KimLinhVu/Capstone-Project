@@ -1,5 +1,5 @@
 .nav-bar {
-  padding: 30px 30px 10px 35px;
+  padding: 5px 35px 0px 35px;
   position: fixed;
   width: 100%;
   font-size: 1em;
@@ -8,19 +8,15 @@
   flex-direction: row;
   justify-content: space-between;
   z-index: 10;
+  overflow: none;
+  border-bottom: .5px solid var(--light-border);
 }
 
-.nav-bar .tabs {
-  display: flex;
-  gap: 50px;
-  color: var(--txt-med);
+.nav-bar .logo {
+  width: 80px;
 }
 
-.nav-bar .tabs span {
+.nav-bar .avatar {
+  margin-top: 15px;
   cursor: pointer;
-}
-
-.nav-bar .tabs .selectedTab {
-  color: var(--txt-dark);
-  font-weight: 500;
 }

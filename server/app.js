@@ -4,6 +4,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const similarity = require('./utils/similarity')
 require('dotenv').config()
 
 const app = express()
@@ -60,7 +61,7 @@ app.post('/login', async (req, res, next) => {
 /* adds new user to Users db */
 app.post('/signup', async (req, res, next) => {
   try {
-    const { username, password, location, privacy } = req.body
+    const { username, password, location, privacy, showFollowing } = req.body
     /* check to see if username and pw fields are filled out */
     if (!username) {
       return next(new BadRequestError('Missing username field.'))
@@ -81,8 +82,14 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    const newUser = await new User({ username, password, location, privacy })
-    await newUser.save()
+    /* randomly decide which similarity method user receives */
+    const tempUser = await new User({ username })
+
+    /* determine similarity method based on counter in id */
+    const similarityMethod = similarity.getSimilarityMethod(tempUser.id)
+    const user = await new User({ username, password, location, privacy, showFollowing, following: [], followers: [], similarityMethod })
+
+    await user.save()
     res.status(200).json()
   } catch (error) {
     next(error)

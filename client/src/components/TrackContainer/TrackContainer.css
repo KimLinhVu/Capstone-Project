@@ -1,8 +1,10 @@
 .track-container {
+  max-height: 500px;
   width: 100%;
-  padding: 20px 30px 30px 30px;
+  padding: 5px 30px 30px 30px;
   background: var(--background-color);
   border-radius: 10px;
+  overflow-y: auto;
 }
 
 .track-container .tracks {

@@ -39,11 +39,3 @@
   align-items: center;
   gap: 15px;
 }
-
-#add {
-  border: 1px solid var(--light-border);
-  border-radius: 7px;
-  cursor: pointer;
-  color: black;
-}
-

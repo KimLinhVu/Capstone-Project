@@ -6,6 +6,8 @@ import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { ToastContainer } from 'react-toastify'
 import Switch from 'react-switch'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
 import axios from 'axios'
 
 const libraries = ['places']
@@ -16,6 +18,7 @@ function Signup() {
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(null)
   const [privacyChecked, setPrivacyChecked] = useState(false)
+  const [followingChecked, setFollowingChecked] = useState(false)
   const navigate = useNavigate()
 
   /* set up Google Map Places autocomplete */
@@ -35,7 +38,8 @@ function Signup() {
         username: username,
         password: password,
         location: place,
-        privacy: privacyChecked
+        privacy: privacyChecked,
+        showFollowing: followingChecked
       })
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
@@ -115,6 +119,11 @@ function Signup() {
         />
         <span>Private</span>
       </div>
+      {privacyChecked ? (
+        <div className="followers">
+          <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+        </div>
+      ): null}
       <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
       <ToastContainer
         position="top-center"

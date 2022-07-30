@@ -107,11 +107,15 @@ export const getPlaylistDetail = (playlistId) => {
 }
 
 export const getPlaylistItems = (playlistId, offset) => {
-  return axios.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`)
+  return instance.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`)
 }
 
 export const getTrackDetail = (trackId) => {
   return instance.get(`/tracks/${trackId}`)
+}
+
+export const getTracksDetails = (trackIdString) => {
+  return instance.get(`/tracks/?ids=${trackIdString}`)
 }
 
 export const getArtistDetail = (artistId) => {
@@ -128,4 +132,16 @@ export const getTracksAudioFeatures = async (ids) => {
 
 export const getTrackAudioFeatures = async (id) => {
   return instance.get(`/audio-features/${id}`)
+}
+
+export const removeTrackFromPlaylist = async (playlistId, trackUri) => {
+  return instance.delete(`/playlists/${playlistId}/tracks`, {
+    data: {
+      tracks: [
+        {
+          uri: trackUri
+        }
+      ]
+    }
+  })
 }

@@ -1,7 +1,8 @@
 import React from 'react'
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
+import ReactLoading from 'react-loading'
 
 function Map({
   userLocation,
@@ -10,8 +11,11 @@ function Map({
   vector,
   setUsers,
   similar,
-  similarityMethod
+  similarityMethod,
+  setIsLoading
 }) {
+  const [map, setMap] = useState(null)
+  const [onLoad, setOnLoad] = useState(true)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -22,11 +26,25 @@ function Map({
 
   const options = {
     streetViewControl: false,
-    fullscreenControl: false
+    fullscreenControl: false,
+    
+  }
+
+  const onBoundsChanged = () => {
+    setIsLoading(true)
+    /* check which markers are currently in view of map bounds */
+    setUsers([])
+    markerArray?.forEach(item => {
+      const inBounds = map?.getBounds()?.contains(item)
+      if (inBounds) {
+        handleMarkerOnClick(item)
+      }
+    })
+    setIsLoading(false)
   }
 
   if (!isLoaded) {
-    return <h1>Loading</h1>
+    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
   const handleMarkerOnClick = (location) => {
@@ -40,7 +58,7 @@ function Map({
       setUsers([])
       const { data } = await getUserPlaylists(user.user._id)
       data?.forEach(playlist => {
-        const userVector = similar.convertObjectToVector(playlist.trackVector)
+        const userVector = playlist.trackVector
 
         /* use random similarity method associated with user */
         let similarity = 0
@@ -50,7 +68,7 @@ function Map({
           similarity = similar.calculateOwnSimilarity(vector, userVector)
         }
         
-        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity}
+        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity, userVector: userVector}
         setUsers(old => [...old, newTrackObject])
       })
     })
@@ -62,6 +80,17 @@ function Map({
       center={center}
       options={options}
       mapContainerClassName="map-container"
+      onZoomChanged={onBoundsChanged}
+      onDragEnd={onBoundsChanged}
+      onBoundsChanged={() => {
+        if (onLoad) {
+          onBoundsChanged()
+          setOnLoad(false)
+        }
+      }}
+      onLoad={map => {
+        setMap(map)
+      }}
     >
       <Marker 
         position={center}

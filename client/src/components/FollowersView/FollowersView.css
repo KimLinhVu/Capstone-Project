@@ -2,3 +2,10 @@
   font-weight: 600;
   font-size: 1.2em;
 }
+
+.followers-view .follower-searchbar {
+  border: 1px solid var(--light-border);
+  padding: 12px;
+  border-radius: 6px;
+  width: 40%;
+}

@@ -1,0 +1,31 @@
+.user-playlist-detail .content {
+  padding: 0% 5%;
+  padding-top: 80px;
+}
+
+.user-playlist-detail .chart {
+}
+
+.user-playlist-detail .header {
+  display: flex;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  color: var(--txt-med);
+}
+
+.user-playlist-detail hr {
+  color: var(--txt-med);
+}
+
+.user-playlist-detail .title, .similarity {
+  flex: 3;
+}
+
+.user-playlist-detail .num {
+  margin-right: 10px;
+}
+
+.user-playlist-detail .time {
+  flex: .5;
+}

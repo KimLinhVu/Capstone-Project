@@ -30,7 +30,7 @@
 
 .dashboard .carousel {
   width: 100%;
-  background: url('../../../img/lily.jpeg');
+  background: url('img/lily.jpeg');
   background-size: cover;
   background-position: 5rem;
   height: 35vh;

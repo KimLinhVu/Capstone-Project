@@ -3,23 +3,34 @@ import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getPlaylistDetail } from 'utils/spotify'
 import { removePlaylistFromProfile } from 'utils/playlist'
-import TrackContainer from 'components/TrackContainer/TrackContainer'
 import { Link, useNavigate } from 'react-router-dom'
-import { notifyError, notifySuccess } from 'utils/toast'
 import NavBar from 'components/NavBar/NavBar'
 import GenreContainer from 'components/GenreContainer/GenreContainer'
+import Tracks from 'utils/tracks'
+import TrackContainer from 'components/TrackContainer/TrackContainer'
+import ReactLoading from 'react-loading'
 import './PlaylistDetail.css'
 
 function PlaylistDetail() {
   const [playlist, setPlaylist] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [tracks, setTracks] = useState(null)
   const { playlistId } = useParams()
+  const track = new Tracks()
 
   let navigate = useNavigate()
   
   useEffect(() => {
     const fetchPlaylistInformation = async () => {
+      setIsLoading(true)
+
       const { data } = await getPlaylistDetail(playlistId)
       setPlaylist(data)
+
+      const allTracks = await track.getAllPlaylistTracks(playlistId)
+      setTracks(allTracks)
+
+      setIsLoading(false)
     }
     fetchPlaylistInformation()
   }, [])
@@ -55,12 +66,11 @@ function PlaylistDetail() {
               </div>
             </div>
             <div className="right">
-              <TrackContainer 
-                tracks={playlist.tracks.items}
-                notifyError={notifyError}
-                notifySuccess={notifySuccess}
-              />
               <GenreContainer tracks={playlist.tracks.items}/>
+              <TrackContainer 
+                tracks={tracks}
+                isLoading={isLoading}
+              />
             </div>
           </div>
       </div>

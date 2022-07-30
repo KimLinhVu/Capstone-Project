@@ -34,7 +34,7 @@ export const getUserProfile = () => {
 }
 
 export const getUserProfileById = (userId) => {
-  return axios.get('/users/profile-id', {
+  return axios.get('users/profile-id', {
     headers: {
       "x-access-token": localStorage.getItem('token'),
       "user-id": userId

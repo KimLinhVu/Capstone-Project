@@ -2,24 +2,24 @@ import { toast } from 'react-toastify';
 
 export const notifySuccess = (successMessage) => {
   toast.success(successMessage, {
-    position: "top-center",
-    autoClose: 5000,
-    hideProgressBar: false,
+    position: "bottom-center",
+    autoClose: 1000,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
     progress: undefined,
   });
 }
 
 export const notifyError = (errorMessage) => {
   toast.error(errorMessage, {
-    position: "top-center",
-    autoClose: 5000,
-    hideProgressBar: false,
+    position: "bottom-center",
+    autoClose: 1000,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
     progress: undefined,
   });
 }

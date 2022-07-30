@@ -1,4 +1,4 @@
-import { getPlaylistItems } from "./spotify";
+import { getPlaylistItems, getTracksDetails } from "./spotify";
 
 export default class Tracks {
   sortOptionsTracks = (options) => {
@@ -10,16 +10,34 @@ export default class Tracks {
   }
 
   getAllPlaylistTracks = async (playlistId) => {
-    let allTracks = []
     let offset = 0
     let tracks = await getPlaylistItems(playlistId, offset)
-    tracks.data.items.forEach(item => allTracks.push(item))
+    let allTracks = tracks.data.items.map(item => { return item })
     
     while (tracks.data.items.length > 0) {
       offset += tracks.data.items.length
       tracks = await getPlaylistItems(playlistId, offset)
-      tracks.data.items.forEach(item => allTracks.push(item))
+      allTracks.push(tracks.data.items.map(item => { return item }))
     }
-    return allTracks
+    return allTracks.flat()
+  }
+
+  getAllTrackDetails = async (tracks) => {
+    let trackArray = []
+    let trackIds = tracks.map(item => { return item.id })
+
+    while (trackIds.length > 0) {
+      let trackIdString = trackIds.splice(0, 50).join(',')
+
+      const { data } = await getTracksDetails(trackIdString)
+      trackArray = data.tracks.map(item => { return item })
+    }
+    return trackArray
+  }
+
+  convertDuration = (millis) => {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
   }
 }

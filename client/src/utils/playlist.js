@@ -97,3 +97,23 @@ export const removeFavoritePlaylist = (playlistId) => {
     }
   })
 }
+
+export const addSimilarityMethodCount = (similarityMethod) => {
+  return axios.post('/playlist/addSimilarityCount', {
+    similarityMethod: similarityMethod
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}
+
+export const removeSimilarityMethodCount = (similarityMethod) => {
+  return axios.post('/playlist/removeSimilarityCount', {
+    similarityMethod: similarityMethod
+  }, {
+    headers: {
+      "x-access-token": localStorage.getItem('token')
+    }
+  })
+}

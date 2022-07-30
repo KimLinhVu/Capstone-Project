@@ -3,7 +3,7 @@ const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Playlist = require('../models/Playlists')
-const { BadRequestError } = require('../utils/errors')
+const SimilarityCount = require('../models/SimilarityCount')
 
 /* returns all playlists belonging to spotify user */
 router.get('/playlists', jwt.verifyJWT, async (req, res, next) => {
@@ -45,15 +45,14 @@ router.get('/current', jwt.verifyJWT, async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { playlist, spotifyId, userId } = req.body
-
-    playlist.forEach(async (playlist) => {
-      /* search for if playlist already exists */
+    const promises = playlist.map(async (playlist) => {
       const playlistItem = await Playlist.findOne({ userId, spotifyId, playlistId: playlist.id })
       if (!playlistItem) {
         const newPlaylist = new Playlist({ userId, spotifyId, playlistId: playlist.id, playlist, added: false, favorite: false })
         await newPlaylist.save()
       }
     })
+    await Promise.all(promises)
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -151,6 +150,44 @@ router.post('/remove-favorite', jwt.verifyJWT, async (req, res, next) => {
     const found = await Playlist.findOneAndUpdate({ userId, playlistId }, { favorite: false })
     if (!found) {
       return next(new BadRequestError('Playlist Not Found'))
+    }
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* adds to similarity count */
+router.post('/addSimilarityCount', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const { similarityMethod } = req.body
+
+    /* check to see if similaritymethod counter has been created yet */
+    const found = await SimilarityCount.findOne({ similarityMethod })
+    if (!found) {
+      /* create new entry with count set to 1 */
+      const newSimilarity = new SimilarityCount({ similarityMethod, count: 1 })
+      await newSimilarity.save()
+    } else {
+      /* increment similarity count by one */
+      await SimilarityCount.findOneAndUpdate({ similarityMethod }, { $inc: { count: 1 } })
+    }
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* removes from similarity count */
+router.post('/removeSimilarityCount', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const { similarityMethod } = req.body
+
+    /* check to see if similaritymethod counter has been created yet */
+    const found = await SimilarityCount.findOne({ similarityMethod })
+    if (!found) {
+      /* decrement similarity count by one */
+      await SimilarityCount.findOneAndUpdate({ similarityMethod }, { $inc: { count: -1 } })
     }
     res.status(200).json()
   } catch (error) {
