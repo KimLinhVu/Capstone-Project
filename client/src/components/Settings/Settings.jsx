@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import ReactLoading from 'react-loading'
 import './Settings.css'
 import { updateUserSettings } from 'utils/users'
 
@@ -28,7 +29,7 @@ function Settings () {
   })
 
   if (!isLoaded) {
-    return <h1>Loading</h1>
+    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
   if (privacy) {

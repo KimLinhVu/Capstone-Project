@@ -7,7 +7,8 @@ import { ToastContainer } from 'react-toastify'
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import axios from 'axios'
+import ReactLoading from 'react-loading'
+import { signup } from 'utils/users'
 
 const libraries = ['places']
 
@@ -27,19 +28,12 @@ function Signup () {
   })
 
   if (!isLoaded) {
-    return <h1>Loading</h1>
+    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
   const handleOnSubmitSignup = async () => {
     try {
-      await axios.post('http://localhost:8888/signup',
-        {
-          username,
-          password,
-          location: place,
-          privacy,
-          showFollowing: followingChecked
-        })
+      await signup(username, password, place, privacy, followingChecked)
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
     } catch (e) {
@@ -70,42 +64,50 @@ function Signup () {
 
   return (
     <div className="signup">
+      <div className="content">
       <h1>Sign Up</h1>
-      <input
-        type="text"
-        name='user'
-        placeholder='Enter username'
-        onChange={(e) => setUsername(e.target.value)}
-        value={username}
-      />
-      <input
-        type="text"
-        name='password'
-        placeholder='Enter password'
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-
-      />
-      <Autocomplete
-        types={['locality']}
-        restrictions={{ country: ['us'] }}
-        onLoad={onLoad}
-        onPlaceChanged={onPlaceChanged}
-      >
-        <input type="text" placeholder='Enter your Location' onChange={() => { setPlace(null) }}/>
-      </Autocomplete>
-      <div className="switch">
-        <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
-      </div>
-      {privacy
-        ? (
-        <div className="followers">
-          <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+        <label>
+          <p>Username</p>
+          <input
+            type="text"
+            name='user'
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+        </label>
+        <label>
+          <p>Password</p>
+          <input
+            type="text"
+            name='password'
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          />
+        </label>
+        <label>
+          <p>Location</p>
+          <Autocomplete
+          types={['locality']}
+          restrictions={{ country: ['us'] }}
+          onLoad={onLoad}
+          onPlaceChanged={onPlaceChanged}
+        >
+          <input type="text" onChange={() => { setPlace(null) }}/>
+        </Autocomplete>
+        </label>
+        <div className="switch">
+          <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
         </div>
-          )
-        : null}
-      <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
+        {privacy
+          ? (
+          <div className="followers">
+            <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+          </div>
+            )
+          : null}
+        <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
+      </div>
       <ToastContainer
         position="top-center"
         limit={1}
