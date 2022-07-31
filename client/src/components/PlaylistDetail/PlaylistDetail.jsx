@@ -65,7 +65,7 @@ function PlaylistDetail () {
               <p>{playlist.description}</p>
               <div className="buttons">
                 <Link to={`/recommend/${playlist.id}`}><button className='recommend-btn'>recommend me</button></Link>
-                <button className={resyncIsLoading ? 'resync disable' : 'resync'} onClick={handleOnClickResync} disabled={resyncIsLoading}>resync playlist</button>
+                <button className={resyncIsLoading ? 'resync disabled' : 'resync'} onClick={handleOnClickResync} disabled={resyncIsLoading}>resync playlist</button>
               </div>
             </div>
           </div>
