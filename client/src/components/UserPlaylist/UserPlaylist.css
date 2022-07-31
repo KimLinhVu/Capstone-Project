@@ -4,7 +4,7 @@
   justify-content: space-between;
   font-size: 1.1em;
   width: 100%;
-  padding: 13px 22px;
+  padding: 13px 25px;
   text-decoration: none;
   border: .6px solid var(--background-color);
   background: white;
@@ -51,7 +51,7 @@
 }
 
 .user-playlist .right button {
-  min-width: 70px;
+  min-width: 80px;
   padding: 5px 0px;
   background-color: var(--elements-pink);
   color: white;
