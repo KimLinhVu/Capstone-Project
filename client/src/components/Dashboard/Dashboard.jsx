@@ -186,7 +186,7 @@ function Dashboard () {
               </div>
             </div>
             )}
-        {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId}/>}
+        {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId} currentProfile={profile} spotifyProfile={spotifyProfile}/>}
       </div>
     </DashboardContext.Provider>
   )

@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { MdOutlineFavoriteBorder, MdOutlineFavorite } from 'react-icons/md'
 import { addFollowerFavorite, findFollowerFavorite, removeFollowerFavorite } from 'utils/users'
+import { Link } from 'react-router-dom'
 import './FollowerPlaylistCard.css'
 
 function FollowerPlaylistCard ({
   playlist,
-  item
+  item,
+  user,
+  profile,
+  originalPlaylistId,
+  vector
 }) {
   const [favorited, setFavorited] = useState(false)
   const [refresh, setRefresh] = useState(false)
   let favoriteIcon
+
+  const data = {
+    similarityMethod: profile.similarityMethod,
+    originalPlaylistId,
+    user,
+    vector,
+    userVector: item.trackVector
+  }
 
   useEffect(() => {
     /* find if user already favorited playlist */
@@ -36,7 +49,7 @@ function FollowerPlaylistCard ({
 
   return (
     <div className="playlist-card">
-      <img src={playlist.images[0].url} alt="Playlist Cover" />
+      <Link to={`/user/${playlist.id}`} state={data}><img src={playlist.images[0].url} alt="Playlist Cover" /></Link>
       <span className="title">{playlist.name}</span>
       {favoriteIcon}
     </div>

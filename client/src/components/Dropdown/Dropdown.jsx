@@ -12,6 +12,7 @@ function Dropdown ({
   isLoading
 }) {
   const [isActive, setIsActive] = useState(false)
+  const [displayOptions, setDisplayOptions] = useState(options)
   const track = new Tracks()
 
   useEffect(() => {
@@ -24,6 +25,12 @@ function Dropdown ({
     }
   }, [refresh])
 
+  useEffect(() => {
+    /* filter out option that is selected */
+    const temp = options.filter(item => item.label !== selected)
+    setDisplayOptions(temp)
+  }, [selected])
+
   return (
     <div className="dropdown">
       <div className="dropdown-btn" onClick={options.length === 0 || isLoading ? () => {} : () => setIsActive(!isActive)}>
@@ -32,7 +39,7 @@ function Dropdown ({
       </div>
       {isActive && (
         <div className="dropdown-content">
-          {options.length >= 1 && options.map((option, idx) => (
+          {displayOptions.length >= 1 && displayOptions.map((option, idx) => (
             <div
               onClick={() => {
                 setSelected(option.label)

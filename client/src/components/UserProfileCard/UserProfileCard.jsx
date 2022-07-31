@@ -4,14 +4,18 @@ import Follower from 'utils/follower'
 import { DashboardContext } from 'components/Dashboard/Dashboard'
 import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
-import { getUserPlaylists } from 'utils/playlist'
+import { getRandomUserPlaylist, getUserPlaylists } from 'utils/playlist'
 import FollowerPlaylistCard from 'components/FollowerPlaylistCard/FollowerPlaylistCard'
 
 function UserProfileCard ({
   userId,
-  setPopupIsOpen
+  setPopupIsOpen,
+  currentProfile,
+  spotifyProfile
 }) {
   const [profile, setProfile] = useState(null)
+  const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
+  const [vector, setVector] = useState(null)
   const [playlists, setPlaylists] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(null)
@@ -31,6 +35,11 @@ function UserProfileCard ({
       /* get user's added playlists */
       const result = await getUserPlaylists(userId)
       setPlaylists(result.data)
+
+      /* gets random playlist from current user */
+      const random = await getRandomUserPlaylist(spotifyProfile.id)
+      setOriginalPlaylistId(random.data.playlistId)
+      setVector(random.data.trackVector)
 
       setIsLoading(false)
     }
@@ -62,6 +71,10 @@ function UserProfileCard ({
                   key={idx}
                   playlist={item.playlist}
                   item={item}
+                  user={profile}
+                  profile={currentProfile}
+                  originalPlaylistId={originalPlaylistId}
+                  vector={vector}
                 />
               ))}
             </div>
