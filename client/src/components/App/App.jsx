@@ -8,6 +8,7 @@ import PlaylistDetail from 'components/PlaylistDetail/PlaylistDetail'
 import useToken from 'utils/useToken'
 import RecommendView from 'components/RecommendView/RecommendView'
 import UserPlaylistDetail from 'components/UserPlaylistDetail/UserPlaylistDetail'
+import Settings from 'components/Settings/Settings'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
@@ -25,6 +26,13 @@ function App () {
                   setToken={setToken}
                   clearToken={clearToken}
                 />
+              }
+            />
+            <Route path="/settings" element=
+              {
+                <Protected token={token}>
+                  <Settings />
+                </Protected>
               }
             />
             <Route path="/" element=

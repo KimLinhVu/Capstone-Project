@@ -4,6 +4,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const jwtUtil = require('./utils/jwt')
 const Similarity = require('./utils/similarity')
 require('dotenv').config()
 
@@ -104,6 +105,30 @@ app.post('/verify-token', (req, res) => {
       res.status(200).send('Successfully Authenticated')
     }
   })
+})
+
+/* updates user settings */
+app.post('/settings', jwtUtil.verifyJWT, async (req, res, next) => {
+  try {
+    const { username, location, privacy, showFollowing } = req.body
+    const userId = req.userId
+
+    /* check to see if username is already taken */
+    if (await User.findOne({ _id: { $ne: userId }, username })) {
+      return next(new BadRequestError('Username already exists. Please try again.'))
+    }
+
+    /* check if location is valid */
+    if (!location) {
+      return next(new BadRequestError('Location is invalid.'))
+    }
+
+    /* update settings */
+    await User.findOneAndUpdate({ _id: userId}, { username, privacy, location, showFollowing })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
 })
 
 /* add generic error handler */
