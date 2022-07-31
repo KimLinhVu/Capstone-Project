@@ -1,5 +1,6 @@
-import { getPlaylistItems, getTracksDetails, getTracksAudioFeatures, getPlaylistDetail } from './spotify'
+import { getPlaylistItems, getTracksDetails, getTracksAudioFeatures, getPlaylistDetail, getCurrentUserProfile } from './spotify'
 import Similarity from './similarity'
+import { getPlaylists } from './playlist'
 
 export default class Tracks {
   similar = new Similarity()
@@ -70,6 +71,30 @@ export default class Tracks {
       }
       tempTrackVector[key] += itemValue
     })
+  }
+
+  createOptions = async (added) => {
+    const prof = await getCurrentUserProfile()
+    const { data } = await getPlaylists(prof.data.id, added)
+    const options = this.convertToOptionsArray(data)
+
+    const filterOptions = options.filter((item) => {
+      if (item.value.spotifyId !== item.value.playlist.owner.id) {
+        return false
+      } else {
+        return true
+      }
+    })
+    this.sortOptionsTracks(filterOptions)
+    return filterOptions
+  }
+
+  convertToOptionsArray = (playlist) => {
+    const newArray = []
+    playlist?.forEach(item => {
+      newArray.push({ key: item.playlist.id, value: item, label: item.playlist.name })
+    })
+    return newArray
   }
 
   sortOptionsTracks = (options) => {

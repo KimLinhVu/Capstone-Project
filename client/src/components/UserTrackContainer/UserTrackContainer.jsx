@@ -15,7 +15,8 @@ function UserTrackContainer ({
   vector,
   setPopupIsOpen,
   setUserTrack,
-  filterSimilarity
+  filterSimilarity,
+  refresh
 }) {
   const [tracks, setTracks] = useState(null)
   const [trackDetails, setTrackDetails] = useState(null)
@@ -79,7 +80,7 @@ function UserTrackContainer ({
       setIsLoading(false)
     }
     getAllTracks()
-  }, [])
+  }, [refresh])
 
   useEffect(() => {
     if (tracks && trackDetails) {
