@@ -4,6 +4,8 @@ import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
 import { getSimilarityScore } from 'utils/playlist'
 import ReactLoading from 'react-loading'
 
+const libraries = ['places']
+
 function Map ({
   userLocation,
   allUsers,
@@ -17,7 +19,8 @@ function Map ({
   const [onLoad, setOnLoad] = useState(true)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries
   })
 
   const markerArray = [userLocation]
@@ -53,10 +56,10 @@ function Map ({
     })
 
     /* fetch similarity score for each user's playlists */
-    const userPromises = resultArray.map(async (user) => {
+    resultArray.map(async (user) => {
       setUsers([])
       const { data } = await getUserPlaylists(user.user._id)
-      const playlistPromises = data?.map(async (playlist) => {
+      data?.map(async (playlist) => {
         const userVector = playlist.trackVector
 
         const res = await getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
@@ -65,9 +68,7 @@ function Map ({
         const newTrackObject = { user, playlist, similarityScore, userVector }
         setUsers(old => [...old, newTrackObject])
       })
-      await Promise.all(playlistPromises)
     })
-    await Promise.all(userPromises)
     setIsLoading(false)
   }
 

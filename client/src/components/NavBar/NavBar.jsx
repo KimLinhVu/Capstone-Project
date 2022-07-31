@@ -34,7 +34,6 @@ function NavBar () {
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
         <MenuItem onClick={() => navigate('/login')}>Logout</MenuItem>
         <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
-        <MenuItem onClick={handleClose}>Change Settings</MenuItem>
       </Menu>
     </div>
   )
