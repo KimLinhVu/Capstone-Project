@@ -6,6 +6,7 @@ import UserPlaylist from 'components/UserPlaylist/UserPlaylist'
 import Map from 'components/Map/Map'
 import ReactLoading from 'react-loading'
 import NavBar from 'components/NavBar/NavBar'
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import './RecommendView.css'
 
 function RecommendView () {
@@ -18,8 +19,11 @@ function RecommendView () {
   const [usersLocationArray, setUsersLocationArray] = useState([])
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [userSearch, setUserSearch] = useState([])
+  const [userSearch, setUserSearch] = useState('')
+  const [filterSimilarity, setFilterSimilarity] = useState(false)
   const { playlistId } = useParams()
+
+  let filterSimilarityButton
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -48,10 +52,13 @@ function RecommendView () {
     if (users.length === 0) {
       setDisplayUsers(null)
     } else {
-      /* sorts users array by similarity score */
-      const newArray = users.sort((a, b) => {
+      /* sorts users array by similarity score filter */
+      let newArray = users.sort((a, b) => {
         return b.similarityScore - a.similarityScore
       })
+      if (filterSimilarity) {
+        newArray = users.slice().reverse()
+      }
       setCurrentUsers(newArray)
       setDisplayUsers(newArray)
     }
@@ -60,8 +67,11 @@ function RecommendView () {
   useEffect(() => {
     /* displays users included in search input */
     const newArray = currentUsers?.filter(item => item.user.user.username.toLowerCase().includes(userSearch.toLowerCase()))
+    if (filterSimilarity) {
+      newArray.reverse()
+    }
     setDisplayUsers(newArray)
-  }, [userSearch])
+  }, [userSearch, filterSimilarity])
 
   const addUsersToLocationArray = (users) => {
     const resultArray = []
@@ -78,12 +88,19 @@ function RecommendView () {
     return resultArray
   }
 
+  if (filterSimilarity) {
+    filterSimilarityButton = <IoMdArrowDropup className='filter'/>
+  } else {
+    filterSimilarityButton = <IoMdArrowDropdown className='filter'/>
+  }
+
   return (
     <div className="recommend-view">
       <NavBar />
       <div className="users">
         <div className="header">
           <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+          <span className='filter-similarity' onClick={() => setFilterSimilarity(!filterSimilarity)}>Similarity{filterSimilarityButton}</span>
         </div>
         {displayUsers?.length !== 0 && displayUsers !== null
           ? displayUsers?.map((item, idx) => {
