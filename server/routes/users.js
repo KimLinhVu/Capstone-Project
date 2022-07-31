@@ -145,4 +145,49 @@ router.post('/remove-following', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.post('/add-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    await Users.findOneAndUpdate({ _id: userId}, {
+      $push: {
+        followFavorites: { playlist }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/remove-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    await Users.findOneAndUpdate({ _id: userId}, {
+      $pull: {
+        followFavorites: { playlist }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/find-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    const found = await Users.findOne({ userId, followFavorites: { $elemMatch: {playlist}} })
+    if (found) {
+      res.status(200).json(true)
+    } else {
+      res.status(200).json(false)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router
