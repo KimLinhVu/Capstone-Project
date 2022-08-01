@@ -21,6 +21,7 @@ function Settings () {
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(profile.location)
   const [disable, setDisable] = useState(false)
+  
   const [followingChecked, setFollowingChecked] = useState(profile.followingChecked)
   let privacySwitch
 
