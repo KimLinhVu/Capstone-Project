@@ -8,11 +8,11 @@ import PlaylistDetail from 'components/PlaylistDetail/PlaylistDetail'
 import useToken from 'utils/useToken'
 import RecommendView from 'components/RecommendView/RecommendView'
 import UserPlaylistDetail from 'components/UserPlaylistDetail/UserPlaylistDetail'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
-function App() {
-  const {token, setToken, clearToken} = useToken()
+function App () {
+  const { token, setToken, clearToken } = useToken()
 
   return (
     <div className='app'>
@@ -21,7 +21,7 @@ function App() {
           <Routes>
             <Route path="/login" element=
               {
-                <Login 
+                <Login
                   setToken={setToken}
                   clearToken={clearToken}
                 />

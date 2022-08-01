@@ -1,6 +1,5 @@
-import React from 'react'
-import "./Signup.css"
-import { useState } from 'react'
+import React, { useState } from 'react'
+import './Signup.css'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from 'utils/toast'
@@ -12,7 +11,7 @@ import axios from 'axios'
 
 const libraries = ['places']
 
-function Signup() {
+function Signup () {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
@@ -24,23 +23,23 @@ function Signup() {
   /* set up Google Map Places autocomplete */
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: libraries
+    libraries
   })
 
   if (!isLoaded) {
     return <h1>Loading</h1>
   }
-  
+
   const handleOnSubmitSignup = async () => {
     try {
-      const res = await axios.post('http://localhost:8888/signup',
-      {
-        username: username,
-        password: password,
-        location: place,
-        privacy: privacyChecked,
-        showFollowing: followingChecked
-      })
+      await axios.post('http://localhost:8888/signup',
+        {
+          username,
+          password,
+          location: place,
+          privacy: privacyChecked,
+          showFollowing: followingChecked
+        })
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
     } catch (e) {
@@ -73,33 +72,33 @@ function Signup() {
   const handlePrivacySwitch = () => {
     setPrivacyChecked(!privacyChecked)
   }
-  
+
   return (
     <div className="signup">
       <h1>Sign Up</h1>
-      <input 
-        type="text" 
-        name='user' 
-        placeholder='Enter username' 
-        onChange={(e) => setUsername(e.target.value)} 
+      <input
+        type="text"
+        name='user'
+        placeholder='Enter username'
+        onChange={(e) => setUsername(e.target.value)}
         value={username}
       />
-      <input 
-        type="text" 
-        name='password' 
-        placeholder='Enter password' 
+      <input
+        type="text"
+        name='password'
+        placeholder='Enter password'
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 
       />
-      <Autocomplete 
-        types={['locality']} 
+      <Autocomplete
+        types={['locality']}
         restrictions={{ country: ['us'] }}
         onLoad={onLoad}
         onPlaceChanged={onPlaceChanged}
       >
-        <input type="text" placeholder='Enter your Location' onChange={() => {setPlace(null)}}/>
+        <input type="text" placeholder='Enter your Location' onChange={() => { setPlace(null) }}/>
       </Autocomplete>
       <div className="switch">
         <span>Public</span>
@@ -119,11 +118,13 @@ function Signup() {
         />
         <span>Private</span>
       </div>
-      {privacyChecked ? (
+      {privacyChecked
+        ? (
         <div className="followers">
           <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
         </div>
-      ): null}
+          )
+        : null}
       <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
       <ToastContainer
         position="top-center"

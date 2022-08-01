@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import Tracks from 'utils/tracks';
-import UserTrack from 'components/UserTrack/UserTrack';
-import { getTracksAudioFeatures } from 'utils/spotify';
-import { ToastContainer } from 'react-toastify';
-import Similarity from 'utils/similarity';
+import Tracks from 'utils/tracks'
+import UserTrack from 'components/UserTrack/UserTrack'
+import { getTracksAudioFeatures } from 'utils/spotify'
+import { ToastContainer } from 'react-toastify'
+import Similarity from 'utils/similarity'
 import ReactLoading from 'react-loading'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 import './UserTrackContainer.css'
 
-function UserTrackContainer({
+function UserTrackContainer ({
   originalPlaylistId,
   similarityMethod,
   playlistId,
@@ -37,13 +37,13 @@ function UserTrackContainer({
       })
 
       /* initialize tracks array */
-      let tempTracks = []
+      const tempTracks = []
 
       while (trackIdArray.length > 0) {
-        let trackIdString = trackIdArray.splice(0, 100).join(',')
+        const trackIdString = trackIdArray.splice(0, 100).join(',')
         const { data } = await getTracksAudioFeatures(trackIdString)
         data.audio_features.forEach(item => {
-          let tempTrackVector = {
+          const tempTrackVector = {
             acousticness: 0,
             danceability: 0,
             energy: 0,
@@ -57,21 +57,16 @@ function UserTrackContainer({
             valence: 0
           }
           if (item !== null) {
-            similar.createTrackObject(tempTrackVector, item)
-            
-            let similarity = 0
-            if (similarityMethod === 0) {
-              similarity = similar.calculateCosineSimilarity(vector, tempTrackVector)
-            } else {
-              similarity = similar.calculateOwnSimilarity(vector, tempTrackVector)
-            }
-            tempTracks.push({ id: item.id, similarity: similarity, vector: tempTrackVector})
+            track.createTrackObject(tempTrackVector, item)
+
+            const similarity = similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
+            tempTracks.push({ id: item.id, similarity, vector: tempTrackVector })
           }
         })
       }
       /* sort tempTracks by similarity score */
       tempTracks.sort((a, b) => {
-        return a.similarity - b.similarity
+        return b.similarity - a.similarity
       })
       const trackDetailArray = await track.getAllTrackDetails(tempTracks)
       setTrackDetails(trackDetailArray)
@@ -81,12 +76,13 @@ function UserTrackContainer({
     }
     getAllTracks()
   }, [])
-  
+
   return (
     <div className="user-track-container">
       <div className="tracks">
-        {!isLoading ? tracks?.map((item, idx) => (
-          <UserTrack 
+        {!isLoading
+          ? tracks?.map((item, idx) => (
+          <UserTrack
             key={idx}
             similarityScore={item.similarity}
             similarityMethod={similarityMethod === 0 ? 'cosine similarity' : 'own similarity'}
@@ -98,7 +94,8 @@ function UserTrackContainer({
             setPopupIsOpen={setPopupIsOpen}
             setUserTrack={setUserTrack}
           />
-        )) : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+          ))
+          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
       <ToastContainer
         position="top-center"

@@ -3,3 +3,10 @@
   font-size: 1.4em;
   margin-bottom: 20px;
 }
+
+.favorite-view .playlists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-left: 15px;
+}

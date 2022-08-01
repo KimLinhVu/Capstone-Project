@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   background: var(--background-color);
+  min-height: 100vh;
 }
 
 .playlist-detail .header {
@@ -22,12 +23,13 @@
 }
 
 .playlist-detail .buttons {
-  border-radius: 6px;
   margin-top: 30px;
-  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
 }
 
-.playlist-detail .recommend-btn, .remove-playlist-btn {
+.playlist-detail .recommend-btn {
   padding: 10px 20px;
   font-size: 1.5rem;
   background: var(--elements-pink);
@@ -37,16 +39,37 @@
   border-radius: 6px;
   cursor: pointer;
   transition: 200ms ease-in-out;
+  margin-bottom: 10px;
 }
 
-.playlist-detail .remove-playlist-btn {
-  margin-left: 5px;
-  background: rgb(197, 14, 84);
-}
-
-.playlist-detail .recommend-btn:hover, .remove-playlist-btn:hover {
+.playlist-detail .recommend-btn:hover {
   box-shadow: 0px 0px 13px 0px rgba(155, 155, 161, 0.7);
   transform: translateY(-3px);
+  background: var(--elements-darkpink);
+}
+
+.playlist-detail .resync {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: rgb(78, 139, 78);
+  letter-spacing: 1px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.playlist-detail .resync:hover {
+  background: rgb(47, 84, 47);
+}
+
+.playlist-detail .disable:hover {
+  background-color: rgba(78, 139, 78, 0.649);
+}
+
+.playlist-detail .disable {
+  background: rgba(78, 139, 78, 0.649);
 }
 
 .playlist-detail .playlist-detail-content {
@@ -61,7 +84,8 @@
 }
 
 .playlist-detail .left .details {
-  box-shadow: 0px 0px 13px 0px rgba(217, 217, 223, 0.7);
+  box-shadow: 0px 0px 7px 0px rgba(186, 186, 187, 0.7);
+  background: var(--background-color);
   width: 290px;
   padding: 15px 20px 5px 20px;
   border-radius: 7px;
@@ -72,6 +96,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.playlist-detail .loading {
+  margin-top: auto;
 }
 
 /* text styling */

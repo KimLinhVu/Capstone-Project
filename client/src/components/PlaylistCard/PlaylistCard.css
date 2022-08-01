@@ -16,6 +16,10 @@
   align-self: center;
 }
 
+.playlist-card .disable {
+  pointer-events: none;
+}
+
 .playlist-card .title {
   margin-top: 8px;
   margin-left: 5px;

@@ -5,12 +5,28 @@ const router = express.Router()
 const Users = require('../models/Users')
 const Playlist = require('../models/Playlists')
 
-router.get('/', jwt.verifyJWT, async (req, res, next) => {
+router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     /* gets all users except self */
     const userId = req.userId
-    const allUsers = await Users.find({ _id: { $ne: userId }, privacy: false })
-    res.json(allUsers)
+    const { followers } = req.body
+    const allUsers = await Users.find({ _id: { $ne: userId } })
+
+    /* filters out users who are private and are not following current user */
+    const filteredUsers = allUsers.filter(user => {
+      /* check to see if user is private and if user is a follower */
+      if (user.privacy === true) {
+        if (user.showFollowing === true) {
+          const found = followers?.some(obj => obj.userId === user.id)
+          if (found) {
+            return true
+          }
+        }
+        return false
+      }
+      return true
+    })
+    res.json(filteredUsers)
   } catch (error) {
     next(error)
   }
@@ -31,6 +47,16 @@ router.get('/profile-id', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.headers['user-id']
     const user = await Users.findOne({ _id: userId })
     res.json(user)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/follow-profile-id', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.headers['user-id']
+    const user = await Users.findOne({ _id: userId })
+    !(user.privacy && !user.showFollowing) ? res.json(user) : res.json(null)
   } catch (error) {
     next(error)
   }

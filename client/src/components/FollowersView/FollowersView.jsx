@@ -1,10 +1,9 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import UserCard from 'components/UserCard/UserCard'
 import './FollowersView.css'
-import { getUserProfileById } from 'utils/users'
+import { getUserFollowerProfile } from 'utils/users'
 
-function FollowersView({
+function FollowersView ({
   profile,
   followers,
   setPopupIsOpen,
@@ -19,12 +18,15 @@ function FollowersView({
 
   useEffect(() => {
     const getUserInfo = async () => {
-      let newArray = []
+      const newArray = []
       const promises = userArray.map(async (item) => {
-        const { data } = await getUserProfileById(item.userId)
-        newArray.push(data)
+        const { data } = await getUserFollowerProfile(item.userId)
+        if (data !== null) {
+          newArray.push(data)
+        }
       })
       await Promise.all(promises)
+
       setUsers(newArray)
       setDisplayUsers(newArray)
     }
@@ -43,7 +45,7 @@ function FollowersView({
       return <UserCard key={idx} userId={item._id} user={item} setPopupIsOpen={setPopupIsOpen} setUserPopupId={setUserPopupId}/>
     })
   }
-  
+
   return (
     <div className="followers-view">
       <input type="text" placeholder='Search Users' className='follower-searchbar' value={followerSearch} onChange={(e) => setFollowerSearch(e.target.value)}/>

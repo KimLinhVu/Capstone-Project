@@ -1,25 +1,24 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { getPlaylistDetail } from 'utils/spotify'
-import { removePlaylistFromProfile } from 'utils/playlist'
-import { Link, useNavigate } from 'react-router-dom'
 import NavBar from 'components/NavBar/NavBar'
 import GenreContainer from 'components/GenreContainer/GenreContainer'
 import Tracks from 'utils/tracks'
 import TrackContainer from 'components/TrackContainer/TrackContainer'
 import ReactLoading from 'react-loading'
 import './PlaylistDetail.css'
+import { addTrackVector, saveSimilarityScores } from 'utils/playlist'
+import { ToastContainer } from 'react-toastify'
+import { notifyError, notifySuccess } from 'utils/toast'
 
-function PlaylistDetail() {
+function PlaylistDetail () {
   const [playlist, setPlaylist] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [tracks, setTracks] = useState(null)
+  const [resyncIsLoading, setResyncIsLoading] = useState(false)
   const { playlistId } = useParams()
   const track = new Tracks()
 
-  let navigate = useNavigate()
-  
   useEffect(() => {
     const fetchPlaylistInformation = async () => {
       setIsLoading(true)
@@ -35,16 +34,29 @@ function PlaylistDetail() {
     fetchPlaylistInformation()
   }, [])
 
-  const removePlaylist = () => {
-    removePlaylistFromProfile(playlist.id)
-    navigate('/')
+  const handleOnClickResync = async () => {
+    setResyncIsLoading(true)
+
+    /* recalculate track vector and similarity scores */
+    const trackVector = await track.createTrackVector(playlistId, setPlaylist)
+
+    /* save trackvector and recalculate similarity scores between all playlists */
+    const trackRes = await addTrackVector(playlistId, trackVector)
+    const similarityRes = await saveSimilarityScores(playlistId, trackVector)
+    if (trackRes.status === 200 && similarityRes.status === 200) {
+      notifySuccess('Playlist resynced successfully')
+    } else {
+      notifyError('Error resyncing playlist')
+    }
+
+    setResyncIsLoading(false)
   }
 
   return (
     <div className="playlist-detail">
       <NavBar />
-      {playlist ? 
-        <div>
+      {playlist
+        ? <div>
           <div className='header'>
             <img src={playlist.images[0].url} alt="Playlist Image" />
             <div className="playlist-header-info">
@@ -53,6 +65,7 @@ function PlaylistDetail() {
               <p>{playlist.description}</p>
               <div className="buttons">
                 <Link to={`/recommend/${playlist.id}`}><button className='recommend-btn'>recommend me</button></Link>
+                <button className={resyncIsLoading ? 'resync disable' : 'resync'} onClick={handleOnClickResync} disabled={resyncIsLoading}>resync playlist</button>
               </div>
             </div>
           </div>
@@ -67,15 +80,27 @@ function PlaylistDetail() {
             </div>
             <div className="right">
               <GenreContainer tracks={playlist.tracks.items}/>
-              <TrackContainer 
+              <TrackContainer
                 tracks={tracks}
                 isLoading={isLoading}
               />
             </div>
           </div>
       </div>
-      : <h1>Loading...</h1>}
-  </div>
+        : <ReactLoading color='#B1A8A6' type='spin' className='playlist-loading'/>}
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </div>
   )
 }
 

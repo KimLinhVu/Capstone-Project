@@ -1,20 +1,19 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
-import { notifyError } from 'utils/toast';
-import { logout } from 'utils/spotify';
-import 'react-toastify/dist/ReactToastify.css';
-import "./Login.css"
+import { ToastContainer } from 'react-toastify'
+import { notifyError } from 'utils/toast'
+import { logout } from 'utils/spotify'
+import 'react-toastify/dist/ReactToastify.css'
+import './Login.css'
 
-function Login({
+function Login ({
   setToken,
   clearToken
 }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -25,10 +24,10 @@ function Login({
   const handleOnSubmitLogin = async (e) => {
     try {
       const { data } = await axios.post('http://localhost:8888/login',
-      {
-        username: username,
-        password: password
-      })
+        {
+          username,
+          password
+        })
       setToken(data.accessToken)
       navigate('/')
     } catch (e) {

@@ -2,10 +2,10 @@
   height: 100%;
   width: 100%;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,18 +16,26 @@
   height: 100%;
   width: 100%;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   transition: .5ms;
 }
 
 .user-profile-card .profile-popup {
-  width: 700px;
-  height: 60vh;
+  width: 800px;
+  height: 600px;
   background: white;
   padding: 20px;
   border-radius: 10px;
   z-index: 10;
+}
+
+.user-profile-card .playlists {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-x: auto;
+  gap: 20px;
 }

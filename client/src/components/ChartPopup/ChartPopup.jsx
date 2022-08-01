@@ -2,7 +2,7 @@ import React from 'react'
 import LineChart from 'components/LineChart/LineChart'
 import './ChartPopup.css'
 
-function ChartPopup({
+function ChartPopup ({
   trackVector,
   setPopupIsOpen,
   playlistName,
@@ -12,7 +12,7 @@ function ChartPopup({
     <div className="chart-popup">
       <div className="overlay" onClick={() => setPopupIsOpen(false)}></div>
       <div className="chart">
-        <LineChart 
+        <LineChart
           trackVector={trackVector}
           userTrackVector={userTrack.vector}
           userPlaylistName={userTrack.name}

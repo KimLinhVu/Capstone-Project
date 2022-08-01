@@ -18,6 +18,7 @@
         "react"
     ],
     "rules": {
+        "no-console": "error",
         "camelcase": "off"
     }
 }

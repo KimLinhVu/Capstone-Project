@@ -1,12 +1,14 @@
 .user-track-container {
   width: 100%;
-  max-height: 800px;
+  height: 800px;
   overflow-y: auto;
 }
 
 .user-track-container .tracks {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+
+.user-track-container .loading {
+  margin-top: 100px;
 }

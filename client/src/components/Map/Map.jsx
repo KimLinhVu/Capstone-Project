@@ -1,16 +1,15 @@
-import React from 'react'
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { getUserPlaylists } from 'utils/users'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
+import { getSimilarityScore } from 'utils/playlist'
 import ReactLoading from 'react-loading'
 
-function Map({
+function Map ({
   userLocation,
   allUsers,
   usersLocationArray,
-  vector,
+  playlistId,
   setUsers,
-  similar,
   similarityMethod,
   setIsLoading
 }) {
@@ -18,16 +17,15 @@ function Map({
   const [onLoad, setOnLoad] = useState(true)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   })
 
-  let markerArray = [userLocation]
+  const markerArray = [userLocation]
   const center = useMemo(() => (userLocation), [])
 
   const options = {
     streetViewControl: false,
-    fullscreenControl: false,
-    
+    fullscreenControl: false
   }
 
   const onBoundsChanged = () => {
@@ -47,31 +45,30 @@ function Map({
     return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
-  const handleMarkerOnClick = (location) => {
+  const handleMarkerOnClick = async (location) => {
+    setIsLoading(true)
     /* returns all users who are in the location of the marker clicked */
     const resultArray = usersLocationArray.filter(user => {
       return user.location.lat === location.lat && user.location.lng === location.lng
     })
 
-    /* calculate similarity score for each user's playlists */
-    resultArray.forEach(async (user) => {
+    /* fetch similarity score for each user's playlists */
+    const userPromises = resultArray.map(async (user) => {
       setUsers([])
       const { data } = await getUserPlaylists(user.user._id)
-      data?.forEach(playlist => {
+      const playlistPromises = data?.map(async (playlist) => {
         const userVector = playlist.trackVector
 
-        /* use random similarity method associated with user */
-        let similarity = 0
-        if (similarityMethod === 0) {
-          similarity = similar.calculateCosineSimilarity(vector, userVector)
-        } else {
-          similarity = similar.calculateOwnSimilarity(vector, userVector)
-        }
-        
-        const newTrackObject = { user: user, playlist: playlist, similarityScore: similarity, userVector: userVector}
+        const res = await getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
+        const similarityScore = res.data
+
+        const newTrackObject = { user, playlist, similarityScore, userVector }
         setUsers(old => [...old, newTrackObject])
       })
+      await Promise.all(playlistPromises)
     })
+    await Promise.all(userPromises)
+    setIsLoading(false)
   }
 
   return (
@@ -92,14 +89,14 @@ function Map({
         setMap(map)
       }}
     >
-      <Marker 
+      <Marker
         position={center}
         label='User Location'
         onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
       />
       {allUsers?.map((user, idx) => {
         const position = user.location.geometry.location
-        
+
         /* checks if marker already exists on map */
         const found = markerArray.some(obj => obj.lat === position.lat && obj.lng === position.lng)
 
@@ -107,9 +104,9 @@ function Map({
         if (!found) {
           markerArray.push(position)
           return (
-          <Marker 
-            key={idx} 
-            position={position} 
+          <Marker
+            key={idx}
+            position={position}
             label={user.location.name}
             onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
           />)

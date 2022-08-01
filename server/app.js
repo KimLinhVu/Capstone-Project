@@ -4,7 +4,7 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-const similarity = require('./utils/similarity')
+const Similarity = require('./utils/similarity')
 require('dotenv').config()
 
 const app = express()
@@ -18,6 +18,7 @@ const User = require('./models/Users')
 const spotifyRouter = require('./routes/spotify')
 const playlistRouter = require('./routes/playlist')
 const userRouter = require('./routes/users')
+const similarity = new Similarity()
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/spotify', spotifyRouter)
@@ -82,14 +83,12 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    /* randomly decide which similarity method user receives */
-    const tempUser = await new User({ username })
-
     /* determine similarity method based on counter in id */
-    const similarityMethod = similarity.getSimilarityMethod(tempUser.id)
-    const user = await new User({ username, password, location, privacy, showFollowing, following: [], followers: [], similarityMethod })
-
+    const user = new User({ username, password, location, privacy, showFollowing, following: [], followers: [] })
+    const similarityMethod = await similarity.getSimilarityMethod(user.id)
     await user.save()
+    await User.findOneAndUpdate({ username }, { similarityMethod })
+
     res.status(200).json()
   } catch (error) {
     next(error)
