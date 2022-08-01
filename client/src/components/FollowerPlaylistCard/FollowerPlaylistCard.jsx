@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MdOutlineFavoriteBorder, MdOutlineFavorite } from 'react-icons/md'
 import { addFollowerFavorite, findFollowerFavorite, removeFollowerFavorite } from 'utils/users'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './FollowerPlaylistCard.css'
 
 function FollowerPlaylistCard ({
@@ -14,6 +14,7 @@ function FollowerPlaylistCard ({
 }) {
   const [favorited, setFavorited] = useState(false)
   const [refresh, setRefresh] = useState(false)
+  const navigate = useNavigate()
   let favoriteIcon
 
   const data = {
@@ -47,10 +48,16 @@ function FollowerPlaylistCard ({
     favoriteIcon = <MdOutlineFavoriteBorder size={30} className={'follower-favorite-icon'} onClick={handleAddFavorite}/>
   }
 
+  const handleOnClick = () => {
+    navigate(`/user/${playlist.id}`, { state: data })
+    window.location.reload()
+  }
+
   return (
-    <div className="playlist-card">
-      <Link to={`/user/${playlist.id}`} state={data}><img src={playlist.images[0].url} alt="Playlist Cover" /></Link>
+    <div className="follow-playlist-card">
+      <img onClick={handleOnClick} src={playlist.images[0].url} alt="Playlist Cover" />
       <span className="title">{playlist.name}</span>
+      <span className='username'>{user?.username}</span>
       {favoriteIcon}
     </div>
   )

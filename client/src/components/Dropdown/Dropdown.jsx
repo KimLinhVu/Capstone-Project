@@ -27,8 +27,10 @@ function Dropdown ({
 
   useEffect(() => {
     /* filter out option that is selected */
-    const temp = options.filter(item => item.label !== selected)
-    setDisplayOptions(temp)
+    if (options.length > 1) {
+      const temp = options?.filter(item => item.label !== selected)
+      setDisplayOptions(temp)
+    }
   }, [selected])
 
   return (

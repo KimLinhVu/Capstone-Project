@@ -149,11 +149,12 @@ function Dashboard () {
               />
             </div>
             <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
-              {spotifyProfile && (
+              {spotifyProfile && profile && (
                 <FavoriteView
                   refresh={refresh}
                   setRefresh={setRefresh}
                   spotifyProfile={spotifyProfile}
+                  profile={profile}
                 />
               )}
             </div>

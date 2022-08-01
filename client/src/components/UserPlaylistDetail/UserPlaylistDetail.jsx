@@ -1,45 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import { getPlaylistDetail } from 'utils/spotify'
+import { getCurrentUserProfile, getPlaylistDetail } from 'utils/spotify'
 import UserTrackContainer from 'components/UserTrackContainer/UserTrackContainer'
 import NavBar from 'components/NavBar/NavBar'
 import ReactLoading from 'react-loading'
-import Follower from 'utils/follower'
 import ChartPopup from 'components/ChartPopup/ChartPopup'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import Dropdown from 'components/Dropdown/Dropdown'
+import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 import Tracks from 'utils/tracks'
 import './UserPlaylistDetail.css'
+import { getUserProfile } from 'utils/users'
 
 function UserPlaylistDetail () {
   const [userPlaylist, setUserPlaylist] = useState(null)
   const [userTrack, setUserTrack] = useState(null)
   const [playlist, setPlaylist] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [isFollowing, setIsFollowing] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
+  const [profilePopup, setProfilePopup] = useState(false)
   const [filterSimilarity, setFilterSimilarity] = useState(false)
   const [selected, setSelected] = useState('')
   const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
   const [options, setOptions] = useState(null)
   const [refresh, setRefresh] = useState(false)
+  const [profile, setProfile] = useState(null)
+  const [spotifyProfile, setSpotifyProfile] = useState(null)
   const { playlistId } = useParams()
   const location = useLocation()
   const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
   const [currentVector, setCurrentVector] = useState(vector)
-  const follower = new Follower()
   const track = new Tracks()
 
-  let followButton
   let filterSimilarityButton
 
   useEffect(() => {
-    /* get following list of current user */
-    const isUserFollowing = async () => {
-      setIsLoading(true)
-      follower.isUserFollowing(user, setIsFollowing)
-      setIsLoading(false)
+    /* get current user profile and spotifyProfile */
+    const getProfiles = async () => {
+      const { data } = await getCurrentUserProfile()
+      setSpotifyProfile(data)
+
+      const res = await getUserProfile()
+      setProfile(res)
     }
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
@@ -57,7 +60,7 @@ function UserPlaylistDetail () {
 
       setIsLoading(false)
     }
-    isUserFollowing()
+    getProfiles()
     fetchPlaylist()
     getDropdownOptions()
   }, [])
@@ -75,22 +78,16 @@ function UserPlaylistDetail () {
 
   /* prevent scrolling when popup is open */
   useEffect(() => {
-    if (popupIsOpen) {
+    if (popupIsOpen || profilePopup) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'scroll'
     }
-  }, [popupIsOpen])
+  }, [popupIsOpen, profilePopup])
 
   const handleViewFeaturesOnClick = () => {
     setPopupIsOpen(true)
     setUserTrack({ vector: userVector, name: userPlaylist.name })
-  }
-
-  if (isFollowing) {
-    followButton = <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(user, setIsFollowing)}>Unfollow {user.username}</button>
-  } else {
-    followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>
   }
 
   if (filterSimilarity) {
@@ -113,7 +110,7 @@ function UserPlaylistDetail () {
                 <p className='header-tag'>Owner: {userPlaylist.owner.display_name}</p>
                 <div className="buttons">
                   <button onClick={handleViewFeaturesOnClick} className='view-features'>View Audio Features</button>
-                  {followButton}
+                  <button className='follow' onClick={() => setProfilePopup(true)}>{user.username}&apos;s Profile</button>
                 </div>
               </div>
             </div>
@@ -166,6 +163,7 @@ function UserPlaylistDetail () {
           playlistName={currentAddPlaylist === null ? playlist.name : currentAddPlaylist.playlist.name}
         />
       }
+      {profilePopup && profile && spotifyProfile && <UserProfileCard setPopupIsOpen={setProfilePopup} userId={user._id} currentProfile={profile} spotifyProfile={spotifyProfile}/>}
     </div>
   )
 }
