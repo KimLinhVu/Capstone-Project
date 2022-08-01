@@ -52,6 +52,16 @@ router.get('/profile-id', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.get('/follow-profile-id', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.headers['user-id']
+    const user = await Users.findOne({ _id: userId })
+    !(user.privacy && !user.showFollowing) ? res.json(user) : res.json(null)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/playlist', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.headers['user-id']

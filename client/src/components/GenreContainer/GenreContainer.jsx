@@ -49,16 +49,17 @@ function GenreContainer ({
   }, [])
 
   useEffect(() => {
-    setTopFiveGenres(genreArray.slice(0, 5))
+    const displayGenres = genreArray.slice(0, 5).filter(item => {
+      return item.genre !== undefined
+    })
+    setTopFiveGenres(displayGenres)
   }, [genreArray])
 
   return (
     <div className="genre-container">
       <div className="genres">
       {topFiveGenres.map((item, idx) => {
-        if (item.genre !== undefined) {
-          return <button key={idx}>{item.genre}</button>
-        }
+        return <button key={idx}>{item.genre}</button>
       })}
       </div>
     </div>

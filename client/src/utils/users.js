@@ -44,6 +44,15 @@ export const getUserProfileById = (userId) => {
   })
 }
 
+export const getUserFollowerProfile = (userId) => {
+  return axios.get('/users/follow-profile-id', {
+    headers: {
+      'x-access-token': localStorage.getItem('token'),
+      'user-id': userId
+    }
+  })
+}
+
 export const addUserFollower = (otherUserId) => {
   return axios.post('/users/add-follower', {
     otherUserId

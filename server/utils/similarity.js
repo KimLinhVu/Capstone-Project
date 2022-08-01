@@ -22,6 +22,10 @@ class Similarity {
     return similarityMethod
   }
 
+  getSimilarityScore = (similarityMethod, playlistObject) => {
+    return similarityMethod === 0 ? playlistObject.cosineSimilarityScore : playlistObject.ownSimilarityScore
+  }
+
   normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale

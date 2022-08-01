@@ -85,10 +85,9 @@ function RecommendView () {
         <div className="header">
           <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
         </div>
-        {!isLoading
-          ? displayUsers?.length !== 0 && displayUsers !== null
-            ? displayUsers?.map((item, idx) => {
-              return (
+        {displayUsers?.length !== 0 && displayUsers !== null
+          ? displayUsers?.map((item, idx) => {
+            return (
               <UserPlaylist
                 key={idx}
                 following={profile.following}
@@ -101,10 +100,9 @@ function RecommendView () {
                 vector={vector}
                 userVector={item.userVector}
               />
-              )
-            })
-            : <p className='no-users'>No Users Found</p>
-          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+            )
+          })
+          : <p className='no-users'>No Users Found</p>}
       </div>
       {!isLoading
         ? (

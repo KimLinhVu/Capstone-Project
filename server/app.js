@@ -83,14 +83,12 @@ app.post('/signup', async (req, res, next) => {
       return next(new BadRequestError('Username already exists. Please try again.'))
     }
 
-    /* randomly decide which similarity method user receives */
-    const tempUser = new User({ username })
-
     /* determine similarity method based on counter in id */
-    const similarityMethod = await similarity.getSimilarityMethod(tempUser.id)
-    const user = new User({ username, password, location, privacy, showFollowing, following: [], followers: [], similarityMethod })
-
+    const user = new User({ username, password, location, privacy, showFollowing, following: [], followers: [] })
+    const similarityMethod = await similarity.getSimilarityMethod(user.id)
     await user.save()
+    await User.findOneAndUpdate({ username }, { similarityMethod })
+
     res.status(200).json()
   } catch (error) {
     next(error)

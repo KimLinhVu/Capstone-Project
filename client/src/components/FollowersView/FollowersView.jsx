@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import UserCard from 'components/UserCard/UserCard'
 import './FollowersView.css'
-import { getUserProfileById } from 'utils/users'
+import { getUserFollowerProfile } from 'utils/users'
 
 function FollowersView ({
   profile,
@@ -18,17 +18,14 @@ function FollowersView ({
 
   useEffect(() => {
     const getUserInfo = async () => {
-      let newArray = []
+      const newArray = []
       const promises = userArray.map(async (item) => {
-        const { data } = await getUserProfileById(item.userId)
-        newArray.push(data)
+        const { data } = await getUserFollowerProfile(item.userId)
+        if (data !== null) {
+          newArray.push(data)
+        }
       })
       await Promise.all(promises)
-
-      /* filter out private users */
-      newArray = newArray.filter(user => {
-        return !(user.privacy && !user.showFollowing)
-      })
 
       setUsers(newArray)
       setDisplayUsers(newArray)

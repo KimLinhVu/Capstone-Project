@@ -14,7 +14,9 @@ export default class Tracks {
     const trackIdArray = []
     const tracks = await this.getAllPlaylistTracks(data.id)
     tracks.forEach(item => {
-      trackIdArray.push(item.track.id)
+      if (item.track !== null) {
+        trackIdArray.push(item.track.id)
+      }
     })
 
     /* receive track audio features for each track and store in an array */

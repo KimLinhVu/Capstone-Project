@@ -235,11 +235,7 @@ router.get('/get-similarity-score', jwt.verifyJWT, async (req, res, next) => {
 
     const result = await PlaylistSimilarity.findOne({ $or: [{ firstPlaylistId, secondPlaylistId }, { firstPlaylistId: secondPlaylistId, secondPlaylistId: firstPlaylistId }] })
 
-    if (similarityMethod === 0) {
-      res.status(200).json(result.cosineSimilarityScore)
-    } else {
-      res.status(200).json(result.ownSimilarityScore)
-    }
+    res.status(200).json(similarity.getSimilarityScore(similarityMethod, result))
   } catch (error) {
     next(error)
   }
