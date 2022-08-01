@@ -27,10 +27,7 @@ function FollowersView ({
 
       /* filter out private users */
       newArray = newArray.filter(user => {
-        if (user.privacy && !user.showFollowing) {
-          return false
-        }
-        return true
+        return !(user.privacy && !user.showFollowing)
       })
 
       setUsers(newArray)

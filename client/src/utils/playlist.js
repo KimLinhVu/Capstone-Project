@@ -10,7 +10,7 @@ export const getPlaylists = (spotifyId) => {
 }
 
 export const getUserPlaylists = (userId) => {
-  return axios.get('http://localhost:8888/playlist/user-playlists', {
+  return axios.get('/playlist/user-playlists', {
     headers: {
       'x-access-token': localStorage.getItem('token'),
       'user-id': userId
