@@ -12,26 +12,17 @@ function Dropdown ({
   isLoading
 }) {
   const [isActive, setIsActive] = useState(false)
-  const [displayOptions, setDisplayOptions] = useState(options)
   const track = new Tracks()
 
   useEffect(() => {
-    if (options.length === 0) {
-      setSelected('No playlist available')
-    } else {
+    if (options.length !== 0) {
       /* sort options array alphabetically */
       setSelected('Add a playlist')
-      track.sortOptionsTracks(options)
+      if (options.length > 1) {
+        track.sortOptionsTracks(options)
+      }
     }
   }, [refresh])
-
-  useEffect(() => {
-    /* filter out option that is selected */
-    if (options.length > 1) {
-      const temp = options?.filter(item => item.label !== selected)
-      setDisplayOptions(temp)
-    }
-  }, [selected])
 
   return (
     <div className="dropdown">
@@ -41,7 +32,7 @@ function Dropdown ({
       </div>
       {isActive && (
         <div className="dropdown-content">
-          {displayOptions.length >= 1 && displayOptions.map((option, idx) => (
+          {options.length >= 1 && options.map((option, idx) => (
             <div
               onClick={() => {
                 setSelected(option.label)

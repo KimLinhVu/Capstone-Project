@@ -69,7 +69,7 @@
 .user-profile-card .follow, .unfollow {
   padding: 10px 20px;
   font-size: 1rem;
-  width: 200px;
+  width: fit-content;
   background: rgb(78, 139, 78);
   letter-spacing: 1px;
   border: none;
