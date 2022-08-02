@@ -71,11 +71,7 @@ function Dashboard () {
       setCurrentPlaylist(currentResult.data)
       setDisplayPlaylist(currentResult.data)
 
-      if (currentResult.data.length === 0) {
-        setDisableTab(true)
-      } else {
-        setDisableTab(false)
-      }
+      currentResult.data.length === 0 ? setDisableTab(true) : setDisableTab(false)
     }
     if (accessToken) {
       addUserPlaylist()
@@ -90,11 +86,7 @@ function Dashboard () {
 
   /* prevent scrolling when popup is open */
   useEffect(() => {
-    if (popupIsOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'scroll'
-    }
+    popupIsOpen ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'scroll'
   }, [popupIsOpen])
 
   const closeAllTabs = () => {
