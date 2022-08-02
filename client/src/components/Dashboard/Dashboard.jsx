@@ -192,7 +192,13 @@ function Dashboard () {
             </div>
           </div>
         </>)
-          : <a className="App-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify</a>}
+          : (
+            <div className="spotify">
+              <div className="content">
+                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify Account</a>
+              </div>
+            </div>
+            )}
         {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId}/>}
       </div>
     </DashboardContext.Provider>

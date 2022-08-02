@@ -1,22 +1,59 @@
 .signup {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('img/lavendar1.jpeg');
+  background-size: cover;
+}
+
+.signup .content {
+  width: 550px;
+  border-radius: 13px;
+  box-shadow: 0px 0px 13px 0px rgba(1, 1, 14, 0.7);
+  background: white;
+  padding: 50px 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 50vh;
-  justify-content: space-around;
+  justify-content: center;
+}
+
+.signup p {
+  color: rgb(86, 83, 83);
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
 
 .signup input {
-  padding: 20px;
-  border-radius: 3px;
-  font-size: .8rem;
-  border: 1px solid black;
+  padding: 10px 20px;
+  width: 400px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  border: 1px solid rgb(181, 178, 178);
+  margin-bottom: 20px;
 }
 
 .signup .signup-btn {
   border: none;
+  margin-top: 20px;
   padding: 10px 20px;
-  border-radius: 3px;
-  background-color: rgb(108, 177, 108);
+  border-radius: 20px;
+  width: 400px;
+  background-color: rgb(156, 174, 217);
   cursor: pointer;
+  font-size: 1.1rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.signup button:hover {
+  filter: brightness(1.05);
+}
+
+.signup h1 {
+  font-weight: 500;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
 }

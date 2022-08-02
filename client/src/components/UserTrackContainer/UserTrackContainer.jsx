@@ -34,7 +34,9 @@ function UserTrackContainer ({
 
       /* gets track audio features for each track */
       const trackIdArray = allTracks.map(item => {
-        return item.track.id
+        if (item.track !== null) {
+          return item.track.id
+        }
       })
 
       /* initialize tracks array */

@@ -1,5 +1,24 @@
 import axios from 'axios'
 
+export const login = (username, password) => {
+  return axios.post('/login',
+    {
+      username,
+      password
+    })
+}
+
+export const signup = (username, password, location, privacy, showFollowing) => {
+  return axios.post('/signup',
+    {
+      username,
+      password,
+      location,
+      privacy,
+      showFollowing
+    })
+}
+
 export const getAllUsers = (followers) => {
   return axios.post('/users', {
     followers

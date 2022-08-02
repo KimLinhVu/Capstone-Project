@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import ReactLoading from 'react-loading'
 import './Settings.css'
 import { updateUserSettings } from 'utils/users'
 
@@ -19,6 +20,7 @@ function Settings () {
   const [privacy, setPrivacy] = useState(profile.privacy)
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(profile.location)
+  const [disable, setDisable] = useState(false)
   const [followingChecked, setFollowingChecked] = useState(profile.followingChecked)
   let privacySwitch
 
@@ -28,7 +30,7 @@ function Settings () {
   })
 
   if (!isLoaded) {
-    return <h1>Loading</h1>
+    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   }
 
   if (privacy) {
@@ -60,6 +62,7 @@ function Settings () {
 
   const handleUpdateSettings = async () => {
     try {
+      setDisable(true)
       await updateUserSettings(username, place, privacy, followingChecked)
       notifySuccess('Successfully updated settings. Redirecting...')
       setTimeout(() => navigate('/'), 2000)
@@ -69,38 +72,42 @@ function Settings () {
   }
 
   return (
-    <div className="settings">
-      <h2>{profile.username} Settings</h2>
-      <div className="username">
-        <span>Change Username</span>
-        <input
-          type="text"
-          name='user'
-          placeholder='Enter username'
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />
-      </div>
-      <div className="location">
-        <p>Change Address: </p>
-        <Autocomplete
-          types={['locality']}
-          restrictions={{ country: ['us'] }}
-          onLoad={onLoad}
-          onPlaceChanged={onPlaceChanged}
-        >
-          <input type="text" placeholder={profile.location.formatted_address} onChange={() => { setPlace(null) }}/>
-        </Autocomplete>
-      </div>
-      <FormControlLabel control={privacySwitch} label="Private Account" />
-      {privacy
-        ? (
-        <div className="followers">
-          <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+    <div className="setting">
+      <div className="content">
+        <h1>Settings</h1>
+        <div className="username">
+          <label>
+            <p>Username</p>
+            <input
+            type="text"
+            name='user'
+            placeholder='Change username'
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          </label>
         </div>
-          )
-        : null}
-      <button disabled={place === null || username === ''} className='signup-btn' onClick={handleUpdateSettings}>Update Settings</button>
+        <div className="location">
+          <p>Location </p>
+          <Autocomplete
+            types={['locality']}
+            restrictions={{ country: ['us'] }}
+            onLoad={onLoad}
+            onPlaceChanged={onPlaceChanged}
+          >
+            <input type="text" placeholder={profile.location.formatted_address} onChange={() => { setPlace(null) }}/>
+          </Autocomplete>
+        </div>
+        <FormControlLabel control={privacySwitch} label="Private Account" />
+        {privacy
+          ? (
+          <div className="followers">
+            <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+          </div>
+            )
+          : null}
+        <button disabled={place === null || username === ''} className={place === null || username === '' || disable ? 'disable' : 'update-btn'} onClick={handleUpdateSettings}>Update Settings</button>
+      </div>
       <ToastContainer
         position="top-center"
         limit={1}
