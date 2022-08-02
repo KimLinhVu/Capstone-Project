@@ -10,9 +10,10 @@
 }
 
 .user-card img {
+  margin-top: 5px;
   width: 153px;
   height: 150px;
-  border-radius: 5px;
+  border-radius: 50%;
   align-self: center;
 }
 

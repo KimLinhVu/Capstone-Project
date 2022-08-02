@@ -51,7 +51,7 @@
 .dashboard .links button {
   border: none;
   background: transparent;
-  color: black;
+  color: var(--txt-grey);
   cursor: pointer;
   font-weight: 600;
   font-size: 1.2rem;

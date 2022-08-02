@@ -6,6 +6,7 @@ import NavBar from 'components/NavBar/NavBar'
 import ReactLoading from 'react-loading'
 import Follower from 'utils/follower'
 import ChartPopup from 'components/ChartPopup/ChartPopup'
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import './UserPlaylistDetail.css'
 
 function UserPlaylistDetail () {
@@ -15,12 +16,14 @@ function UserPlaylistDetail () {
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
+  const [filterSimilarity, setFilterSimilarity] = useState(false)
   const { playlistId } = useParams()
   const location = useLocation()
   const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const follower = new Follower()
 
   let followButton
+  let filterSimilarityButton
 
   useEffect(() => {
     /* get following list of current user */
@@ -60,6 +63,12 @@ function UserPlaylistDetail () {
     followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(user, setIsFollowing)}>Follow {user.username}</button>
   }
 
+  if (filterSimilarity) {
+    filterSimilarityButton = <IoMdArrowDropup className='filter' onClick={() => setFilterSimilarity(false)}/>
+  } else {
+    filterSimilarityButton = <IoMdArrowDropdown className='filter' onClick={() => setFilterSimilarity(true)}/>
+  }
+
   return (
     <div className="user-playlist-detail">
       <NavBar />
@@ -83,7 +92,10 @@ function UserPlaylistDetail () {
                 <div className="track-header">
                   <span className="num">#</span>
                   <span className="title">Title</span>
-                  <span className="similarity">Similarity</span>
+                  <div className='similarity-container'>
+                    <span>Similarity</span>
+                    {filterSimilarityButton}
+                  </div>
                   <span className="preview">Preview</span>
                 </div>
                 <hr></hr>
@@ -97,6 +109,7 @@ function UserPlaylistDetail () {
                     similarityMethod={similarityMethod}
                     setPopupIsOpen={setPopupIsOpen}
                     setUserTrack={setUserTrack}
+                    filterSimilarity={filterSimilarity}
                   />
                 </div>
               </div>

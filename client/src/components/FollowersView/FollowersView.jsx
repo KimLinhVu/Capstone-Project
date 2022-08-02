@@ -38,7 +38,7 @@ function FollowersView ({
     setDisplayUsers(newArray)
   }, [followerSearch, profile])
 
-  if (displayUsers?.length === 0) {
+  if (displayUsers?.length === 0 || displayUsers === undefined) {
     userCards = <p>No Users Found</p>
   } else {
     userCards = displayUsers?.map((item, idx) => {
