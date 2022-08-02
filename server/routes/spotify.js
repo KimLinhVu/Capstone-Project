@@ -5,7 +5,6 @@ const axios = require('axios')
 const router = express.Router()
 const spotify = require('../utils/spotify')
 const playlist = require('../utils/playlist')
-const app = require('../app')
 const jwt = require('../utils/jwt')
 const jwtToken = require('jsonwebtoken')
 const SpotifyToken = require('../models/SpotifyToken')
@@ -114,16 +113,16 @@ router.get('/callback', (req, res, next) => {
 
             Spotify.locals.spotifyId = spotifyId
             /* store tokens in database */
-            const found = await SpotifyToken.findOne( { userId, spotifyId })
+            const found = await SpotifyToken.findOne({ userId, spotifyId })
             if (found) {
-              await SpotifyToken.findOneAndUpdate( { userId, spotifyId}, {
+              await SpotifyToken.findOneAndUpdate({ userId, spotifyId }, {
                 accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now()
               })
             } else {
-              const newTokens = new SpotifyToken( { userId, spotifyId, accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now()})
+              const newTokens = new SpotifyToken({ userId, spotifyId, accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now() })
               await newTokens.save()
             }
-            
+
             /* get list playlist from Spotify Api */
             const { data } = await spotify.getCurrentUserPlaylist(access_token)
             await playlist.addPlaylists(data.items, prof.data.id, userId)
@@ -168,7 +167,7 @@ router.get('/tokens', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const spotifyId = Spotify.locals.spotifyId
-    const tokens = await SpotifyToken.findOne( { userId, spotifyId })
+    const tokens = await SpotifyToken.findOne({ userId, spotifyId })
     res.status(200).json(tokens)
   } catch (error) {
     next(error)
@@ -180,7 +179,7 @@ router.post('/tokens', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const spotifyId = Spotify.locals.spotifyId
     const { accessToken, timeStamp } = req.body
-    await SpotifyToken.findOneAndUpdate( { userId, spotifyId}, { accessToken, timeStamp })
+    await SpotifyToken.findOneAndUpdate({ userId, spotifyId }, { accessToken, timeStamp })
     res.status(200).json()
   } catch (error) {
     next(error)
@@ -191,7 +190,7 @@ router.delete('/delete-tokens', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const spotifyId = Spotify.locals.spotifyId
-    await SpotifyToken.findOneAndDelete( { userId, spotifyId })
+    await SpotifyToken.findOneAndDelete({ userId, spotifyId })
     res.status(200).json()
   } catch (error) {
     next(error)
