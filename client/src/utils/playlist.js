@@ -1,10 +1,11 @@
 import axios from 'axios'
 
-export const getPlaylists = (spotifyId) => {
+export const getPlaylists = (spotifyId, added) => {
   return axios.get('/playlist/playlists', {
     headers: {
       'x-access-token': localStorage.getItem('token'),
-      'spotify-id': spotifyId
+      'spotify-id': spotifyId,
+      added
     }
   })
 }

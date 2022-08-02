@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { accessToken, getCurrentUserProfile } from 'utils/spotify'
-import { getPlaylists, getCurrentPlaylists } from 'utils/playlist'
+import { getCurrentPlaylists } from 'utils/playlist'
 import PlaylistView from 'components/PlaylistView/PlaylistView'
 import FavoriteView from 'components/FavoriteView/FavoriteView'
 import ProfileCard from 'components/ProfileCard/ProfileCard'
@@ -53,14 +53,8 @@ function Dashboard () {
       const prof = await getCurrentUserProfile()
 
       /* retrieve playlist that belongs to user and store in playlist state */
-      const result = await getPlaylists(prof.data.id)
-      const options = convertToOptionsArray(result.data)
-      /* filter out playlist that don't belong to spotifyId */
-      const filterOptions = options.filter((item) => {
-        return item.value.spotifyId === item.value.playlist.owner.id
-      })
-      track.sortOptionsTracks(filterOptions)
-      setPlaylist(filterOptions)
+      const result = await track.createOptions(false)
+      setPlaylist(result)
 
       /* retrieve playlists that spotify user has added to their profile */
       const currentResult = await getCurrentPlaylists(prof.data.id)
@@ -93,13 +87,6 @@ function Dashboard () {
       document.body.style.overflow = 'scroll'
     }
   }, [popupIsOpen])
-
-  const convertToOptionsArray = (playlist) => {
-    const newArray = playlist?.map(item => {
-      return { key: item.playlist.id, value: item, label: item.playlist.name }
-    })
-    return newArray
-  }
 
   const closeAllTabs = () => {
     setPlaylistShow(false)
