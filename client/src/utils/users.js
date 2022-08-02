@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const login = (username, password) => {
-  return axios.post('http://localhost:8888/login',
+  return axios.post('/login',
     {
       username,
       password
@@ -9,7 +9,7 @@ export const login = (username, password) => {
 }
 
 export const signup = (username, password, location, privacy, showFollowing) => {
-  return axios.post('http://localhost:8888/signup',
+  return axios.post('/signup',
     {
       username,
       password,
