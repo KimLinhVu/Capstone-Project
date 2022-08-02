@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { ToastContainer } from 'react-toastify'
-import Switch from 'react-switch'
+import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import axios from 'axios'
@@ -16,8 +16,8 @@ function Signup () {
   const [password, setPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(null)
-  const [privacyChecked, setPrivacyChecked] = useState(false)
   const [followingChecked, setFollowingChecked] = useState(false)
+  const [privacy, setPrivacy] = useState(false)
   const navigate = useNavigate()
 
   /* set up Google Map Places autocomplete */
@@ -37,7 +37,7 @@ function Signup () {
           username,
           password,
           location: place,
-          privacy: privacyChecked,
+          privacy,
           showFollowing: followingChecked
         })
       notifySuccess('Successfully created an account. Redirecting...')
@@ -68,11 +68,6 @@ function Signup () {
     }
   }
 
-  /* handle privacy switch */
-  const handlePrivacySwitch = () => {
-    setPrivacyChecked(!privacyChecked)
-  }
-
   return (
     <div className="signup">
       <h1>Sign Up</h1>
@@ -101,24 +96,9 @@ function Signup () {
         <input type="text" placeholder='Enter your Location' onChange={() => { setPlace(null) }}/>
       </Autocomplete>
       <div className="switch">
-        <span>Public</span>
-        <Switch
-          onChange={handlePrivacySwitch}
-          checked={privacyChecked}
-          className="react-switch"
-          onColor="#86d3ff"
-          onHandleColor="#2693e6"
-          handleDiameter={30}
-          uncheckedIcon={false}
-          checkedIcon={false}
-          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-          height={20}
-          width={48}
-        />
-        <span>Private</span>
+        <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />
       </div>
-      {privacyChecked
+      {privacy
         ? (
         <div className="followers">
           <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
