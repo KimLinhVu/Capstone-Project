@@ -34,31 +34,30 @@ mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
   console.log('Database not connected ' + err)
 })
 
-app.post('/login', async (req, res, next) => {
-  const { username, password } = req.body
+// app.post('/login', async (req, res, next) => {
+//   const { username, password } = req.body
 
-  if (!username) {
-    return next(new BadRequestError('Missing username field.'))
-  }
-  if (!password) {
-    return next(new BadRequestError('Missing password field.'))
-  }
+//   if (!username) {
+//     return next(new BadRequestError('Missing username field.'))
+//   }
+//   if (!password) {
+//     return next(new BadRequestError('Missing password field.'))
+//   }
 
-  /* decrypt hashed password */
-  /* search db for pw that matches correct user */
-  const user = await User.findOne({ username })
-  bcrypt.compare(password, user?.password, function (err, result) {
-    if (err || !result) {
-      return next(new BadRequestError('User does not exist or password does not match.'))
-    } else {
-      /* create jwt and store userId */
-      app.locals.userId = user.id
-      const userId = user.id
-      const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
-      res.json({ accessToken, userId })
-    }
-  })
-})
+//   /* decrypt hashed password */
+//   /* search db for pw that matches correct user */
+//   const user = await User.findOne({ username })
+//   bcrypt.compare(password, user?.password, function (err, result) {
+//     if (err || !result) {
+//       return next(new BadRequestError('User does not exist or password does not match.'))
+//     } else {
+//       /* create jwt and store userId */
+//       app.locals.userId = user.id
+//       const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
+//       res.json({ accessToken, userId: user.id })
+//     }
+//   })
+// })
 
 /* adds new user to Users db */
 app.post('/signup', async (req, res, next) => {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const login = (username, password) => {
-  return axios.post('http://localhost:8888/login',
+  return axios.post('/spotify/user-login',
     {
       username,
       password

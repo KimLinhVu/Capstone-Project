@@ -6,6 +6,13 @@ const router = express.Router()
 const spotify = require('../utils/spotify')
 const playlist = require('../utils/playlist')
 const app = require('../app')
+const jwt = require('../utils/jwt')
+const jwtToken = require('jsonwebtoken')
+const SpotifyToken = require('../models/SpotifyToken')
+const Spotify = express()
+const { BadRequestError } = require('../utils/errors')
+const User = require('../models/Users')
+const bcrypt = require('bcrypt')
 
 router.use(express.json())
 
@@ -48,6 +55,31 @@ router.get('/login', (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`)
 })
 
+router.post('/user-login', async (req, res, next) => {
+  const { username, password } = req.body
+
+  if (!username) {
+    return next(new BadRequestError('Missing username field.'))
+  }
+  if (!password) {
+    return next(new BadRequestError('Missing password field.'))
+  }
+
+  /* decrypt hashed password */
+  /* search db for pw that matches correct user */
+  const user = await User.findOne({ username })
+  bcrypt.compare(password, user?.password, function (err, result) {
+    if (err || !result) {
+      return next(new BadRequestError('User does not exist or password does not match.'))
+    } else {
+      /* create jwt and store userId */
+      Spotify.locals.userId = user.id
+      const accessToken = jwtToken.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET)
+      res.json({ accessToken, userId: user.id })
+    }
+  })
+})
+
 router.get('/callback', (req, res, next) => {
   const code = req.query.code || null
 
@@ -72,13 +104,26 @@ router.get('/callback', (req, res, next) => {
           expires_in
         })
 
-        /* store users playlists in database */
+        /* store users playlists and tokens in database */
         const storeInitialPlaylist = async () => {
           try {
             /* get user's userId */
-            const userId = app.getUserId()
+            const userId = Spotify.locals.userId
             const prof = await spotify.getCurrentUserProfile(access_token)
+            const spotifyId = prof.data.id
 
+            Spotify.locals.spotifyId = spotifyId
+            /* store tokens in database */
+            const found = await SpotifyToken.findOne( { userId, spotifyId })
+            if (found) {
+              await SpotifyToken.findOneAndUpdate( { userId, spotifyId}, {
+                accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now()
+              })
+            } else {
+              const newTokens = new SpotifyToken( { userId, spotifyId, accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now()})
+              await newTokens.save()
+            }
+            
             /* get list playlist from Spotify Api */
             const { data } = await spotify.getCurrentUserPlaylist(access_token)
             await playlist.addPlaylists(data.items, prof.data.id, userId)
@@ -117,6 +162,40 @@ router.get('/refresh_token', (req, res) => {
     .catch(err => {
       res.send(err)
     })
+})
+
+router.get('/tokens', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const spotifyId = Spotify.locals.spotifyId
+    const tokens = await SpotifyToken.findOne( { userId, spotifyId })
+    res.status(200).json(tokens)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/tokens', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const spotifyId = Spotify.locals.spotifyId
+    const { accessToken, timeStamp } = req.body
+    await SpotifyToken.findOneAndUpdate( { userId, spotifyId}, { accessToken, timeStamp })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/delete-tokens', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const spotifyId = Spotify.locals.spotifyId
+    await SpotifyToken.findOneAndDelete( { userId, spotifyId })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router
