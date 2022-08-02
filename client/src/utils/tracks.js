@@ -78,17 +78,17 @@ export default class Tracks {
     const { data } = await getPlaylists(prof.data.id, added)
     const options = this.convertToOptionsArray(data)
 
-    const filterOptions = options.filter((item) => {
-      return item.value.spotifyId === item.value.playlist.owner.id
-    })
+    const filterOptions = options.filter((item) => (
+      item.value.spotifyId === item.value.playlist.owner.id
+    ))
     this.sortOptionsTracks(filterOptions)
     return filterOptions
   }
 
   convertToOptionsArray = (playlist) => {
-    const newArray = playlist?.map(item => {
-      return { key: item.playlist.id, value: item, label: item.playlist.name }
-    })
+    const newArray = playlist?.map(item => (
+      { key: item.playlist.id, value: item, label: item.playlist.name }
+    ))
     return newArray
   }
 
