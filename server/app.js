@@ -124,7 +124,7 @@ app.post('/settings', jwtUtil.verifyJWT, async (req, res, next) => {
     }
 
     /* update settings */
-    await User.findOneAndUpdate({ _id: userId}, { username, privacy, location, showFollowing })
+    await User.findOneAndUpdate({ _id: userId }, { username, privacy, location, showFollowing })
     res.status(200).json()
   } catch (error) {
     next(error)

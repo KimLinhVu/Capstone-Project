@@ -56,8 +56,7 @@ function UserPlaylistDetail () {
       setIsLoading(true)
 
       const result = await track.createOptions(true)
-      const temp = result.filter(item => item.value.playlist.id !== originalPlaylistId)
-      setOptions(temp)
+      setOptions(result)
 
       setIsLoading(false)
     }
@@ -73,10 +72,6 @@ function UserPlaylistDetail () {
     } else {
       setCurrentPlaylistId(currentAddPlaylist.playlistId)
       setCurrentVector(currentAddPlaylist.trackVector)
-
-      /* filter out option that is selected */
-      const temp = options.filter(item => currentAddPlaylist.playlist.name !== item.label)
-      setOptions(temp)
       setRefresh(!refresh)
     }
   }, [currentAddPlaylist])

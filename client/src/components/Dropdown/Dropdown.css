@@ -28,7 +28,7 @@
   max-height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 10;
+  z-index: 2;
 }
 .dropdown .dropdown-content .dropdown-item {
   padding: 10px;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getFavoritePlaylists, getRandomUserPlaylist } from 'utils/playlist'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
-import ReactLoading from 'react-loading'
 import './FavoriteView.css'
 import { getFollowerFavorite, getUserProfileById } from 'utils/users'
 import FollowerPlaylistCard from 'components/FollowerPlaylistCard/FollowerPlaylistCard'
@@ -14,6 +13,7 @@ function FavoriteView ({
 }) {
   const [displayFavorites, setDisplayFavorites] = useState([])
   const [userFavorites, setUserFavorites] = useState(null)
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
   const [userDetails, setUserDetails] = useState(null)
   const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
@@ -51,33 +51,28 @@ function FavoriteView ({
         <div className="header">
           <h3>{spotifyProfile.display_name}&apos;s Favorites</h3>
         </div>
-        {displayFavorites && !isLoading
-          ? (
-          <div className="playlists">
-          {displayFavorites.length !== 0
-            ? displayFavorites.map((item, idx) => (
-            <PlaylistCard
-              key={idx}
-              favorite={item.favorite}
-              playlist={item.playlist}
-              refresh={refresh}
-              setRefresh={setRefresh}
-              setIsLoading={setIsLoading}
-            />
-            ))
-            : <p>No Favorites Found</p>}
-        </div>)
-          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+        <div className="playlists">
+        {displayFavorites?.length !== 0
+          ? displayFavorites?.map((item, idx) => (
+          <PlaylistCard
+            key={idx}
+            favorite={item.favorite}
+            playlist={item.playlist}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            setIsLoading={setIsLoading}
+          />
+          ))
+          : <p>No Favorites Found</p>}
+        </div>
       </div>
       <div className="playlist-container">
         <div className="header">
           <h3>Other Favorites</h3>
         </div>
-        {userFavorites && userDetails && !isLoading
-          ? (
-          <div className="playlists">
-          {userFavorites.length !== 0
-            ? userFavorites.map((item, idx) => {
+        <div className="playlists">
+          {userFavorites?.length !== 0 && userDetails
+            ? userFavorites?.map((item, idx) => {
               return (
                 <FollowerPlaylistCard
                   key={idx}
@@ -91,8 +86,7 @@ function FavoriteView ({
               )
             })
             : <p>No User Favorites Found</p>}
-        </div>)
-          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+        </div>
       </div>
     </div>
   )

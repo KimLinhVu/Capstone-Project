@@ -149,7 +149,7 @@ router.post('/add-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const { playlist } = req.body
-    await Users.findOneAndUpdate({ _id: userId}, {
+    await Users.findOneAndUpdate({ _id: userId }, {
       $push: {
         followFavorites: { playlist }
       }
@@ -164,7 +164,7 @@ router.post('/remove-follower-favorite', jwt.verifyJWT, async (req, res, next) =
   try {
     const userId = req.userId
     const { playlist } = req.body
-    await Users.findOneAndUpdate({ _id: userId}, {
+    await Users.findOneAndUpdate({ _id: userId }, {
       $pull: {
         followFavorites: { playlist }
       }
@@ -179,7 +179,7 @@ router.post('/find-follower-favorite', jwt.verifyJWT, async (req, res, next) => 
   try {
     const userId = req.userId
     const { playlist } = req.body
-    const found = await Users.findOne({ userId, followFavorites: { $elemMatch: {playlist}} })
+    const found = await Users.findOne({ _id: userId, followFavorites: { $elemMatch: { playlist } } })
     if (found) {
       res.status(200).json(true)
     } else {
@@ -193,7 +193,8 @@ router.post('/find-follower-favorite', jwt.verifyJWT, async (req, res, next) => 
 router.get('/get-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const result = await Users.findOne({ userId })
+    const result = await Users.findOne({ _id: userId })
+    console.log(result)
     res.status(200).json(result.followFavorites)
   } catch (error) {
     next(error)
