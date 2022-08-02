@@ -17,7 +17,7 @@ function Settings () {
   const location = useLocation()
   const { profile } = location.state
   const [username, setUsername] = useState(profile.username)
-  const [privacy, setPrivacy] = useState(profile.privacy)
+  const [privacy, setPrivacy] = useState(profile.isPrivate)
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(profile.location)
   const [disable, setDisable] = useState(false)
