@@ -71,7 +71,7 @@ function UserTrack ({
         </div>
       </div>
       <div className="similarity">
-        <span>{similarityScore.toFixed(2)}</span>
+        <span>{similarityScore?.toFixed(2)}</span>
       </div>
       <div className="preview">
         {track.preview_url !== null
