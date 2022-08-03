@@ -9,7 +9,7 @@ export const login = (username, password) => {
 }
 
 export const signup = (username, password, location, privacy, showFollowing) => {
-  return axios.post('http://localhost:8888/signup',
+  return axios.post('/signup',
     {
       username,
       password,
