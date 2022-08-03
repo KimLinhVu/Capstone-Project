@@ -65,7 +65,6 @@ router.post('/user-login', async (req, res, next) => {
   }
 
   /* decrypt hashed password */
-  /* search db for pw that matches correct user */
   const user = await User.findOne({ username })
   bcrypt.compare(password, user?.password, function (err, result) {
     if (err || !result) {
@@ -119,8 +118,8 @@ router.get('/callback', (req, res, next) => {
                 accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now()
               })
             } else {
-              const newTokens = new SpotifyToken({ userId, spotifyId, accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now() })
-              await newTokens.save()
+              const newToken = new SpotifyToken({ userId, spotifyId, accessToken: access_token, refreshToken: refresh_token, expiresIn: expires_in, timeStamp: Date.now() })
+              await newToken.save()
             }
 
             /* get list playlist from Spotify Api */

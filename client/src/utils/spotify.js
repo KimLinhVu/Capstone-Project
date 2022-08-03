@@ -4,7 +4,7 @@ const hasTokenExpired = (accessToken, timeStamp, expiresIn) => {
   if (!accessToken || !timeStamp) {
     return false
   }
-  const timeElapsed = Date.now() - Number(timeStamp)
+  const timeElapsed = Date.now() - timeStamp
   return (timeElapsed / 1000) > Number(expiresIn)
 }
 
