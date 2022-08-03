@@ -5,7 +5,7 @@ import { DashboardContext } from 'components/Dashboard/Dashboard'
 import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
 import { getUserPlaylists } from 'utils/playlist'
-import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
+import FollowerPlaylistCard from 'components/FollowerPlaylistCard/FollowerPlaylistCard'
 
 function UserProfileCard ({
   userId,
@@ -17,6 +17,8 @@ function UserProfileCard ({
   const [isFollowing, setIsFollowing] = useState(null)
   const follower = new Follower()
   const { refresh, setRefresh } = useContext(DashboardContext)
+
+  let followButton
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -35,6 +37,12 @@ function UserProfileCard ({
     getUserProfile()
   }, [])
 
+  if (isFollowing) {
+    followButton = <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(profile, setIsFollowing, refresh, setRefresh)}>Unfollow {profile?.username}</button>
+  } else {
+    followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(profile, setIsFollowing, refresh, setRefresh)}>Follow {profile?.username}</button>
+  }
+
   return (
     <div className="user-profile-card">
       <div id="overlay" onClick={() => setPopupIsOpen(false)}></div>
@@ -46,17 +54,14 @@ function UserProfileCard ({
               <h1>{profile.username}</h1>
               <p>Followers: {profile.followers.length}</p>
               <p>Location: {profile.location.formatted_address}</p>
-              {isFollowing ? <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(profile, setIsFollowing, refresh, setRefresh)}>Unfollow {profile.username}</button> : <button className='follow' onClick={() => follower.handleOnClickFollow(profile, setIsFollowing, refresh, setRefresh)}>Follow {profile.username}</button>}
+              {followButton}
             </div>
             <div className="playlists">
               { playlists?.map((item, idx) => (
-                <PlaylistCard
+                <FollowerPlaylistCard
                   key={idx}
                   playlist={item.playlist}
-                  setIsLoading={setIsLoading}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                  otherUser={true}
+                  item={item}
                 />
               ))}
             </div>

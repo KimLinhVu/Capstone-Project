@@ -58,7 +58,7 @@ app.post('/signup', async (req, res, next) => {
     }
 
     /* determine similarity method based on counter in id */
-    const user = new User({ username, password, location, privacy, showFollowing, following: [], followers: [] })
+    const user = new User({ username, password, location, isPrivate: privacy, showFollowing, following: [], followers: [] })
     const similarityMethod = await similarity.getSimilarityMethod(user.id)
     await user.save()
     await User.findOneAndUpdate({ username }, { similarityMethod })
@@ -97,7 +97,7 @@ app.post('/settings', jwtUtil.verifyJWT, async (req, res, next) => {
     }
 
     /* update settings */
-    await User.findOneAndUpdate({ _id: userId}, { username, privacy, location, showFollowing })
+    await User.findOneAndUpdate({ _id: userId }, { username, isPrivate: privacy, location, showFollowing })
     res.status(200).json()
   } catch (error) {
     next(error)

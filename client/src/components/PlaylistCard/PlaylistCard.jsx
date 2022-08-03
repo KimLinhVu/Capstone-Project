@@ -11,8 +11,7 @@ function PlaylistCard ({
   setIsLoading,
   refresh,
   setRefresh,
-  favorite,
-  otherUser
+  favorite
 }) {
   const [active, setActive] = useState('')
   let favoriteIcon
@@ -42,12 +41,10 @@ function PlaylistCard ({
 
   return (
     <div className='playlist-card' onMouseEnter={() => setActive('active')} onMouseLeave={() => setActive('')} >
-      {!otherUser
-        ? <Tooltip title='Remove Playlist'>
-          <AiFillCloseCircle size={35} className={`playlist-close-btn ${active}`} onClick={handleCloseOnClick}/>
-        </Tooltip>
-        : null}
-      <Link to={`playlist/${playlist.id}`} className={otherUser ? 'disable' : ''}><img src={playlist.images[0].url} alt="Playlist Cover" className={otherUser ? 'disable' : ''}/></Link>
+      <Tooltip title='Remove Playlist'>
+        <AiFillCloseCircle size={35} className={`playlist-close-btn ${active}`} onClick={handleCloseOnClick}/>
+      </Tooltip>
+      <Link to={`playlist/${playlist.id}`}><img src={playlist.images[0].url} alt="Playlist Cover"/></Link>
       <span className='title'>{playlist.name}</span>
       {favoriteIcon}
     </div>
