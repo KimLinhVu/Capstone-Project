@@ -124,3 +124,33 @@ export const updateUserSettings = (username, location, privacy, showFollowing) =
     }
   })
 }
+
+export const addFollowerFavorite = (playlist) => {
+  return axios.post('/users/add-follower-favorite', {
+    playlist
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const removeFollowerFavorite = (playlist) => {
+  return axios.post('/users/remove-follower-favorite', {
+    playlist
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const findFollowerFavorite = (playlist) => {
+  return axios.post('/users/find-follower-favorite', {
+    playlist
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}

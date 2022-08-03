@@ -1,0 +1,8 @@
+.follower-favorite-icon {
+  margin-top: 12.6rem;
+  margin-left: 7.6rem;
+  position: absolute;
+  color: rgb(226, 142, 161);
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}

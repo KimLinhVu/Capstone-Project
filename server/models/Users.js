@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   showFollowing: Boolean,
   following: Array,
   followers: Array,
-  similarityMethod: Number
+  similarityMethod: Number,
+  followFavorites: [Object]
 })
 
 userSchema.pre('save', async function (next) {
