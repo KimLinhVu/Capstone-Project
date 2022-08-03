@@ -96,11 +96,6 @@ router.get('/callback', (req, res, next) => {
     .then(response => {
       if (response.status === 200) {
         const { access_token, refresh_token, expires_in } = response.data
-        const queryParams = querystring.stringify({
-          access_token,
-          refresh_token,
-          expires_in
-        })
 
         /* store users playlists and tokens in database */
         const storeInitialPlaylist = async () => {
@@ -126,7 +121,7 @@ router.get('/callback', (req, res, next) => {
             const { data } = await spotify.getCurrentUserPlaylist(access_token)
             await playlist.addPlaylists(data.items, prof.data.id, userId)
             /* redirect to react app on success */
-            res.redirect(`http://localhost:3000/?${queryParams}`)
+            res.redirect(process.env.CLIENT_BASE_URL)
           } catch (error) {
             next(error)
           }
@@ -139,7 +134,7 @@ router.get('/callback', (req, res, next) => {
       }
     })
     .catch(() => {
-      res.redirect('http://localhost:3000/')
+      res.redirect(process.env.CLIENT_BASE_URL)
     })
 })
 

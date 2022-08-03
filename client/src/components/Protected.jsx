@@ -9,7 +9,7 @@ export const Protected = ({
 }) => {
   const navigate = useNavigate()
   useEffect(() => {
-    axios.post('http://localhost:8888/verify-token', {
+    axios.post('/verify-token', {
       token
     }).catch(() => {
       /* redirect to login page if user is not authenticated */

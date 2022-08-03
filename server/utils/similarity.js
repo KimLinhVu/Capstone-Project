@@ -1,7 +1,7 @@
 const axios = require('axios')
 class Similarity {
   getTrackFactors = async () => {
-    const { data } = await axios.get('http://localhost:8888/trackFactor')
+    const { data } = await axios.get(`${process.env.SERVER_BASE_URL}/trackFactor`)
     delete data._id
     return data
   }
