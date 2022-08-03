@@ -19,6 +19,9 @@ function FavoriteView ({
   const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
   const [vector, setVector] = useState(null)
 
+  let userFavoriteCard
+  let playlistCard
+
   useEffect(() => {
     const fetchPlaylists = async () => {
       setIsLoading(true)
@@ -33,7 +36,7 @@ function FavoriteView ({
         const { data } = await getUserProfileById(item.playlist.userId)
         userArray.push(data)
       })
-      Promise.all(promises)
+      await Promise.all(promises)
       setUserDetails(userArray)
 
       const random = await getRandomUserPlaylist(spotifyProfile.id)
@@ -45,6 +48,39 @@ function FavoriteView ({
     fetchPlaylists()
   }, [refresh])
 
+  if (userFavorites?.length !== 0 && userDetails) {
+    userFavoriteCard = userFavorites?.map((item, idx) => {
+      return (
+        <FollowerPlaylistCard
+          key={idx}
+          playlist={item.playlist.playlist}
+          item={item.playlist}
+          user={userDetails[idx]}
+          profile={profile}
+          originalPlaylistId={originalPlaylistId}
+          vector={vector}
+        />
+      )
+    })
+  } else {
+    userFavoriteCard = <p>No User Favorites Found</p>
+  }
+
+  if (displayFavorites?.length !== 0) {
+    playlistCard = displayFavorites?.map((item, idx) => (
+      <PlaylistCard
+        key={idx}
+        favorite={item.favorite}
+        playlist={item.playlist}
+        refresh={refresh}
+        setRefresh={setRefresh}
+        setIsLoading={setIsLoading}
+      />
+    ))
+  } else {
+    playlistCard = <p>No Favorites Found</p>
+  }
+
   return (
     <div className="favorite-view">
       <div className='playlist-container'>
@@ -52,18 +88,7 @@ function FavoriteView ({
           <h3>{spotifyProfile.display_name}&apos;s Favorites</h3>
         </div>
         <div className="playlists">
-        {displayFavorites?.length !== 0
-          ? displayFavorites?.map((item, idx) => (
-          <PlaylistCard
-            key={idx}
-            favorite={item.favorite}
-            playlist={item.playlist}
-            refresh={refresh}
-            setRefresh={setRefresh}
-            setIsLoading={setIsLoading}
-          />
-          ))
-          : <p>No Favorites Found</p>}
+        {playlistCard}
         </div>
       </div>
       <div className="playlist-container">
@@ -71,21 +96,7 @@ function FavoriteView ({
           <h3>Other Favorites</h3>
         </div>
         <div className="playlists">
-          {userFavorites?.length !== 0 && userDetails
-            ? userFavorites?.map((item, idx) => {
-              return (
-                <FollowerPlaylistCard
-                  key={idx}
-                  playlist={item.playlist.playlist}
-                  item={item.playlist}
-                  user={userDetails[idx]}
-                  profile={profile}
-                  originalPlaylistId={originalPlaylistId}
-                  vector={vector}
-                />
-              )
-            })
-            : <p>No User Favorites Found</p>}
+          {userFavoriteCard}
         </div>
       </div>
     </div>
