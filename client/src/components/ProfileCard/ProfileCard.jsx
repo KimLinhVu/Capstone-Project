@@ -28,7 +28,7 @@ function ProfileCard ({
     <div className='profile-card'>
       {profile && (
         <>
-          {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : null}
+          {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>}
           <div className="user-info">
             <div className="header">
               <h1 className='username'>{profile.username}</h1>

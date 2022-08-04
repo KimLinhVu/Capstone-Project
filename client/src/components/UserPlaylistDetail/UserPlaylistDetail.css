@@ -26,7 +26,7 @@
 }
 
 .user-playlist-detail .playlist-detail-content {
-  padding: 270px 50px 50px 82px;
+  padding: 250px 50px 50px 82px;
   width: 80%;
   margin: auto;
   margin-top: 220px;
@@ -83,6 +83,21 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.user-playlist-detail .dropdown-container {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.user-playlist-detail .add-playlist {
+  font-size: 15px;
+  margin-left: 5px;
+  margin-bottom: 4px;
+  color: rgb(100, 99, 99);
 }
 
 .user-playlist-detail .track-header {
@@ -165,10 +180,14 @@
   color: black;
 }
 
-.user-playlist-detail p {
+.user-playlist-detail .header-tag {
   color: rgb(100, 99, 99);
   font-size: 1.2rem;
   letter-spacing: .3px;
+}
+
+.user-playlist-detail p {
+  font-size: 1.1rem;
 }
 
 .user-playlist-detail .header h2 {

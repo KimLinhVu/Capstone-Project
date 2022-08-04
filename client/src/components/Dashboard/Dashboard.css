@@ -80,3 +80,33 @@
   margin-bottom: 20px;
   border: none;
 }
+
+.spotify {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('img/eucalyptus.jpg');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spotify .spotify-link {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  border-radius: 6px;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  background-color: rgb(78, 139, 78);
+  box-shadow: 0px 0px 13px 0px rgba(1, 1, 14, 0.239);
+  transition: 200ms ease-in-out;
+  width: 400px;
+  font-size: 1.5rem;
+}
+
+.spotify .spotify-link:hover {
+  background-color: rgb(49, 92, 49);
+  transform: translateY(-3px);
+}

@@ -7,6 +7,8 @@ import ReactLoading from 'react-loading'
 import Follower from 'utils/follower'
 import ChartPopup from 'components/ChartPopup/ChartPopup'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import Dropdown from 'components/Dropdown/Dropdown'
+import Tracks from 'utils/tracks'
 import './UserPlaylistDetail.css'
 
 function UserPlaylistDetail () {
@@ -17,10 +19,17 @@ function UserPlaylistDetail () {
   const [isFollowing, setIsFollowing] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [filterSimilarity, setFilterSimilarity] = useState(false)
+  const [selected, setSelected] = useState('')
+  const [currentAddPlaylist, setCurrentAddPlaylist] = useState(null)
+  const [options, setOptions] = useState(null)
+  const [refresh, setRefresh] = useState(false)
   const { playlistId } = useParams()
   const location = useLocation()
   const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
+  const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
+  const [currentVector, setCurrentVector] = useState(vector)
   const follower = new Follower()
+  const track = new Tracks()
 
   let followButton
   let filterSimilarityButton
@@ -38,10 +47,31 @@ function UserPlaylistDetail () {
 
       const res = await getPlaylistDetail(originalPlaylistId)
       setPlaylist(res.data)
+      setSelected(res.data.name)
+    }
+    const getDropdownOptions = async () => {
+      setIsLoading(true)
+
+      const result = await track.createOptions(true)
+      setOptions(result)
+
+      setIsLoading(false)
     }
     isUserFollowing()
     fetchPlaylist()
+    getDropdownOptions()
   }, [])
+
+  /* changes which playlist to add track to */
+  useEffect(() => {
+    if (currentAddPlaylist === null) {
+      setCurrentPlaylistId(originalPlaylistId)
+    } else {
+      setCurrentPlaylistId(currentAddPlaylist.playlistId)
+      setCurrentVector(currentAddPlaylist.trackVector)
+      setRefresh(!refresh)
+    }
+  }, [currentAddPlaylist])
 
   /* prevent scrolling when popup is open */
   useEffect(() => {
@@ -78,9 +108,9 @@ function UserPlaylistDetail () {
             <div className="header">
               <img src={userPlaylist.images[0].url} alt="Playlist Cover" />
               <div className="playlist-header-info">
-                <p>PLAYLIST</p>
+                <p className='header-tag'>PLAYLIST</p>
                 <h2>{userPlaylist.name}</h2>
-                <p>Owner: {userPlaylist.owner.display_name}</p>
+                <p className='header-tag'>Owner: {userPlaylist.owner.display_name}</p>
                 <div className="buttons">
                   <button onClick={handleViewFeaturesOnClick} className='view-features'>View Audio Features</button>
                   {followButton}
@@ -89,6 +119,16 @@ function UserPlaylistDetail () {
             </div>
             <div className="playlist-detail-content">
               <div className="right">
+                <div className="dropdown-container">
+                  <p className='add-playlist'>Add to Playlist</p>
+                  <Dropdown
+                    options={options}
+                    selected={selected}
+                    setSelected={setSelected}
+                    setCurrentAddPlaylist={setCurrentAddPlaylist}
+                    isLoading={isLoading}
+                  />
+                </div>
                 <div className="track-header">
                   <span className="num">#</span>
                   <span className="title">Title</span>
@@ -104,12 +144,13 @@ function UserPlaylistDetail () {
                     tracks={userPlaylist.tracks.items}
                     addPlaylist={true}
                     playlistId={playlistId}
-                    originalPlaylistId={originalPlaylistId}
-                    vector={vector}
+                    originalPlaylistId={currentPlaylistId}
+                    vector={currentVector}
                     similarityMethod={similarityMethod}
                     setPopupIsOpen={setPopupIsOpen}
                     setUserTrack={setUserTrack}
                     filterSimilarity={filterSimilarity}
+                    refresh={refresh}
                   />
                 </div>
               </div>
@@ -120,9 +161,9 @@ function UserPlaylistDetail () {
       {popupIsOpen && userTrack &&
         <ChartPopup
           setPopupIsOpen={setPopupIsOpen}
-          trackVector={vector}
+          trackVector={currentVector}
           userTrack={userTrack}
-          playlistName={playlist?.name}
+          playlistName={currentAddPlaylist === null ? playlist.name : currentAddPlaylist.playlist.name}
         />
       }
     </div>

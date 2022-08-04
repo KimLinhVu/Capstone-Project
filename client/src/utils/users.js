@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const login = (username, password) => {
-  return axios.post('http://localhost:8888/login',
+  return axios.post('/login',
     {
       username,
       password
@@ -9,7 +9,7 @@ export const login = (username, password) => {
 }
 
 export const signup = (username, password, location, privacy, showFollowing) => {
-  return axios.post('http://localhost:8888/signup',
+  return axios.post('/signup',
     {
       username,
       password,
@@ -118,6 +118,36 @@ export const updateUserSettings = (username, location, privacy, showFollowing) =
     location,
     privacy,
     showFollowing
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const addFollowerFavorite = (playlist) => {
+  return axios.post('/users/add-follower-favorite', {
+    playlist
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const removeFollowerFavorite = (playlist) => {
+  return axios.post('/users/remove-follower-favorite', {
+    playlist
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const findFollowerFavorite = (playlist) => {
+  return axios.post('/users/find-follower-favorite', {
+    playlist
   }, {
     headers: {
       'x-access-token': localStorage.getItem('token')

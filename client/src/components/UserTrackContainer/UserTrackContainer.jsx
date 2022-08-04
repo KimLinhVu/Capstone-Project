@@ -15,7 +15,8 @@ function UserTrackContainer ({
   vector,
   setPopupIsOpen,
   setUserTrack,
-  filterSimilarity
+  filterSimilarity,
+  refresh
 }) {
   const [tracks, setTracks] = useState(null)
   const [trackDetails, setTrackDetails] = useState(null)
@@ -34,7 +35,9 @@ function UserTrackContainer ({
 
       /* gets track audio features for each track */
       const trackIdArray = allTracks.map(item => {
-        return item.track.id
+        if (item.track !== null) {
+          return item.track.id
+        }
       })
 
       /* initialize tracks array */
@@ -77,7 +80,7 @@ function UserTrackContainer ({
       setIsLoading(false)
     }
     getAllTracks()
-  }, [])
+  }, [refresh])
 
   useEffect(() => {
     if (tracks && trackDetails) {

@@ -1,0 +1,67 @@
+.setting {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('img/blueflower.jpeg');
+  background-size: cover;
+}
+
+.setting .content {
+  width: 550px;
+  border-radius: 13px;
+  box-shadow: 0px 0px 13px 0px rgba(1, 1, 14, 0.7);
+  background: white;
+  padding: 50px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting p {
+  color: rgb(86, 83, 83);
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.setting input {
+  padding: 10px 20px;
+  width: 400px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  border: 1px solid rgb(181, 178, 178);
+  margin-bottom: 20px;
+}
+
+.setting .update-btn, .disable {
+  border: none;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  width: 400px;
+  background-color: rgb(84, 121, 141);
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.setting .disable:hover {
+  background-color: rgba(84, 121, 141, 0.513);
+}
+
+.setting .update-btn:hover {
+  filter: brightness(1.05);
+}
+
+.setting .disable {
+  background-color: rgba(84, 121, 141, 0.513);
+}
+
+.setting h1 {
+  font-weight: 500;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}

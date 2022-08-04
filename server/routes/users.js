@@ -15,7 +15,7 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
     /* filters out users who are private and are not following current user */
     const filteredUsers = allUsers.filter(user => {
       /* check to see if user is private and if user is a follower */
-      if (user.privacy === true) {
+      if (user.isPrivate) {
         if (user.showFollowing === true) {
           const found = followers?.some(obj => obj.userId === user.id)
           if (found) {
@@ -56,7 +56,7 @@ router.get('/follow-profile-id', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.headers['user-id']
     const user = await Users.findOne({ _id: userId })
-    !(user.privacy && !user.showFollowing) ? res.json(user) : res.json(null)
+    !(user.isPrivate && !user.showFollowing) ? res.json(user) : res.json(null)
   } catch (error) {
     next(error)
   }
@@ -140,6 +140,51 @@ router.post('/remove-following', jwt.verifyJWT, async (req, res, next) => {
       }
     })
     res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/add-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    await Users.findOneAndUpdate({ _id: userId}, {
+      $push: {
+        followFavorites: { playlist }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/remove-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    await Users.findOneAndUpdate({ _id: userId}, {
+      $pull: {
+        followFavorites: { playlist }
+      }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/find-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { playlist } = req.body
+    const found = await Users.findOne({ userId, followFavorites: { $elemMatch: {playlist}} })
+    if (found) {
+      res.status(200).json(true)
+    } else {
+      res.status(200).json(false)
+    }
   } catch (error) {
     next(error)
   }
