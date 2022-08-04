@@ -163,7 +163,13 @@ function UserPlaylistDetail () {
           playlistName={currentAddPlaylist === null ? playlist.name : currentAddPlaylist.playlist.name}
         />
       }
-      {profilePopup && profile && spotifyProfile && <UserProfileCard setPopupIsOpen={setProfilePopup} userId={user._id} currentProfile={profile} spotifyProfile={spotifyProfile}/>}
+      {profilePopup && profile && spotifyProfile &&
+        <UserProfileCard
+          setPopupIsOpen={setProfilePopup}
+          userId={user._id}
+          currentProfile={profile}
+          spotifyProfile={spotifyProfile}
+        />}
     </div>
   )
 }
