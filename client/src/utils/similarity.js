@@ -21,7 +21,6 @@ class Similarity {
     const trackFactor = await this.getTrackFactors()
     const trackFactorKeys = Object.keys(trackFactor)
     const trackFactorValues = Object.values(trackFactor)
-    console.log(trackFactor)
 
     const newTrackFactor = Object.assign({}, trackFactor)
 
@@ -31,21 +30,21 @@ class Similarity {
 
       /* reverse and scale difference */
       /* bigger difference equates to decrease in factor */
-      const normalized = this.normalizeData((1 - difference), 0, 1, 2)
+      const scale = (1 - difference) * 2
 
-      /* multiply or divide by current track factor to obtain proprotionate difference */
-      const scaled = trackFactorValues[i] >= 1 ? (normalized / trackFactorValues[i]) : (normalized * trackFactorValues[i])
-
-      /* normalize factor on a scale from 0 - 2 */
-      const normalizedScale = this.normalizeData(scaled, 0, trackFactorValues[i] * 2, 2)
-
-      /* take midpoint between new scale and current scale */
-      const midpoint = (normalizedScale + trackFactorValues[i]) / 2
+      /* take midpoint between new factor and current factor */
+      const midpoint = (scale + trackFactorValues[i]) / 2
       newTrackFactor[trackFactorKeys[i]] = midpoint.toFixed(2)
     }
-    console.log(newTrackFactor)
     /* update track factor in db */
     await this.updateTrackFactors(newTrackFactor)
+
+    /* resync all playlists with new track factors */
+    await this.updateAllSimilarityScores()
+  }
+
+  updateAllSimilarityScores = async () => {
+    return axios.post('/playlist/update-similarity-scores')
   }
 
   getSimilarityScore = async (similarityMethod, vector, userVector) => {

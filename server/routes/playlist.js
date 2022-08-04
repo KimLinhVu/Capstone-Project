@@ -206,15 +206,15 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
       const found = await PlaylistSimilarity.findOne({ $or: [{ firstPlaylistId: playlistId, secondPlaylistId: allPlaylists[i].playlistId }, { firstPlaylistId: allPlaylists[i].playlistId, secondPlaylistId: playlistId }] })
 
       /* fetch both playlist track vectors */
-      const firstVector = trackVector
-      const secondVector = allPlaylists[i].trackVector
+      const firstPlaylistVector = trackVector
+      const secondPlaylistVector = allPlaylists[i].trackVector
 
-      const cosineSimilarityScore = similarity.calculateCosineSimilarity(firstVector, secondVector)
-      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstVector, secondVector)
+      const cosineSimilarityScore = similarity.calculateCosineSimilarity(firstPlaylistVector, secondPlaylistVector)
+      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
 
       /* if not found, save new entry in db */
       if (!found) {
-        const newEntry = new PlaylistSimilarity({ firstPlaylistId: playlistId, secondPlaylistId: allPlaylists[i].playlistId, cosineSimilarityScore, ownSimilarityScore })
+        const newEntry = new PlaylistSimilarity({ firstPlaylistId: playlistId, firstPlaylistVector, secondPlaylistId: allPlaylists[i].playlistId, secondPlaylistVector, cosineSimilarityScore, ownSimilarityScore })
         await newEntry.save()
       } else {
         /* find one and update */
@@ -248,6 +248,27 @@ router.get('/get-random-playlist', jwt.verifyJWT, async (req, res, next) => {
     const spotifyId = req.headers['spotify-id']
     const result = await Playlist.findOne({ userId, spotifyId, added: true })
     res.status(200).json(result)
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* updates all similarity scores between playlists in db */
+router.post('/update-similarity-scores', async (req, res, next) => {
+  try {
+    const allPlaylists = await PlaylistSimilarity.find()
+
+    const promises = allPlaylists.map(async (item) => {
+      const { firstPlaylistId, firstPlaylistVector, secondPlaylistId, secondPlaylistVector } = item
+
+      /* recalculate similarity score */
+      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
+
+      /* update entry with new similarity score */
+      await PlaylistSimilarity.findOneAndUpdate({ firstPlaylistId, secondPlaylistId }, { ownSimilarityScore })
+    })
+    await Promise.all(promises)
+    res.status(200).json()
   } catch (error) {
     next(error)
   }
