@@ -210,7 +210,7 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
       const secondVector = allPlaylists[i].trackVector
 
       const cosineSimilarityScore = similarity.calculateCosineSimilarity(firstVector, secondVector)
-      const ownSimilarityScore = similarity.calculateOwnSimilarity(firstVector, secondVector)
+      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstVector, secondVector)
 
       /* if not found, save new entry in db */
       if (!found) {

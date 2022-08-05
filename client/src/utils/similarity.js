@@ -1,23 +1,16 @@
+const axios = require('axios')
 class Similarity {
-  scaleValueObject = {
-    acousticness: 1.5,
-    danceability: 1.8,
-    energy: 2,
-    instrumentalness: 1.5,
-    key: 0.5,
-    liveness: 0.3,
-    loudness: 0.5,
-    mode: 0.5,
-    speechiness: 1.5,
-    time_signature: 0.5,
-    valence: 2
+  getTrackFactors = async () => {
+    const { data } = await axios.get('/trackFactor')
+    delete data._id
+    return data
   }
 
-  getSimilarityScore = (similarityMethod, vector, userVector) => {
+  getSimilarityScore = async (similarityMethod, vector, userVector) => {
     if (similarityMethod === 0) {
       return this.calculateCosineSimilarity(vector, userVector)
     } else {
-      return this.calculateOwnSimilarity(vector, userVector)
+      return await this.calculateOwnSimilarity(vector, userVector)
     }
   }
 
@@ -55,7 +48,7 @@ class Similarity {
     return 100 - normalized
   }
 
-  calculateOwnSimilarity = (a, b) => {
+  calculateOwnSimilarity = async (a, b) => {
     /* calculates similarity based on difference between values
     in same position
     range from 0 - 100; closer to 0 means more similar */
@@ -63,7 +56,9 @@ class Similarity {
     b = this.convertObjectToVector(b)
     let differenceSum = 0
     let maxValue = 0
-    const scaleValueArray = this.convertObjectToVector(this.scaleValueObject)
+
+    const trackFactors = await this.getTrackFactors()
+    const scaleValueArray = this.convertObjectToVector(trackFactors)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
       a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i]

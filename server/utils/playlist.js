@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 const addPlaylists = (playlist, spotifyId, userId) => {
-  return axios.post('http://localhost:8888/playlist/', {
+  return axios.post(`${process.env.SERVER_BASE_URL}/playlist/`, {
     playlist,
     spotifyId,
     userId
