@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const login = (username, password) => {
-  return axios.post('/login',
+  return axios.post('/spotify/user-login',
     {
       username,
       password

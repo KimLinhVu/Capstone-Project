@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react'
-import { accessToken, getCurrentUserProfile } from 'utils/spotify'
+import { getCurrentUserProfile, getSpotifyAccessTokens } from 'utils/spotify'
 import { getCurrentPlaylists } from 'utils/playlist'
 import PlaylistView from 'components/PlaylistView/PlaylistView'
 import FavoriteView from 'components/FavoriteView/FavoriteView'
@@ -37,16 +37,18 @@ function Dashboard () {
 
   /* get value of tokens out of the URL */
   useEffect(() => {
-    setSpotifyToken(accessToken)
+    const getSpotifyToken = async () => {
+      const token = await getSpotifyAccessTokens()
+      setSpotifyToken(token)
+      fetchUserProfiles()
+    }
+    getSpotifyToken()
     const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
 
       const res = await getUserProfile()
       setProfile(res.data)
-    }
-    if (accessToken) {
-      fetchUserProfiles()
     }
   }, [refresh])
 
@@ -73,9 +75,7 @@ function Dashboard () {
 
       currentResult.data.length === 0 ? setDisableTab(true) : setDisableTab(false)
     }
-    if (accessToken) {
-      addUserPlaylist()
-    }
+    addUserPlaylist()
   }, [currentAddPlaylist, refresh])
 
   useEffect(() => {
