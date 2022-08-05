@@ -30,11 +30,13 @@
   overflow-x: hidden;
   z-index: 2;
 }
+
 .dropdown .dropdown-content .dropdown-item {
   padding: 10px;
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .dropdown .dropdown-content .dropdown-item:hover {
   background: #f4f4f4;
 }
