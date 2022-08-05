@@ -80,8 +80,14 @@
   transform: translateY(-3px);
 }
 
-.profile-card h2 {
+.profile-card h1 {
   font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: .5px;
+}
+
+.profile-card h2 {
+  font-weight: 600;
 }
 
 .profile-card p {

@@ -242,4 +242,15 @@ router.get('/get-similarity-score', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.get('/get-random-playlist', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const spotifyId = req.headers['spotify-id']
+    const result = await Playlist.findOne({ userId, spotifyId, added: true })
+    res.status(200).json(result)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

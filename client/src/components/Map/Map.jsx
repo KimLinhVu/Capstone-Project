@@ -28,7 +28,9 @@ function Map ({
 
   const options = {
     streetViewControl: false,
-    fullscreenControl: false
+    fullscreenControl: false,
+    minZoom: 4,
+    maxZoom: 20
   }
 
   const onBoundsChanged = () => {

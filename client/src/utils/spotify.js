@@ -1,135 +1,145 @@
 import axios from 'axios'
-// Map for localStorage keys
-const LOCALSTORAGE_KEYS = {
-  accessToken: 'spotify_access_token',
-  refreshToken: 'spotify_refresh_token',
-  expireTime: 'spotify_token_expire_time',
-  timestamp: 'spotify_token_timestamp'
-}
 
-// Map to retrieve localStorage values
-const LOCALSTORAGE_VALUES = {
-  accessToken: localStorage.getItem(LOCALSTORAGE_KEYS.accessToken),
-  refreshToken: localStorage.getItem(LOCALSTORAGE_KEYS.refreshToken),
-  expireTime: localStorage.getItem(LOCALSTORAGE_KEYS.expireTime),
-  timestamp: localStorage.getItem(LOCALSTORAGE_KEYS.timestamp)
-}
-
-const hasTokenExpired = () => {
-  const { accessToken, timestamp, expireTime } = LOCALSTORAGE_VALUES
-  if (!accessToken || !timestamp) {
+const hasTokenExpired = (accessToken, timeStamp, expiresIn) => {
+  if (!accessToken || !timeStamp) {
     return false
   }
-
-  const timeElapsed = Date.now() - Number(timestamp)
-  return (timeElapsed / 1000) > Number(expireTime)
+  const timeElapsed = Date.now() - timeStamp
+  return (timeElapsed / 1000) > Number(expiresIn)
 }
 
-export const logout = () => {
-  for (const property in LOCALSTORAGE_KEYS) {
-    localStorage.removeItem(LOCALSTORAGE_KEYS[property])
-  }
-}
+const refreshTokens = async (refreshToken) => {
+  const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${refreshToken}`)
 
-export const logoutSpotify = () => {
-  for (const property in LOCALSTORAGE_KEYS) {
-    localStorage.removeItem(LOCALSTORAGE_KEYS[property])
-  }
-  window.location = window.location.origin
-}
-
-const refreshToken = async () => {
-  if (!LOCALSTORAGE_VALUES.refreshToken || LOCALSTORAGE_VALUES.refreshToken === 'undefined' ||
-      (Date.now() - Number(LOCALSTORAGE_VALUES.timestamp) / 1000) < 1000) {
-    logoutSpotify()
-  }
-  const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`)
-
-  localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
-  localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
+  await axios.post('/playlist/', {
+    accessToken: data.access_token,
+    timeStamp: Date.now()
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
 
   window.location.reload()
 }
 
-const getAccessToken = () => {
-  const queryString = window.location.search
-  const urlParams = new URLSearchParams(queryString)
-  const queryParams = {
-    [LOCALSTORAGE_KEYS.accessToken]: urlParams.get('access_token'),
-    [LOCALSTORAGE_KEYS.refreshToken]: urlParams.get('refresh_token'),
-    [LOCALSTORAGE_KEYS.expireTime]: urlParams.get('expires_in')
-  }
-  const hasError = urlParams.get('error')
-
-  if (hasError || hasTokenExpired() || LOCALSTORAGE_VALUES.accessToken === 'undefined') {
-    refreshToken()
-  }
-
-  if (LOCALSTORAGE_VALUES.accessToken && LOCALSTORAGE_VALUES.accessToken !== 'undefined') {
-    return LOCALSTORAGE_VALUES.accessToken
-  }
-
-  if (queryParams[LOCALSTORAGE_KEYS.accessToken]) {
-    /* store query params in local storage */
-    for (const prop in queryParams) {
-      localStorage.setItem(prop, queryParams[prop])
+export const logoutSpotify = async () => {
+  await axios.delete('/spotify/delete-tokens', {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
     }
-    localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
-    return queryParams[LOCALSTORAGE_KEYS.accessToken]
-  }
-
-  return false
+  })
+  window.location.reload()
 }
 
-export const accessToken = getAccessToken()
+export const getSpotifyAccessTokens = async () => {
+  const { data } = await axios.get('/spotify/tokens', {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+  const { accessToken, refreshToken, expiresIn, timeStamp } = data
+
+  if (hasTokenExpired(refreshToken, timeStamp, expiresIn) || !accessToken) {
+    await refreshTokens(refreshToken)
+  }
+  return accessToken
+}
 
 const instance = axios.create({
   baseURL: 'https://api.spotify.com/v1'
 })
-instance.defaults.headers.Authorization = `Bearer ${accessToken}`
 instance.defaults.headers['Content-Type'] = 'application/json'
 
 export const getCurrentUserProfile = async () => {
-  return instance.get('/me')
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get('/me', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getCurrentUserPlaylist = () => {
-  return instance.get('/me/playlists?limit=50')
+export const getCurrentUserPlaylist = async () => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get('/me/playlists?limit=50', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getPlaylistDetail = (playlistId) => {
-  return instance.get(`/playlists/${playlistId}`)
+export const getPlaylistDetail = async (playlistId) => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/playlists/${playlistId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getPlaylistItems = (playlistId, offset) => {
-  return instance.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`)
+export const getPlaylistItems = async (playlistId, offset) => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/playlists/${playlistId}/tracks?limit=50&offset=${offset}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getTrackDetail = (trackId) => {
-  return instance.get(`/tracks/${trackId}`)
+export const getTrackDetail = async (trackId) => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/tracks/${trackId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getTracksDetails = (trackIdString) => {
-  return instance.get(`/tracks/?ids=${trackIdString}`)
+export const getTracksDetails = async (trackIdString) => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/tracks/?ids=${trackIdString}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
-export const getArtistDetail = (artistId) => {
-  return instance.get(`/artists?ids=${artistId}`)
+export const getArtistDetail = async (artistId) => {
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/artists?ids=${artistId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
 export const addTrackToPlaylist = async (playlistId, trackUri) => {
+  const accessToken = await getSpotifyAccessTokens()
+  instance.defaults.headers.Authorization = `Bearer ${accessToken}`
   return instance.post(`/playlists/${playlistId}/tracks?uris=${trackUri}`)
 }
 
 export const getTracksAudioFeatures = async (ids) => {
-  return instance.get(`/audio-features?ids=${ids}`)
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/audio-features?ids=${ids}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
 export const getTrackAudioFeatures = async (id) => {
-  return instance.get(`/audio-features/${id}`)
+  const accessToken = await getSpotifyAccessTokens()
+  return instance.get(`/audio-features/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
 export const removeTrackFromPlaylist = async (playlistId, trackUri) => {
+  const accessToken = await getSpotifyAccessTokens()
   return instance.delete(`/playlists/${playlistId}/tracks`, {
     data: {
       tracks: [
@@ -137,6 +147,10 @@ export const removeTrackFromPlaylist = async (playlistId, trackUri) => {
           uri: trackUri
         }
       ]
+    }
+  }, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
     }
   })
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const login = (username, password) => {
-  return axios.post('/login',
+  return axios.post('/spotify/user-login',
     {
       username,
       password
@@ -149,6 +149,14 @@ export const findFollowerFavorite = (playlist) => {
   return axios.post('/users/find-follower-favorite', {
     playlist
   }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const getFollowerFavorite = () => {
+  return axios.get('/users/get-follower-favorite', {
     headers: {
       'x-access-token': localStorage.getItem('token')
     }

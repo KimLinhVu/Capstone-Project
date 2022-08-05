@@ -1,22 +1,26 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getUserProfileById } from 'utils/users'
+import { MdLocationOn } from 'react-icons/md'
 import Follower from 'utils/follower'
-import { DashboardContext } from 'components/Dashboard/Dashboard'
 import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
-import { getUserPlaylists } from 'utils/playlist'
+import { getRandomUserPlaylist, getUserPlaylists } from 'utils/playlist'
 import FollowerPlaylistCard from 'components/FollowerPlaylistCard/FollowerPlaylistCard'
 
 function UserProfileCard ({
   userId,
-  setPopupIsOpen
+  setPopupIsOpen,
+  currentProfile,
+  spotifyProfile
 }) {
   const [profile, setProfile] = useState(null)
+  const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
+  const [vector, setVector] = useState(null)
   const [playlists, setPlaylists] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(null)
   const follower = new Follower()
-  const { refresh, setRefresh } = useContext(DashboardContext)
+  const [refresh, setRefresh] = useState(false)
 
   let followButton
 
@@ -31,6 +35,11 @@ function UserProfileCard ({
       /* get user's added playlists */
       const result = await getUserPlaylists(userId)
       setPlaylists(result.data)
+
+      /* gets random playlist from current user */
+      const random = await getRandomUserPlaylist(spotifyProfile.id)
+      setOriginalPlaylistId(random.data.playlistId)
+      setVector(random.data.trackVector)
 
       setIsLoading(false)
     }
@@ -51,17 +60,29 @@ function UserProfileCard ({
           ? (
           <div>
             <div className="profile-content">
-              <h1>{profile.username}</h1>
-              <p>Followers: {profile.followers.length}</p>
-              <p>Location: {profile.location.formatted_address}</p>
-              {followButton}
+              <div className="user-left">
+                <h1>{profile.username}</h1>
+                <p className='follower'>{profile.followers.length} {profile.followers.length === 1 ? 'follower' : 'followers'}</p>
+                <div className="location">
+                  <MdLocationOn className='icon' size={23}/>
+                  <p>{profile.location.formatted_address}</p>
+                </div>
+              </div>
+              <div className="user-right">
+                {followButton}
+              </div>
             </div>
+            <hr />
             <div className="playlists">
               { playlists?.map((item, idx) => (
                 <FollowerPlaylistCard
                   key={idx}
                   playlist={item.playlist}
                   item={item}
+                  user={profile}
+                  profile={currentProfile}
+                  originalPlaylistId={originalPlaylistId}
+                  vector={vector}
                 />
               ))}
             </div>
