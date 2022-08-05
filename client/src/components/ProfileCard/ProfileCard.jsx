@@ -48,9 +48,12 @@ function ProfileCard ({
                   'aria-labelledby': 'basic-button'
                 }}
               >
-                <MenuItem onClick={() => navigate('/login')}>Logout</MenuItem>
-                <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
                 <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>
+                <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
+                <MenuItem onClick={() => {
+                  logoutSpotify()
+                  navigate('/login')
+                }}>Logout</MenuItem>
               </Menu>
             </div>
             <div className="location">
