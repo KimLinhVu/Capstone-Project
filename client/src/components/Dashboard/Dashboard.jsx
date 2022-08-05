@@ -7,6 +7,8 @@ import ProfileCard from 'components/ProfileCard/ProfileCard'
 import Tracks from 'utils/tracks'
 import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
+import { ToastContainer } from 'react-toastify'
+import { notifyError } from 'utils/toast'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 
@@ -29,6 +31,7 @@ function Dashboard () {
   const [followingShow, setFollowingShow] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [userPopupId, setUserPopupId] = useState(null)
+  const [disableTab, setDisableTab] = useState(true)
 
   const track = new Tracks()
 
@@ -67,6 +70,8 @@ function Dashboard () {
       })
       setCurrentPlaylist(currentResult.data)
       setDisplayPlaylist(currentResult.data)
+
+      currentResult.data.length === 0 ? setDisableTab(true) : setDisableTab(false)
     }
     if (accessToken) {
       addUserPlaylist()
@@ -81,11 +86,7 @@ function Dashboard () {
 
   /* prevent scrolling when popup is open */
   useEffect(() => {
-    if (popupIsOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'scroll'
-    }
+    popupIsOpen ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'scroll'
   }, [popupIsOpen])
 
   const closeAllTabs = () => {
@@ -93,6 +94,11 @@ function Dashboard () {
     setFavoriteShow(false)
     setFollowersShow(false)
     setFollowingShow(false)
+
+    if (disableTab) {
+      setPlaylistShow(true)
+      notifyError('Please add one playlist to your profile')
+    }
   }
 
   return (
@@ -119,15 +125,15 @@ function Dashboard () {
                 }} className={`${playlistShow ? 'tab-show' : ''}`}>Playlists</button>
                 <button onClick={() => {
                   closeAllTabs()
-                  setFavoriteShow(true)
+                  disableTab ? setFavoriteShow(false) : setFavoriteShow(true)
                 }} className={`${favoriteShow ? 'tab-show' : ''}`}>Favorites</button>
                 <button onClick={() => {
                   closeAllTabs()
-                  setFollowersShow(true)
+                  disableTab ? setFollowersShow(false) : setFollowersShow(true)
                 }} className={`${followersShow ? 'tab-show' : ''}`}>Followers</button>
                 <button onClick={() => {
                   closeAllTabs()
-                  setFollowingShow(true)
+                  disableTab ? setFollowingShow(false) : setFollowingShow(true)
                 }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
               </div>
               <hr />
@@ -149,11 +155,12 @@ function Dashboard () {
               />
             </div>
             <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
-              {spotifyProfile && (
+              {spotifyProfile && profile && (
                 <FavoriteView
                   refresh={refresh}
                   setRefresh={setRefresh}
                   spotifyProfile={spotifyProfile}
+                  profile={profile}
                 />
               )}
             </div>
@@ -186,8 +193,20 @@ function Dashboard () {
               </div>
             </div>
             )}
-        {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId}/>}
+        {popupIsOpen && userPopupId && <UserProfileCard setPopupIsOpen={setPopupIsOpen} userId={userPopupId} currentProfile={profile} spotifyProfile={spotifyProfile}/>}
       </div>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </DashboardContext.Provider>
   )
 }

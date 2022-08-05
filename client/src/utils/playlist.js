@@ -149,3 +149,12 @@ export const getSimilarityScore = (firstPlaylistId, secondPlaylistId, similarity
     }
   })
 }
+
+export const getRandomUserPlaylist = (spotifyId) => {
+  return axios.get('/playlist/get-random-playlist', {
+    headers: {
+      'x-access-token': localStorage.getItem('token'),
+      'spotify-id': spotifyId
+    }
+  })
+}

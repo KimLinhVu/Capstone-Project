@@ -15,12 +15,12 @@ function Dropdown ({
   const track = new Tracks()
 
   useEffect(() => {
-    if (options.length === 0) {
-      setSelected('No playlist available')
-    } else {
+    if (options.length !== 0) {
       /* sort options array alphabetically */
       setSelected('Add a playlist')
-      track.sortOptionsTracks(options)
+      if (options.length > 1) {
+        track.sortOptionsTracks(options)
+      }
     }
   }, [refresh])
 
