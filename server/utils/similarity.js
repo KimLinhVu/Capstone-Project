@@ -1,4 +1,6 @@
 const axios = require('axios')
+const PlaylistSimilarity = require('../models/PlaylistSimilarity')
+
 class Similarity {
   getTrackFactors = async () => {
     const { data } = await axios.get(`${process.env.SERVER_BASE_URL}/trackFactor`)
@@ -17,6 +19,19 @@ class Similarity {
 
   getSimilarityScore = (similarityMethod, playlistObject) => {
     return similarityMethod === 0 ? playlistObject.cosineSimilarityScore : playlistObject.ownSimilarityScore
+  }
+
+  updateSimilarityScores = async (allPlaylists) => {
+    const promises = allPlaylists.map(async (item) => {
+      const { firstPlaylistId, firstPlaylistVector, secondPlaylistId, secondPlaylistVector } = item
+
+      /* recalculate similarity score */
+      const ownSimilarityScore = await this.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
+
+      /* update entry with new similarity score */
+      await PlaylistSimilarity.findOneAndUpdate({ firstPlaylistId, secondPlaylistId }, { ownSimilarityScore })
+    })
+    await Promise.all(promises)
   }
 
   normalizeData = (x, min, max, scale) => {

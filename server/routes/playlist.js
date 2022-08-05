@@ -257,17 +257,7 @@ router.get('/get-random-playlist', jwt.verifyJWT, async (req, res, next) => {
 router.post('/update-similarity-scores', async (req, res, next) => {
   try {
     const allPlaylists = await PlaylistSimilarity.find()
-
-    const promises = allPlaylists.map(async (item) => {
-      const { firstPlaylistId, firstPlaylistVector, secondPlaylistId, secondPlaylistVector } = item
-
-      /* recalculate similarity score */
-      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
-
-      /* update entry with new similarity score */
-      await PlaylistSimilarity.findOneAndUpdate({ firstPlaylistId, secondPlaylistId }, { ownSimilarityScore })
-    })
-    await Promise.all(promises)
+    await similarity.updateSimilarityScores(allPlaylists)
     res.status(200).json()
   } catch (error) {
     next(error)
