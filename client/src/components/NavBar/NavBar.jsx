@@ -1,14 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { logoutSpotify } from 'utils/spotify'
 import Avatar from '@mui/material/Avatar'
 import { Link, useNavigate } from 'react-router-dom'
+import { getUserProfile } from 'utils/users'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import './NavBar.css'
 
 function NavBar () {
+  const [profile, setProfile] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const res = await getUserProfile()
+      setProfile(res.data)
+    }
+    fetchUserProfile()
+  }, [])
 
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -32,6 +42,7 @@ function NavBar () {
         }}
       >
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+        {profile && <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>}
         <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
         <MenuItem onClick={() => {
           logoutSpotify()
