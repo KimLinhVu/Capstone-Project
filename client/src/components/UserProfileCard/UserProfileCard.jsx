@@ -6,6 +6,7 @@ import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
 import { getRandomUserPlaylist, getUserPlaylists } from 'utils/playlist'
 import FollowerPlaylistCard from 'components/FollowerPlaylistCard/FollowerPlaylistCard'
+import Image from 'utils/image'
 
 function UserProfileCard ({
   userId,
@@ -14,15 +15,18 @@ function UserProfileCard ({
   spotifyProfile
 }) {
   const [profile, setProfile] = useState(null)
+  const [profilePicture, setProfilePicture] = useState(null)
   const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
   const [vector, setVector] = useState(null)
   const [playlists, setPlaylists] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isFollowing, setIsFollowing] = useState(null)
-  const follower = new Follower()
   const [refresh, setRefresh] = useState(false)
+  const follower = new Follower()
+  const image = new Image()
 
   let followButton
+  let profileImage
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -43,6 +47,11 @@ function UserProfileCard ({
 
       setIsLoading(false)
     }
+    const getProfilePicture = async () => {
+      const { data } = await image.getUserProfilePicture(userId)
+      setProfilePicture(data)
+    }
+    getProfilePicture()
     getUserProfile()
   }, [])
 
@@ -50,6 +59,12 @@ function UserProfileCard ({
     followButton = <button className='unfollow' onClick={() => follower.handleOnClickUnfollow(profile, setIsFollowing, refresh, setRefresh)}>Unfollow {profile?.username}</button>
   } else {
     followButton = <button className='follow' onClick={() => follower.handleOnClickFollow(profile, setIsFollowing, refresh, setRefresh)}>Follow {profile?.username}</button>
+  }
+
+  if (profilePicture === null) {
+    profileImage = spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="profile picture" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
+  } else {
+    profileImage = <img className='profile-picture' src={profilePicture} alt="profile picture"/>
   }
 
   return (
@@ -60,12 +75,17 @@ function UserProfileCard ({
           ? (
           <div>
             <div className="profile-content">
-              <div className="user-left">
-                <h1>{profile.username}</h1>
-                <p className='follower'>{profile.followers.length} {profile.followers.length === 1 ? 'follower' : 'followers'}</p>
-                <div className="location">
-                  <MdLocationOn className='icon' size={23}/>
-                  <p>{profile.location.formatted_address}</p>
+              <div className="profile-content-user">
+                <div className="profile-picture">
+                  {profileImage}
+                </div>
+                <div className="user-left">
+                  <h1>{profile.username}</h1>
+                  <p className='follower'>{profile.followers.length} {profile.followers.length === 1 ? 'follower' : 'followers'}</p>
+                  <div className="location">
+                    <MdLocationOn className='icon' size={23}/>
+                    <p>{profile.location.formatted_address}</p>
+                  </div>
                 </div>
               </div>
               <div className="user-right">

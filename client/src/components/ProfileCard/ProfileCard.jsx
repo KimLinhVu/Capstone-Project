@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
-import { MdLocationOn } from 'react-icons/md'
+import { MdLocationOn, MdOutlineEdit } from 'react-icons/md'
 import { FaSpotify } from 'react-icons/fa'
+import Image from 'utils/image'
 import { IoMdSettings } from 'react-icons/io'
 import Tooltip from '@mui/material/Tooltip'
 import Menu from '@mui/material/Menu'
@@ -14,7 +15,22 @@ function ProfileCard ({
   profile
 }) {
   const [anchorEl, setAnchorEl] = useState(null)
+  const [refresh, setRefresh] = useState(false)
+  const [picture, setPicture] = useState(null)
   const navigate = useNavigate()
+  const image = new Image()
+
+  let profilePicture
+
+  useEffect(() => {
+    const getProfileImage = async () => {
+      const { data } = await image.getProfilePicture()
+      if (data !== null) {
+        setPicture(data)
+      }
+    }
+    getProfileImage()
+  }, [refresh])
 
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -24,11 +40,28 @@ function ProfileCard ({
     setAnchorEl(null)
   }
 
+  if (picture === null) {
+    profilePicture = spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="profile picture" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
+  } else {
+    profilePicture = <img className='profile-picture' src={picture} alt="profile picture"/>
+  }
+
   return (
     <div className='profile-card'>
       {profile && (
         <>
-          {spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="Profile Avatar" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>}
+          <div className="picture">
+            {profilePicture}
+            <label className='upload-image'>
+                <Tooltip title='Change profile picture'><MdOutlineEdit size={40} className='edit'/></Tooltip>
+                <input
+                  id='image'
+                  type="file"
+                  accept="image/*"
+                  onChange={e => image.uploadImage(e, refresh, setRefresh)}
+                />
+            </label>
+          </div>
           <div className="user-info">
             <div className="header">
               <h1 className='username'>{profile.username}</h1>
