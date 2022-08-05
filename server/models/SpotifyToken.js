@@ -6,7 +6,7 @@ const SpotifyTokenSchema = new mongoose.Schema({
   accessToken: String,
   refreshToken: String,
   expiresIn: Number,
-  timeStamp: Number
+  timeStamp: Date
 })
 
 module.exports = mongoose.model('spotify tokens', SpotifyTokenSchema)
