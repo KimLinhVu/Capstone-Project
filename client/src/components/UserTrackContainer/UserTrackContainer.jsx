@@ -46,7 +46,7 @@ function UserTrackContainer ({
       while (trackIdArray.length > 0) {
         const trackIdString = trackIdArray.splice(0, 100).join(',')
         const { data } = await getTracksAudioFeatures(trackIdString)
-        data.audio_features.forEach(item => {
+        const promises = data.audio_features.map(async (item) => {
           const tempTrackVector = {
             acousticness: 0,
             danceability: 0,
@@ -63,10 +63,11 @@ function UserTrackContainer ({
           if (item !== null) {
             track.createTrackObject(tempTrackVector, item)
 
-            const similarity = similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
+            const similarity = await similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
             tempTracks.push({ id: item.id, similarity, vector: tempTrackVector })
           }
         })
+        await Promise.all(promises)
       }
       /* sort tempTracks by similarity score */
       tempTracks.sort((a, b) => {
