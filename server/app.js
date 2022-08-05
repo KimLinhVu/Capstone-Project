@@ -10,6 +10,8 @@ require('dotenv').config()
 const app = express()
 
 app.use(cors())
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb' }))
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(express.urlencoded({ extended: true }))
@@ -18,12 +20,14 @@ const User = require('./models/Users')
 const spotifyRouter = require('./routes/spotify')
 const playlistRouter = require('./routes/playlist')
 const userRouter = require('./routes/users')
+const imageRouter = require('./routes/image')
 const similarity = new Similarity()
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
+app.use('/image', imageRouter)
 
 const devPassword = 'test123'
 
