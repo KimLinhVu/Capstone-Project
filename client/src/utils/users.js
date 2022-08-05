@@ -154,3 +154,11 @@ export const findFollowerFavorite = (playlist) => {
     }
   })
 }
+
+export const getFollowerFavorite = () => {
+  return axios.get('/users/get-follower-favorite', {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}

@@ -37,11 +37,11 @@ function PlaylistView ({
     /* adds selected playlist to user's profile */
     await addPlaylistToProfile(currentAddPlaylist)
     setCurrentAddPlaylist(null)
-    playlist.length <= 1 ? setSelected('No playlist available') : setSelected('Add a playlist')
 
     /* save similarity scores between all playlists in db */
     await saveSimilarityScores(currentAddPlaylist.playlistId, trackVector)
 
+    setRefresh(!refresh)
     setIsLoading(false)
   }
 
