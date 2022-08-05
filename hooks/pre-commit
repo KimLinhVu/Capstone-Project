@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Redirect output to stderr.
+exec 1>&2
+# enable user input
+exec < /dev/tty
+
+consoleRegexp='^[^-].*console.log'
+filenameRegexp='^[^-].*console.log(\|^+++'
+
+if test "$(git diff --cached | grep -c "$consoleRegexp")" != 0
+then
+  exec git diff --cached | grep -ne "$filenameRegexp" | grep -B 1 "$consoleRegexp"
+  read -rp "There are some occurrences of console.log at your modification. Are you sure want to continue? (y/n) " yn
+  if echo "$yn" | grep "^[Yy]$"
+  then
+    exit 0; #THE USER WANTS TO CONTINUE
+  else
+    exit 1; # THE USER DONT WANT TO CONTINUE SO ROLLBACK
+  fi
+fi
