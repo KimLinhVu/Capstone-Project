@@ -1,5 +1,6 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Image from 'utils/image'
 import './UserCard.css'
 
 function UserCard ({
@@ -8,12 +9,30 @@ function UserCard ({
   setPopupIsOpen,
   setUserPopupId
 }) {
+  const [profilePicture, setProfilePicture] = useState(null)
+  const image = new Image()
+  let profileImage
+
+  useEffect(() => {
+    const getProfilePicture = async () => {
+      const { data } = await image.getUserProfilePicture(userId)
+      setProfilePicture(data)
+    }
+    getProfilePicture()
+  }, [])
+
+  if (profilePicture) {
+    profileImage = <img src={profilePicture}/>
+  } else {
+    profileImage = <img src={require('img/blueflower.jpeg')}/>
+  }
+
   return (
     <div className='user-card' onClick={() => {
       setUserPopupId(userId)
       setPopupIsOpen(true)
     }}>
-      <img src={require('img/blueflower.jpeg')}/>
+      {profileImage}
       {user
         ? (
         <div className='user-info'>

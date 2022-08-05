@@ -30,10 +30,21 @@
   margin-left: 10px;
 }
 
+.profile-content .profile-content-user {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-content .user-left {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
 .profile-content .user-right {
   align-self: flex-end;
-  margin-right: 30px;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
+  min-width: 200px;
 }
 
 .profile-content .follower {
@@ -49,9 +60,16 @@
   width: 870px;
   height: 600px;
   background: white;
-  padding: 40px 40px 40px 40px;
+  padding: 40px;
   border-radius: 10px;
   z-index: 10;
+}
+
+.user-profile-card .profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-right: 20px;
 }
 
 .user-profile-card .playlists {

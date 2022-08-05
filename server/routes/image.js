@@ -32,4 +32,14 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.get('/user', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.headers['user-id']
+    const image = await Images.findOne({ userId })
+    image ? res.status(200).json(image.base64) : res.status(200).json(null)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

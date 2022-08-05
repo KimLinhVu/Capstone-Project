@@ -40,4 +40,13 @@ export default class Image {
       }
     })
   }
+
+  getUserProfilePicture = (userId) => {
+    return axios.get('/image/user', {
+      headers: {
+        'x-access-token': localStorage.getItem('token'),
+        'user-id': userId
+      }
+    })
+  }
 }
