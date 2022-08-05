@@ -1,10 +1,11 @@
 import axios from 'axios'
 
 export default class Image {
-  uploadImage = async (e) => {
+  uploadImage = async (e, refresh, setRefresh) => {
     const file = e.target.files[0]
     const base64 = await this.convertBase64(file)
     await this.addProfilePicture(base64)
+    setRefresh(!refresh)
   }
 
   convertBase64 = (file) => {

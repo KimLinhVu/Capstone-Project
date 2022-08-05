@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
-import { MdLocationOn } from 'react-icons/md'
+import { MdLocationOn, MdOutlineEdit } from 'react-icons/md'
 import { FaSpotify } from 'react-icons/fa'
 import Image from 'utils/image'
 import { IoMdSettings } from 'react-icons/io'
@@ -15,6 +15,7 @@ function ProfileCard ({
   profile
 }) {
   const [anchorEl, setAnchorEl] = useState(null)
+  const [refresh, setRefresh] = useState(false)
   const [picture, setPicture] = useState(null)
   const navigate = useNavigate()
   const image = new Image()
@@ -29,7 +30,7 @@ function ProfileCard ({
       }
     }
     getProfileImage()
-  }, [])
+  }, [refresh])
 
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -49,15 +50,18 @@ function ProfileCard ({
     <div className='profile-card'>
       {profile && (
         <>
-          {profilePicture}
-          <label className='upload-image'>
-            <input
-              id='image'
-              type="file"
-              accept="image/*"
-              onChange={e => image.uploadImage(e)}
-            />
-          </label>
+          <div className="picture">
+            {profilePicture}
+            <label className='upload-image'>
+                <MdOutlineEdit size={40} className='edit'/>
+                <input
+                  id='image'
+                  type="file"
+                  accept="image/*"
+                  onChange={e => image.uploadImage(e, refresh, setRefresh)}
+                />
+            </label>
+          </div>
           <div className="user-info">
             <div className="header">
               <h1 className='username'>{profile.username}</h1>
