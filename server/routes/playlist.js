@@ -3,7 +3,6 @@ const jwt = require('../utils/jwt')
 const router = express.Router()
 
 const Similarity = require('../utils/similarity')
-const similarity = new Similarity()
 const Playlist = require('../models/Playlists')
 const SimilarityCount = require('../models/SimilarityCount')
 const PlaylistSimilarity = require('../models/PlaylistSimilarity')
@@ -209,8 +208,8 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
       const firstPlaylistVector = trackVector
       const secondPlaylistVector = allPlaylists[i].trackVector
 
-      const cosineSimilarityScore = similarity.calculateCosineSimilarity(firstPlaylistVector, secondPlaylistVector)
-      const ownSimilarityScore = await similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
+      const cosineSimilarityScore = Similarity.calculateCosineSimilarity(firstPlaylistVector, secondPlaylistVector)
+      const ownSimilarityScore = await Similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
 
       /* if not found, save new entry in db */
       if (!found) {
@@ -236,7 +235,7 @@ router.get('/get-similarity-score', jwt.verifyJWT, async (req, res, next) => {
 
     const result = await PlaylistSimilarity.findOne({ $or: [{ firstPlaylistId, secondPlaylistId }, { firstPlaylistId: secondPlaylistId, secondPlaylistId: firstPlaylistId }] })
 
-    res.status(200).json(similarity.getSimilarityScore(similarityMethod, result))
+    res.status(200).json(Similarity.getSimilarityScore(similarityMethod, result))
   } catch (error) {
     next(error)
   }
@@ -256,8 +255,7 @@ router.get('/get-random-playlist', jwt.verifyJWT, async (req, res, next) => {
 /* updates all similarity scores between playlists in db */
 router.post('/update-similarity-scores', async (req, res, next) => {
   try {
-    const allPlaylists = await PlaylistSimilarity.find()
-    await similarity.updateSimilarityScores(allPlaylists)
+    await Similarity.updateSimilarityScores()
     res.status(200).json()
   } catch (error) {
     next(error)
