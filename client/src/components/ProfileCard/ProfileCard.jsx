@@ -53,7 +53,7 @@ function ProfileCard ({
           <div className="picture">
             {profilePicture}
             <label className='upload-image'>
-                <MdOutlineEdit size={40} className='edit'/>
+                <Tooltip title='Change profile picture'><MdOutlineEdit size={40} className='edit'/></Tooltip>
                 <input
                   id='image'
                   type="file"
