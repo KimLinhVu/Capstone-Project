@@ -15,6 +15,7 @@ function UserTrackContainer ({
   playlistId,
   vector,
   setPopupIsOpen,
+  user,
   setUserTrack,
   filterSimilarity,
   refresh
@@ -107,6 +108,7 @@ function UserTrackContainer ({
             playlistSimilarity={similarity}
             track={trackDetails[idx]}
             vector={vector}
+            user={user}
             userTrackVector={item.vector}
             setPopupIsOpen={setPopupIsOpen}
             setUserTrack={setUserTrack}

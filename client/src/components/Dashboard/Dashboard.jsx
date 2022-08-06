@@ -29,6 +29,7 @@ function Dashboard () {
   const [favoriteShow, setFavoriteShow] = useState(false)
   const [followersShow, setFollowersShow] = useState(false)
   const [followingShow, setFollowingShow] = useState(false)
+  const [recentlyAddedShow, setRecentlyAddedShow] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [userPopupId, setUserPopupId] = useState(null)
   const [disableTab, setDisableTab] = useState(true)
@@ -94,6 +95,7 @@ function Dashboard () {
     setFavoriteShow(false)
     setFollowersShow(false)
     setFollowingShow(false)
+    setRecentlyAddedShow(false)
 
     if (disableTab) {
       setPlaylistShow(true)
@@ -135,6 +137,10 @@ function Dashboard () {
                   closeAllTabs()
                   disableTab ? setFollowingShow(false) : setFollowingShow(true)
                 }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
+                <button onClick={() => {
+                  closeAllTabs()
+                  disableTab ? setRecentlyAddedShow(false) : setRecentlyAddedShow(true)
+                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Recently Added</button>
               </div>
               <hr />
             </div>
@@ -183,6 +189,9 @@ function Dashboard () {
                     setUserPopupId={setUserPopupId}
                   />
               )}
+            </div>
+            <div className={`recently-added-tab ${recentlyAddedShow ? 'show' : ''}`}>
+              <p>Place Holder</p>
             </div>
           </div>
         </>)

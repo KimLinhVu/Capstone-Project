@@ -5,6 +5,7 @@ import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 import { addSimilarityMethodCount, removeSimilarityMethodCount } from 'utils/playlist'
 import Similarity from 'utils/similarity'
 import './UserTrack.css'
+import { addTrackReceipt } from 'utils/trackReceipt'
 
 function UserTrack ({
   playlistId,
@@ -14,6 +15,7 @@ function UserTrack ({
   trackNumber,
   track,
   vector,
+  user,
   userTrackVector,
   setPopupIsOpen,
   setUserTrack
@@ -36,6 +38,9 @@ function UserTrack ({
 
     /* update track factors */
     await similar.recalculateTrackFactor(userTrackVector, vector)
+
+    /* save added track in database */
+    await addTrackReceipt(track, user.username, similarityScore)
   }
 
   const removeTrack = async () => {

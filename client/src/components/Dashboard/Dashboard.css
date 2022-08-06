@@ -22,7 +22,7 @@
   display: none;
 }
 
-.dashboard .favorites-tab, .followers-tab {
+.dashboard .favorites-tab, .followers-tab, .recently-added-tab {
   width: 100%;
   padding: 10px 10px;
   display: none;

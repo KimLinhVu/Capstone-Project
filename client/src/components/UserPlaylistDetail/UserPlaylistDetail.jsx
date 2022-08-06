@@ -141,6 +141,7 @@ function UserPlaylistDetail () {
                     tracks={userPlaylist.tracks.items}
                     addPlaylist={true}
                     playlistId={playlistId}
+                    user={user}
                     originalPlaylistId={currentPlaylistId}
                     vector={currentVector}
                     similarityMethod={similarityMethod}
