@@ -10,12 +10,11 @@ function UserCard ({
   setUserPopupId
 }) {
   const [profilePicture, setProfilePicture] = useState(null)
-  const image = new Image()
   let profileImage
 
   useEffect(() => {
     const getProfilePicture = async () => {
-      const { data } = await image.getUserProfilePicture(userId)
+      const { data } = await Image.getUserProfilePicture(userId)
       setProfilePicture(data)
     }
     getProfilePicture()
