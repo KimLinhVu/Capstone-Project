@@ -22,7 +22,6 @@ const playlistRouter = require('./routes/playlist')
 const userRouter = require('./routes/users')
 const imageRouter = require('./routes/image')
 const trackFactor = require('./routes/trackFactor')
-const similarity = new Similarity()
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/trackFactor', trackFactor)
@@ -65,7 +64,7 @@ app.post('/signup', async (req, res, next) => {
 
     /* determine similarity method based on counter in id */
     const user = new User({ username, password, location, isPrivate: privacy, showFollowing, following: [], followers: [] })
-    const similarityMethod = await similarity.getSimilarityMethod(user.id)
+    const similarityMethod = await Similarity.getSimilarityMethod(user.id)
     await user.save()
     await User.findOneAndUpdate({ username }, { similarityMethod })
 

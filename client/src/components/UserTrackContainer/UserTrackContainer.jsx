@@ -10,6 +10,7 @@ import './UserTrackContainer.css'
 
 function UserTrackContainer ({
   originalPlaylistId,
+  similarity,
   similarityMethod,
   playlistId,
   vector,
@@ -103,6 +104,7 @@ function UserTrackContainer ({
             similarityMethod={similarityMethod === 0 ? 'cosine similarity' : 'own similarity'}
             trackNumber={idx}
             playlistId={originalPlaylistId}
+            playlistSimilarity={similarity}
             track={trackDetails[idx]}
             vector={vector}
             userTrackVector={item.vector}

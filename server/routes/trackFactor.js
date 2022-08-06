@@ -13,8 +13,10 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { feature, value } = req.body
-    await TrackFactor.findOneAndUpdate({}, { [feature]: value })
+    const { trackFactor } = req.body
+    const newTrackFactor = new TrackFactor(trackFactor)
+    await TrackFactor.findOneAndDelete({})
+    await newTrackFactor.save()
     res.status(200).json()
   } catch (error) {
     next(error)

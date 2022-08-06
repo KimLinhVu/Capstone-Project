@@ -6,6 +6,47 @@ class Similarity {
     return data
   }
 
+  updateTrackFactors = (trackFactor) => {
+    return axios.post('/trackFactor', {
+      trackFactor
+    })
+  }
+
+  recalculateTrackFactor = async (userTrackVector, vector) => {
+    /* get values from vector objects */
+    const trackVector = Object.values(userTrackVector)
+    const playlistVector = Object.values(vector)
+
+    /* get current track factors */
+    const trackFactor = await this.getTrackFactors()
+    const trackFactorKeys = Object.keys(trackFactor)
+    const trackFactorValues = Object.values(trackFactor)
+
+    const newTrackFactor = Object.assign({}, trackFactor)
+
+    for (let i = 0; i < trackVector.length; i++) {
+      /* get difference in value between track and og playlist */
+      const difference = Math.abs(trackVector[i] - playlistVector[i])
+
+      /* reverse and scale difference */
+      /* bigger difference equates to decrease in factor */
+      const scale = (1 - difference) * 2
+
+      /* take midpoint between new factor and current factor */
+      const midpoint = (scale + trackFactorValues[i]) / 2
+      newTrackFactor[trackFactorKeys[i]] = midpoint.toFixed(2)
+    }
+    /* update track factor in db */
+    await this.updateTrackFactors(newTrackFactor)
+
+    /* resync all playlists with new track factors */
+    await this.updateAllSimilarityScores()
+  }
+
+  updateAllSimilarityScores = async () => {
+    return axios.post('/playlist/update-similarity-scores')
+  }
+
   getSimilarityScore = async (similarityMethod, vector, userVector) => {
     if (similarityMethod === 0) {
       return this.calculateCosineSimilarity(vector, userVector)

@@ -3,24 +3,27 @@ import { addTrackToPlaylist, removeTrackFromPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 import { addSimilarityMethodCount, removeSimilarityMethodCount } from 'utils/playlist'
+import Similarity from 'utils/similarity'
 import './UserTrack.css'
 
 function UserTrack ({
   playlistId,
+  playlistSimilarity,
   similarityScore,
   similarityMethod,
   trackNumber,
   track,
+  vector,
   userTrackVector,
   setPopupIsOpen,
   setUserTrack
 }) {
   const [add, setAdd] = useState(true)
+  const similar = new Similarity()
   let trackButton
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
-
     /* sends success or error toast */
     if (res.status === 201) {
       setAdd(false)
@@ -30,6 +33,9 @@ function UserTrack ({
     } else {
       notifyError('Error adding track')
     }
+
+    /* update track factors */
+    await similar.recalculateTrackFactor(userTrackVector, vector)
   }
 
   const removeTrack = async () => {
