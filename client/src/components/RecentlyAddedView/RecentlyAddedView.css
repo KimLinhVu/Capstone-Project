@@ -1,0 +1,47 @@
+.recently-added-view {
+  margin-bottom: 20px;
+}
+
+.recently-added-view .receipt-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.recently-added-view .receipt-search {
+  border: 1px solid var(--light-border);
+  padding: 12px;
+  border-radius: 6px;
+  width: 40%;
+  margin-bottom: 30px;
+}
+
+.recently-added-view .receipt-header {
+  display: flex;
+  flex-direction: row;
+  padding: 0 18px;
+  color: var(--txt-dark);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.receipt-header .date {
+  margin-left: 6.5%;
+}
+
+.receipt-header .playlist {
+  margin-left: 23%;
+}
+
+.receipt-header .track-info {
+  margin-left: 12%;
+}
+
+.receipt-header .similarity {
+  margin-left: 20.5%;
+}
+
+.recently-added-view hr {
+  height: 0.8px;
+  background-color: var(--txt-med);
+  border: none;
+}

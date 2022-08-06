@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addTrackToPlaylist, removeTrackFromPlaylist } from 'utils/spotify'
+import { addTrackToPlaylist, getPlaylistDetail, removeTrackFromPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 import { addSimilarityMethodCount, removeSimilarityMethodCount } from 'utils/playlist'
@@ -40,7 +40,8 @@ function UserTrack ({
     await similar.recalculateTrackFactor(userTrackVector, vector)
 
     /* save added track in database */
-    await addTrackReceipt(track, user.username, similarityScore)
+    const { data } = await getPlaylistDetail(playlistId)
+    await addTrackReceipt(track, user.username, similarityScore, data, Date.now())
   }
 
   const removeTrack = async () => {

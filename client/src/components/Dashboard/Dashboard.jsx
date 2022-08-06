@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify'
 import { notifyError } from 'utils/toast'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
+import RecentlyAddedView from 'components/RecentlyAddedView/RecentlyAddedView'
 
 export const DashboardContext = createContext()
 
@@ -191,7 +192,7 @@ function Dashboard () {
               )}
             </div>
             <div className={`recently-added-tab ${recentlyAddedShow ? 'show' : ''}`}>
-              <p>Place Holder</p>
+              <RecentlyAddedView />
             </div>
           </div>
         </>)

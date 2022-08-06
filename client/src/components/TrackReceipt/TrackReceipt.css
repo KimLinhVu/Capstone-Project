@@ -1,0 +1,49 @@
+.track-receipt {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 15px;
+  align-items: center;
+  color: var(--txt-med);
+  background: white;
+  border-bottom: .5px solid var(--light-border);
+  min-height: 80px;
+}
+
+.track-receipt .username {
+  flex: 1.5;
+}
+
+.track-receipt .song {
+  display: flex;
+  flex: 4.5;
+}
+
+.track-receipt .song img {
+  margin-right: 10px;
+  max-width: 45px;
+  max-height: 45px;
+}
+
+.track-receipt .song .song-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.track-receipt .title {
+  color: var(--txt-dark);
+}
+
+.track-receipt .artist {
+  font-size: .9em;
+}
+
+.track-receipt .similarity {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-left: 60px;
+  flex: 1.5;
+}
+
+.track-receipt .date {
+  flex: 1;
+}

@@ -45,6 +45,7 @@
 .dashboard .links {
   display: flex;
   flex-direction: row;
+  gap: 40px;
   list-style: none;
 }
 
@@ -55,7 +56,7 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 1.2rem;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   margin-top: 10px;
   margin-right: 50px;
   transition: 200ms ease-in-out;
