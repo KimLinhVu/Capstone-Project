@@ -1,12 +1,19 @@
 const express = require('express')
 const jwt = require('../utils/jwt')
+const NodeCache = require('node-cache')
 const router = express.Router()
 
 const Users = require('../models/Users')
 const Playlist = require('../models/Playlists')
+/* cache data for 5 minutes */
+const myCache = new NodeCache({ stdTTL: 60 * 5 })
 
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
+    /* check if data has already been cached */
+    if (myCache.has('allUsers')) {
+      return res.status(200).json(myCache.get('allUsers'))
+    }
     /* gets all users except self */
     const userId = req.userId
     const { followers } = req.body
@@ -26,6 +33,8 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
       }
       return true
     })
+    /* set data in cache on first call */
+    myCache.set('allUsers', filteredUsers)
     res.json(filteredUsers)
   } catch (error) {
     next(error)
