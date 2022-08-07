@@ -22,7 +22,6 @@ function UserTrack ({
   setUserTrack
 }) {
   const [disable, setDisable] = useState(false)
-  const similar = new Similarity()
   let trackButton
 
   const addTrack = async () => {
@@ -39,7 +38,7 @@ function UserTrack ({
     }
 
     /* update track factors */
-    await similar.recalculateTrackFactor(userTrackVector, vector)
+    await Similarity.recalculateTrackFactor(userTrackVector, vector)
 
     /* save added track in database */
     const { data } = await getPlaylistDetail(playlistId)

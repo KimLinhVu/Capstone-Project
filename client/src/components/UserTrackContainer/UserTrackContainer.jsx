@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Tracks from 'utils/tracks'
+import Track from 'utils/tracks'
 import UserTrack from 'components/UserTrack/UserTrack'
 import { getTracksAudioFeatures } from 'utils/spotify'
 import { ToastContainer } from 'react-toastify'
@@ -23,8 +23,6 @@ function UserTrackContainer ({
   const [tracks, setTracks] = useState(null)
   const [trackDetails, setTrackDetails] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const track = new Tracks()
-  const similar = new Similarity()
 
   /* calculate similarity score for each track and sort */
   /* implement filter by similarity score option */
@@ -33,7 +31,7 @@ function UserTrackContainer ({
       setIsLoading(true)
 
       /* get all tracks in a user's playlist */
-      const allTracks = await track.getAllPlaylistTracks(playlistId)
+      const allTracks = await Track.getAllPlaylistTracks(playlistId)
 
       /* gets track audio features for each track */
       const trackIdArray = allTracks.map(item => {
@@ -63,9 +61,9 @@ function UserTrackContainer ({
             valence: 0
           }
           if (item !== null) {
-            track.createTrackObject(tempTrackVector, item)
+            Track.createTrackObject(tempTrackVector, item)
 
-            const similarity = await similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
+            const similarity = await Similarity.getSimilarityScore(similarityMethod, vector, tempTrackVector)
             tempTracks.push({ id: item.id, similarity, vector: tempTrackVector, added: true })
           }
         })
@@ -76,7 +74,7 @@ function UserTrackContainer ({
         return b.similarity - a.similarity
       })
 
-      const trackDetailArray = await track.getAllTrackDetails(tempTracks)
+      const trackDetailArray = await Track.getAllTrackDetails(tempTracks)
       setTrackDetails(trackDetailArray)
       setTracks(tempTracks)
 

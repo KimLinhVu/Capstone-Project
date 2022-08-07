@@ -4,6 +4,8 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const jwtUtil = require('./utils/jwt')
+// eslint-disable-next-line no-unused-vars
+const schedule = require('./utils/schedule')
 const Similarity = require('./utils/similarity')
 require('dotenv').config()
 

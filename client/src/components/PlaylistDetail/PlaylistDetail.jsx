@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { getPlaylistDetail } from 'utils/spotify'
 import NavBar from 'components/NavBar/NavBar'
 import GenreContainer from 'components/GenreContainer/GenreContainer'
-import Tracks from 'utils/tracks'
+import Track from 'utils/tracks'
 import TrackContainer from 'components/TrackContainer/TrackContainer'
 import ReactLoading from 'react-loading'
 import './PlaylistDetail.css'
@@ -17,7 +17,6 @@ function PlaylistDetail () {
   const [tracks, setTracks] = useState(null)
   const [resyncIsLoading, setResyncIsLoading] = useState(false)
   const { playlistId } = useParams()
-  const track = new Tracks()
 
   useEffect(() => {
     const fetchPlaylistInformation = async () => {
@@ -26,7 +25,7 @@ function PlaylistDetail () {
       const { data } = await getPlaylistDetail(playlistId)
       setPlaylist(data)
 
-      const allTracks = await track.getAllPlaylistTracks(playlistId)
+      const allTracks = await Track.getAllPlaylistTracks(playlistId)
       setTracks(allTracks)
 
       setIsLoading(false)
@@ -38,7 +37,7 @@ function PlaylistDetail () {
     setResyncIsLoading(true)
 
     /* recalculate track vector and similarity scores */
-    const trackVector = await track.createTrackVector(playlistId, setPlaylist)
+    const trackVector = await Track.createTrackVector(playlistId, setPlaylist)
 
     /* save trackvector and recalculate similarity scores between all playlists */
     const trackRes = await addTrackVector(playlistId, trackVector)

@@ -4,7 +4,7 @@ import { getCurrentPlaylists } from 'utils/playlist'
 import PlaylistView from 'components/PlaylistView/PlaylistView'
 import FavoriteView from 'components/FavoriteView/FavoriteView'
 import ProfileCard from 'components/ProfileCard/ProfileCard'
-import Tracks from 'utils/tracks'
+import Track from 'utils/tracks'
 import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
 import { ToastContainer } from 'react-toastify'
@@ -35,8 +35,6 @@ function Dashboard () {
   const [userPopupId, setUserPopupId] = useState(null)
   const [disableTab, setDisableTab] = useState(true)
 
-  const track = new Tracks()
-
   /* get value of tokens out of the URL */
   useEffect(() => {
     const getSpotifyToken = async () => {
@@ -60,7 +58,7 @@ function Dashboard () {
       const prof = await getCurrentUserProfile()
 
       /* retrieve playlist that belongs to user and store in playlist state */
-      const result = await track.createOptions(false)
+      const result = await Track.createOptions(false)
       setPlaylist(result)
 
       /* retrieve playlists that spotify user has added to their profile */
