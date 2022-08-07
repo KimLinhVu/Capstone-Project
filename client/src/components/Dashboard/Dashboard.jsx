@@ -9,6 +9,7 @@ import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
 import { ToastContainer } from 'react-toastify'
 import { notifyError } from 'utils/toast'
+import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 
@@ -34,6 +35,7 @@ function Dashboard () {
   const [disableTab, setDisableTab] = useState(true)
 
   const track = new Tracks()
+  const navigate = useNavigate()
 
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -190,6 +192,7 @@ function Dashboard () {
             <div className="spotify">
               <div className="content">
                 <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify Account</a>
+                <button className='logout-btn' onClick={() => navigate('/login')}>Logout</button>
               </div>
             </div>
             )}
