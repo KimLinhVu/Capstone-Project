@@ -36,11 +36,11 @@
   justify-content: space-between;
 }
 
-.user-playlist .info .username {
+.user-playlist .info .playlist-title {
   font-weight: 500;
 }
 
-.user-playlist .info .playlist-title {
+.user-playlist .info .username {
   color: var(--txt-med);
   font-size: .9em;
 }

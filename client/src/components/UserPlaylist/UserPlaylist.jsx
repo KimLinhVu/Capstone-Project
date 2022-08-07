@@ -24,8 +24,8 @@ function UserPlaylist ({
       <div className="left">
         <img src={playlist.images[0].url}/>
         <div className="info">
-          <span className='username'>{user.username}</span>
           <span className="playlist-title">{playlist.name}</span>
+          <span className='username'>{user.username}</span>
         </div>
       </div>
       <div className="right">
