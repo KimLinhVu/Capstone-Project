@@ -61,3 +61,10 @@
   margin-left: 5px;
   color: var(--txt-grey);
 }
+
+.recently-added-view .expire {
+  font-size: .9rem;
+  letter-spacing: .3px;
+  color: rgb(96, 95, 95);
+  margin: 15px 3px;
+}

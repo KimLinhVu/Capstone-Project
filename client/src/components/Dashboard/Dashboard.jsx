@@ -141,7 +141,7 @@ function Dashboard () {
                 <button onClick={() => {
                   closeAllTabs()
                   disableTab ? setRecentlyAddedShow(false) : setRecentlyAddedShow(true)
-                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Added Tracks</button>
+                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Recently Added</button>
               </div>
               <hr />
             </div>

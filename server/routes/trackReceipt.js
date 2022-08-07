@@ -22,7 +22,21 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const receipts = await TrackReceipt.find({ userId })
-    receipts ? res.status(200).json(receipts) : res.status(200).json(null)
+
+    /* delete expired receipts */
+    const promises = receipts.map(async (receipt) => {
+      const receiptDate = new Date(receipt.addedAt)
+      const receiptSeconds = receiptDate.getTime() / 1000
+      const timeNow = Date.now() / 1000
+
+      /* delete if longer than 7 days */
+      if ((timeNow - receiptSeconds) > 604800) {
+        await TrackReceipt.findOneAndRemove({ _id: receipt._id })
+      }
+    })
+    await Promise.all(promises)
+    const newReceipts = await TrackReceipt.find({ userId })
+    newReceipts ? res.status(200).json(newReceipts) : res.status(200).json(null)
   } catch (error) {
     next(error)
   }

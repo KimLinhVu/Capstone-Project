@@ -84,6 +84,7 @@ function RecentlyAddedView ({
       <div className="receipt-container">
         {receiptCards}
       </div>
+      <p className='expire'>Records will expire after 7 days</p>
     </div>
   )
 }
