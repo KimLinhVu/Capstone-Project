@@ -199,6 +199,7 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
     const { playlistId, trackVector } = req.body
 
     const allPlaylists = await Playlist.find({ _id: { $ne: userId }, added: true })
+    const trackFactors = await Similarity.getTrackFactors()
 
     for (let i = 0; i < allPlaylists.length; i++) {
       /* see if entry already exists in db */
@@ -209,7 +210,7 @@ router.post('/save-similarity-score', jwt.verifyJWT, async (req, res, next) => {
       const secondPlaylistVector = allPlaylists[i].trackVector
 
       const cosineSimilarityScore = Similarity.calculateCosineSimilarity(firstPlaylistVector, secondPlaylistVector)
-      const ownSimilarityScore = await Similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
+      const ownSimilarityScore = await Similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector, trackFactors)
 
       /* if not found, save new entry in db */
       if (!found) {
