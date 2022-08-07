@@ -24,24 +24,40 @@
   margin-bottom: 10px;
 }
 
+.receipt-header .similarity-container {
+  display: flex;
+  flex-direction: row;
+  margin-left: 19.5%;
+}
+
+.receipt-header .filter {
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 2px;
+  color: var(--elements-pink);
+}
+
 .receipt-header .date {
-  margin-left: 6.5%;
+  margin-left: 4.5%;
 }
 
 .receipt-header .playlist {
-  margin-left: 23%;
+  margin-left: 25%;
 }
 
 .receipt-header .track-info {
   margin-left: 12%;
 }
 
-.receipt-header .similarity {
-  margin-left: 20.5%;
-}
-
 .recently-added-view hr {
   height: 0.8px;
   background-color: var(--txt-med);
   border: none;
+}
+
+.recently-added-view .no-tracks {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  margin-left: 5px;
+  color: var(--txt-grey);
 }

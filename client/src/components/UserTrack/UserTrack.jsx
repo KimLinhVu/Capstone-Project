@@ -14,24 +14,26 @@ function UserTrack ({
   similarityMethod,
   trackNumber,
   track,
+  item,
   vector,
   user,
   userTrackVector,
   setPopupIsOpen,
   setUserTrack
 }) {
-  const [add, setAdd] = useState(true)
+  const [disable, setDisable] = useState(false)
   const similar = new Similarity()
   let trackButton
 
   const addTrack = async () => {
+    setDisable(true)
     const res = await addTrackToPlaylist(playlistId, track.uri)
     /* sends success or error toast */
     if (res.status === 201) {
-      setAdd(false)
       /* add to similarity method counter */
       await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
+      item.added = false
     } else {
       notifyError('Error adding track')
     }
@@ -41,32 +43,37 @@ function UserTrack ({
 
     /* save added track in database */
     const { data } = await getPlaylistDetail(playlistId)
-    await addTrackReceipt(track, user.username, similarityScore, data, Date.now())
+    await addTrackReceipt(track, user._id, user.username, similarityScore, data, Date.now())
+
+    setDisable(false)
   }
 
   const removeTrack = async () => {
+    setDisable(true)
     const res = await removeTrackFromPlaylist(playlistId, track.uri)
     /* sends success or error toast */
     if (res.status === 200) {
-      setAdd(true)
       /* remove from similarity method counter */
       await removeSimilarityMethodCount(similarityMethod)
       notifySuccess('Track removed successfully')
+      item.added = true
     } else {
       notifyError('Error removing track')
     }
+
+    setDisable(false)
   }
 
-  if (add) {
+  if (item.added) {
     trackButton = <AiFillPlusCircle onClick={(e) => {
       addTrack()
       e.stopPropagation()
-    }} className='icon' size={30}/>
+    }} className={disable ? 'track-disable' : 'icon'} size={30} disable={disable}/>
   } else {
     trackButton = <AiFillMinusCircle onClick={(e) => {
       removeTrack()
       e.stopPropagation()
-    }} className='icon' size={30}/>
+    }} className={disable ? 'track-disable' : 'icon'} size={30} disable={disable}/>
   }
 
   return (

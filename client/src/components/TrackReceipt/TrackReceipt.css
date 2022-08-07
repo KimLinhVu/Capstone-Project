@@ -7,6 +7,11 @@
   background: white;
   border-bottom: .5px solid var(--light-border);
   min-height: 80px;
+  cursor: pointer;
+}
+
+.track-receipt:hover {
+  filter: brightness(.9);
 }
 
 .track-receipt .username {

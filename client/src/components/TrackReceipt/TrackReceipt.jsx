@@ -5,12 +5,18 @@ function TrackReceipt ({
   track,
   playlist,
   similarityScore,
+  userId,
   username,
-  addedAt
+  addedAt,
+  setPopupIsOpen,
+  setUserPopupId
 }) {
   const date = new Date(addedAt).toLocaleDateString()
   return (
-    <div className="track-receipt">
+    <div className="track-receipt" onClick={() => {
+      setUserPopupId(userId)
+      setPopupIsOpen(true)
+    }}>
       <div className="username">
         <p>{username}</p>
       </div>

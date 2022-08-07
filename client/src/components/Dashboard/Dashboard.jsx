@@ -141,7 +141,7 @@ function Dashboard () {
                 <button onClick={() => {
                   closeAllTabs()
                   disableTab ? setRecentlyAddedShow(false) : setRecentlyAddedShow(true)
-                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Recently Added</button>
+                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Added Tracks</button>
               </div>
               <hr />
             </div>
@@ -192,7 +192,10 @@ function Dashboard () {
               )}
             </div>
             <div className={`recently-added-tab ${recentlyAddedShow ? 'show' : ''}`}>
-              <RecentlyAddedView />
+              <RecentlyAddedView
+                setPopupIsOpen={setPopupIsOpen}
+                setUserPopupId={setUserPopupId}
+              />
             </div>
           </div>
         </>)

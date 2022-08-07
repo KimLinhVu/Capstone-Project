@@ -66,7 +66,7 @@ function UserTrackContainer ({
             track.createTrackObject(tempTrackVector, item)
 
             const similarity = await similar.getSimilarityScore(similarityMethod, vector, tempTrackVector)
-            tempTracks.push({ id: item.id, similarity, vector: tempTrackVector })
+            tempTracks.push({ id: item.id, similarity, vector: tempTrackVector, added: true })
           }
         })
         await Promise.all(promises)
@@ -104,6 +104,7 @@ function UserTrackContainer ({
             similarityScore={item.similarity}
             similarityMethod={similarityMethod === 0 ? 'cosine similarity' : 'own similarity'}
             trackNumber={idx}
+            item={item}
             playlistId={originalPlaylistId}
             playlistSimilarity={similarity}
             track={trackDetails[idx]}

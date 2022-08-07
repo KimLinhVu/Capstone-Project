@@ -1,8 +1,9 @@
 import axios from 'axios'
 
-export const addTrackReceipt = (track, username, similarityScore, playlist, addedAt) => {
+export const addTrackReceipt = (track, otherUserId, username, similarityScore, playlist, addedAt) => {
   return axios.post('/trackReceipt', {
     track,
+    otherUserId,
     username,
     similarityScore,
     playlist,

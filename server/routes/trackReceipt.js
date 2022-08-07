@@ -7,9 +7,9 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
   /* adds track receipt to db */
   try {
     const userId = req.userId
-    const { track, username, similarityScore, playlist, addedAt } = req.body
+    const { otherUserId, track, username, similarityScore, playlist, addedAt } = req.body
 
-    const receipt = new TrackReceipt({ userId, track, username, similarityScore, playlist, addedAt })
+    const receipt = new TrackReceipt({ userId, otherUserId, track, username, similarityScore, playlist, addedAt })
     await receipt.save()
     res.status(200).json()
   } catch (error) {

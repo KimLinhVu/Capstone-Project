@@ -58,6 +58,12 @@
   flex: .2;
 }
 
+.user-track .track-disable {
+  cursor: pointer;
+  flex: .2;
+  color: rgba(84, 121, 141, 0.513);
+}
+
 /* text styling */
 .preview .no-preview {
   font-size: 1rem;

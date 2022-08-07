@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const trackReceiptSchema = new mongoose.Schema({
   userId: String,
+  otherUserId: String,
   username: String,
   similarityScore: Number,
   track: Object,
