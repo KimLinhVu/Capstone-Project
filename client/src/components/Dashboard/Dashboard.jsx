@@ -146,23 +146,24 @@ function Dashboard () {
               <hr />
             </div>
             <div className={`playlist-tab ${playlistShow ? 'show' : ''}`}>
-              <PlaylistView
-                playlist={playlist}
-                selected={selected}
-                setSelected={setSelected}
-                setCurrentAddPlaylist={setCurrentAddPlaylist}
-                currentAddPlaylist={currentAddPlaylist}
-                playlistSearch={playlistSearch}
-                setPlaylistSearch={setPlaylistSearch}
-                displayPlaylist={displayPlaylist}
-                setPlaylist={setPlaylist}
-                spotifyName={spotifyProfile?.display_name}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
+              {playlistShow &&
+                <PlaylistView
+                  playlist={playlist}
+                  selected={selected}
+                  setSelected={setSelected}
+                  setCurrentAddPlaylist={setCurrentAddPlaylist}
+                  currentAddPlaylist={currentAddPlaylist}
+                  playlistSearch={playlistSearch}
+                  setPlaylistSearch={setPlaylistSearch}
+                  displayPlaylist={displayPlaylist}
+                  setPlaylist={setPlaylist}
+                  spotifyName={spotifyProfile?.display_name}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />}
             </div>
             <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
-              {spotifyProfile && profile && (
+              {spotifyProfile && profile && favoriteShow && (
                 <FavoriteView
                   refresh={refresh}
                   setRefresh={setRefresh}
@@ -172,7 +173,7 @@ function Dashboard () {
               )}
             </div>
             <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
-              {profile && (
+              {profile && followersShow && (
                 <FollowersView
                   profile={profile}
                   followers={true}
@@ -182,7 +183,7 @@ function Dashboard () {
               )}
             </div>
             <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
-              {profile && (
+              {profile && followingShow && (
                   <FollowersView
                     profile={profile}
                     followers={false}
@@ -192,10 +193,12 @@ function Dashboard () {
               )}
             </div>
             <div className={`recently-added-tab ${recentlyAddedShow ? 'show' : ''}`}>
-              <RecentlyAddedView
-                setPopupIsOpen={setPopupIsOpen}
-                setUserPopupId={setUserPopupId}
-              />
+              {recentlyAddedShow &&
+                <RecentlyAddedView
+                  setPopupIsOpen={setPopupIsOpen}
+                  setUserPopupId={setUserPopupId}
+                />
+              }
             </div>
           </div>
         </>)
