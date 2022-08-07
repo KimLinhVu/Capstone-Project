@@ -62,6 +62,7 @@
   cursor: pointer;
   position: absolute;
   margin-left: 45%;
+  margin-top: 6px;
 }
 
 .user-profile-card .playlist-close-btn:hover {
