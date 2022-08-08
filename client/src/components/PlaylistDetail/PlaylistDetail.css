@@ -79,8 +79,17 @@
   margin-top: 220px;
   background: white;
   display: flex;
+  flex-direction: column;
   border-radius: 10px;
-  height: 100vh;
+}
+
+.playlist-detail .playlist-detail-content .upper {
+  display: flex;
+  flex-direction: row;
+}
+
+.playlist-detail .playlist-detail-content .comments {
+  margin: 50px 0px;
 }
 
 .playlist-detail .left .details {

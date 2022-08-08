@@ -1,10 +1,11 @@
 import Comment from 'components/Comment/Comment'
 import React, { useEffect, useRef, useState } from 'react'
-import { getComments, postComment } from 'utils/comment'
+import { getComments, postComment, removeComment } from 'utils/comment'
 import ReactLoading from 'react-loading'
 import './CommentContainer.css'
 
 function CommentContainer ({
+  userId,
   otherUserId,
   playlistId
 }) {
@@ -44,6 +45,11 @@ function CommentContainer ({
     setRefresh(!refresh)
   }
 
+  const handleRemoveComment = async (commentId) => {
+    await removeComment(commentId)
+    setRefresh(!refresh)
+  }
+
   const handleOnScroll = () => {
     if (containerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = containerRef.current
@@ -67,7 +73,12 @@ function CommentContainer ({
       <div className="user-comments">
         {!isLoading
           ? displayComments?.map((item, idx) => (
-          <Comment key={idx} comment={item}/>
+          <Comment
+            key={idx}
+            comment={item}
+            userId={userId}
+            removeComment={handleRemoveComment}
+          />
           ))
           : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>

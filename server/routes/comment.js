@@ -28,4 +28,14 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
+router.post('/remove', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const { commentId } = req.body
+    await Comment.findOneAndDelete({ _id: commentId })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

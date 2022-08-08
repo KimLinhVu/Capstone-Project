@@ -41,11 +41,13 @@ function UserPlaylistDetail () {
   useEffect(() => {
     /* get current user profile and spotifyProfile */
     const getProfiles = async () => {
+      setIsLoading(true)
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
 
       const res = await getUserProfile()
       setProfile(res)
+      setIsLoading(false)
     }
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
@@ -172,6 +174,7 @@ function UserPlaylistDetail () {
                 </div>
                 <div className="comments">
                   <CommentContainer
+                    userId={profile.data._id}
                     otherUserId={user._id}
                     playlistId={playlistId}
                   />

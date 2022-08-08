@@ -10,9 +10,12 @@ import './PlaylistDetail.css'
 import { addTrackVector, saveSimilarityScores } from 'utils/playlist'
 import { ToastContainer } from 'react-toastify'
 import { notifyError, notifySuccess } from 'utils/toast'
+import CommentContainer from 'components/CommentContainer/CommentContainer'
+import { getUserProfile } from 'utils/users'
 
 function PlaylistDetail () {
   const [playlist, setPlaylist] = useState(null)
+  const [userId, setUserId] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [tracks, setTracks] = useState(null)
   const [resyncIsLoading, setResyncIsLoading] = useState(false)
@@ -28,6 +31,9 @@ function PlaylistDetail () {
 
       const allTracks = await track.getAllPlaylistTracks(playlistId)
       setTracks(allTracks)
+
+      const user = await getUserProfile()
+      setUserId(user.data._id)
 
       setIsLoading(false)
     }
@@ -70,20 +76,31 @@ function PlaylistDetail () {
             </div>
           </div>
           <div className='playlist-detail-content'>
-            <div className="left">
-              <div className="details">
-                <p><span>Owner</span> {playlist.owner.display_name}</p>
-                <p><span>Followers</span> {playlist.followers.total}</p>
-                <p><span>Privacy</span> {playlist.public ? 'public' : 'private'}</p>
-                <p><span>Songs</span> {playlist.tracks.total}</p>
+            <div className='upper'>
+              <div className="left">
+                <div className="details">
+                  <p><span>Owner</span> {playlist.owner.display_name}</p>
+                  <p><span>Followers</span> {playlist.followers.total}</p>
+                  <p><span>Privacy</span> {playlist.public ? 'public' : 'private'}</p>
+                  <p><span>Songs</span> {playlist.tracks.total}</p>
+                </div>
+              </div>
+              <div className="right">
+                <GenreContainer tracks={playlist.tracks.items}/>
+                <TrackContainer
+                  tracks={tracks}
+                  isLoading={isLoading}
+                />
               </div>
             </div>
-            <div className="right">
-              <GenreContainer tracks={playlist.tracks.items}/>
-              <TrackContainer
-                tracks={tracks}
-                isLoading={isLoading}
-              />
+            <div className="comments">
+              {userId && (
+                <CommentContainer
+                  userId={userId}
+                  otherUserId={userId}
+                  playlistId={playlistId}
+                />
+              )}
             </div>
           </div>
       </div>

@@ -22,3 +22,13 @@ export const getComments = (userId, playlistId) => {
     }
   })
 }
+
+export const removeComment = (commentId) => {
+  return axios.post('/comment/remove', {
+    commentId
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
