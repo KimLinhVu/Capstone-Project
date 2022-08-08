@@ -21,6 +21,7 @@ function UserTrack ({
   const [add, setAdd] = useState(true)
   const similar = new Similarity()
   let trackButton
+  let similarityClassName
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
@@ -63,6 +64,16 @@ function UserTrack ({
     }} className='icon' size={30}/>
   }
 
+  if (similarityScore >= 80) {
+    similarityClassName = 'green'
+  } else if (similarityScore >= 70) {
+    similarityClassName = 'yellow'
+  } else if (similarityScore >= 50) {
+    similarityClassName = 'orange'
+  } else {
+    similarityClassName = 'red'
+  }
+
   return (
     <div className="user-track" onClick={() => {
       setPopupIsOpen(true)
@@ -77,7 +88,7 @@ function UserTrack ({
         </div>
       </div>
       <div className="similarity">
-        <span>{similarityScore.toFixed(2)}</span>
+        <span className={similarityClassName}>{similarityScore.toFixed(2)}</span>
       </div>
       <div className="preview">
         {track.preview_url !== null
