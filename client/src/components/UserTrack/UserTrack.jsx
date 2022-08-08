@@ -43,7 +43,17 @@ function UserTrack ({
 
     /* save added track in database */
     const { data } = await getPlaylistDetail(playlistId)
-    await addTrackReceipt(track, user._id, user.username, similarityScore, data, Date.now())
+    const playlistObject = {
+      image: data.images[0].url,
+      name: data.name,
+      ownerName: data.owner.display_name
+    }
+    const trackObject = {
+      image: track.album.images[0].url,
+      name: track.name,
+      artist: track.artists[0].name
+    }
+    await addTrackReceipt(trackObject, user._id, user.username, similarityScore, playlistObject, Date.now())
 
     setDisable(false)
   }

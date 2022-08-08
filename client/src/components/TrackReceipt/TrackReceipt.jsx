@@ -21,17 +21,17 @@ function TrackReceipt ({
         <p>{username}</p>
       </div>
       <div className="song">
-        <img src={track.album.images[0].url} alt="Track Image"/>
+        <img src={track.image} alt="Track Image"/>
         <div className="song-info">
           <span className='title'>{track.name}</span>
-          <span className='artist'>{track.artists[0].name}</span>
+          <span className='artist'>{track.artist}</span>
         </div>
       </div>
       <div className="song">
-        <img src={playlist.images[0].url} alt="Track Image"/>
+        <img src={playlist.image} alt="Track Image"/>
         <div className="song-info">
           <span className='title'>{playlist.name}</span>
-          <span className='artist'>{playlist.owner.display_name}</span>
+          <span className='artist'>{playlist.ownerName}</span>
         </div>
       </div>
       <div className="similarity">
