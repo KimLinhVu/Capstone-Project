@@ -12,6 +12,7 @@ import Tracks from 'utils/tracks'
 import './UserPlaylistDetail.css'
 import { getUserProfile } from 'utils/users'
 import { getSimilarityScore } from 'utils/playlist'
+import CommentContainer from 'components/CommentContainer/CommentContainer'
 
 function UserPlaylistDetail () {
   const [userPlaylist, setUserPlaylist] = useState(null)
@@ -142,6 +143,12 @@ function UserPlaylistDetail () {
                     setSelected={setSelected}
                     setCurrentAddPlaylist={setCurrentAddPlaylist}
                     isLoading={isLoading}
+                  />
+                </div>
+                <div className="comments">
+                  <CommentContainer
+                    otherUserId={user._id}
+                    playlistId={playlistId}
                   />
                 </div>
                 <div className="track-header">

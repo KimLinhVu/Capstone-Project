@@ -1,0 +1,31 @@
+const express = require('express')
+const jwt = require('../utils/jwt')
+const router = express.Router()
+
+const Comment = require('../models/Comments')
+
+router.post('/', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const userId = req.userId
+    const { comment, createdAt, otherUserId, playlistId } = req.body
+    const newComment = new Comment({ userId, otherUserId, playlistId, comment, createdAt, likes: 0 })
+    await newComment.save()
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    /* returns all comments on a users' playlist */
+    const userId = req.headers['user-id']
+    const playlistId = req.headers['playlist-id']
+    const comments = await Comment.find({ otherUserId: userId, playlistId })
+    res.status(200).json(comments)
+  } catch (error) {
+    next(error)
+  }
+})
+
+module.exports = router
