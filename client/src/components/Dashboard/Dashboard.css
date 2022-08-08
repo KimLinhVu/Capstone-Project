@@ -45,22 +45,27 @@
 .dashboard .links {
   display: flex;
   flex-direction: row;
-  gap: 40px;
+  gap: 30px;
   list-style: none;
 }
 
 .dashboard .links button {
   border: none;
-  background: transparent;
+  background: var(--background-color);
   color: var(--txt-grey);
   cursor: pointer;
   font-weight: 600;
   font-size: 1.2rem;
-  padding-bottom: 15px;
+  padding: 12px 13px;
   margin-top: 10px;
   margin-right: 50px;
   transition: 200ms ease-in-out;
   border-bottom: 3px solid transparent;
+  border-radius: 6px;
+}
+
+.dashboard .links button:hover {
+  filter: brightness(.9);
 }
 
 .dashboard .Dropdown-control, .Dropdown-menu {
@@ -72,7 +77,15 @@
 }
 
 .dashboard .links .tab-show {
+  border-radius: 0px;
   border-bottom: 3px solid var(--elements-pink);
+  color: var(--elements-pink);
+}
+
+.dashboard .links .tab-show:hover {
+  border-bottom: 3px solid var(--elements-pink);
+  color: var(--elements-pink);
+  filter: brightness(1);
 }
 
 .dashboard .nav hr {
