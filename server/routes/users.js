@@ -1,12 +1,11 @@
 const express = require('express')
 const jwt = require('../utils/jwt')
-const NodeCache = require('node-cache')
 const router = express.Router()
 
 const Users = require('../models/Users')
 const Playlist = require('../models/Playlists')
-/* cache data for 5 minutes */
-const myCache = new NodeCache({ stdTTL: 60 * 5 })
+const cache = require('../utils/cache')
+const myCache = cache.myCache
 
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
