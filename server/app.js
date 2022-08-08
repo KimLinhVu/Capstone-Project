@@ -10,6 +10,8 @@ require('dotenv').config()
 const app = express()
 
 app.use(cors())
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb' }))
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(express.urlencoded({ extended: true }))
@@ -18,12 +20,15 @@ const User = require('./models/Users')
 const spotifyRouter = require('./routes/spotify')
 const playlistRouter = require('./routes/playlist')
 const userRouter = require('./routes/users')
-const similarity = new Similarity()
+const imageRouter = require('./routes/image')
+const trackFactor = require('./routes/trackFactor')
 const { BadRequestError } = require('./utils/errors')
 
+app.use('/trackFactor', trackFactor)
 app.use('/spotify', spotifyRouter)
 app.use('/playlist', playlistRouter)
 app.use('/users', userRouter)
+app.use('/image', imageRouter)
 
 const devPassword = 'test123'
 
@@ -59,7 +64,7 @@ app.post('/signup', async (req, res, next) => {
 
     /* determine similarity method based on counter in id */
     const user = new User({ username, password, location, isPrivate: privacy, showFollowing, following: [], followers: [] })
-    const similarityMethod = await similarity.getSimilarityMethod(user.id)
+    const similarityMethod = await Similarity.getSimilarityMethod(user.id)
     await user.save()
     await User.findOneAndUpdate({ username }, { similarityMethod })
 

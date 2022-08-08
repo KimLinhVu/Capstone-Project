@@ -1,19 +1,14 @@
+const axios = require('axios')
+const PlaylistSimilarity = require('../models/PlaylistSimilarity')
+
 class Similarity {
-  scaleValueObject = {
-    acousticness: 1.5,
-    danceability: 1.8,
-    energy: 2,
-    instrumentalness: 1.5,
-    key: 0.5,
-    liveness: 0.3,
-    loudness: 0.5,
-    mode: 0.5,
-    speechiness: 1.5,
-    time_signature: 0.5,
-    valence: 2
+  static getTrackFactors = async () => {
+    const { data } = await axios.get(`${process.env.SERVER_BASE_URL}/trackFactor`)
+    delete data._id
+    return data
   }
 
-  getSimilarityMethod = async (newUserId) => {
+  static getSimilarityMethod = async (newUserId) => {
     const id = await newUserId.toString()
     const val = parseInt(id.slice(18, 25), 16)
     const littleEndian = ((val & 0xFF) << 8) |
@@ -22,23 +17,37 @@ class Similarity {
     return similarityMethod
   }
 
-  getSimilarityScore = (similarityMethod, playlistObject) => {
+  static getSimilarityScore = (similarityMethod, playlistObject) => {
     return similarityMethod === 0 ? playlistObject.cosineSimilarityScore : playlistObject.ownSimilarityScore
   }
 
-  normalizeData = (x, min, max, scale) => {
+  static updateSimilarityScores = async () => {
+    const allPlaylists = await PlaylistSimilarity.find()
+    const promises = allPlaylists.map(async (item) => {
+      const { firstPlaylistId, firstPlaylistVector, secondPlaylistId, secondPlaylistVector } = item
+
+      /* recalculate similarity score */
+      const ownSimilarityScore = await Similarity.calculateOwnSimilarity(firstPlaylistVector, secondPlaylistVector)
+
+      /* update entry with new similarity score */
+      await PlaylistSimilarity.findOneAndUpdate({ firstPlaylistId, secondPlaylistId }, { ownSimilarityScore })
+    })
+    await Promise.all(promises)
+  }
+
+  static normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
     return result
   }
 
-  convertObjectToVector = (trackObject) => {
+  static convertObjectToVector = (trackObject) => {
     return Object.values(trackObject)
   }
 
-  calculateCosineSimilarity = (a, b) => {
-    a = this.convertObjectToVector(a)
-    b = this.convertObjectToVector(b)
+  static calculateCosineSimilarity = (a, b) => {
+    a = Similarity.convertObjectToVector(a)
+    b = Similarity.convertObjectToVector(b)
     if (JSON.stringify(a) === JSON.stringify(b)) {
       return 0
     }
@@ -53,19 +62,20 @@ class Similarity {
     mA = Math.sqrt(mA)
     mB = Math.sqrt(mB)
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
-    const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
+    const normalized = Similarity.normalizeData(similarity, 0, Math.acos(0), 100)
     return 100 - normalized
   }
 
-  calculateOwnSimilarity = (a, b) => {
+  static calculateOwnSimilarity = async (a, b) => {
     /* calculates similarity based on difference between values
     in same position
     range from 0 - 100; closer to 0 means more similar */
-    a = this.convertObjectToVector(a)
-    b = this.convertObjectToVector(b)
+    a = Similarity.convertObjectToVector(a)
+    b = Similarity.convertObjectToVector(b)
     let differenceSum = 0
     let maxValue = 0
-    const scaleValueArray = this.convertObjectToVector(this.scaleValueObject)
+    const trackFactors = await Similarity.getTrackFactors()
+    const scaleValueArray = Similarity.convertObjectToVector(trackFactors)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
       a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i]
@@ -75,7 +85,7 @@ class Similarity {
       differenceSum += difference
     }
     /* scale differenceSum to between 0-100 */
-    return 100 - this.normalizeData(differenceSum, 0, maxValue, 100)
+    return 100 - Similarity.normalizeData(differenceSum, 0, maxValue, 100)
   }
 }
 

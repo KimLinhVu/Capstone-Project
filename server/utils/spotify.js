@@ -1,10 +1,12 @@
 const axios = require('axios')
-/* axios global request headers */
-axios.defaults.baseURL = 'https://api.spotify.com/v1'
-axios.defaults.headers['Content-Type'] = 'application/json'
+
+const instance = axios.create({
+  baseURL: 'https://api.spotify.com/v1'
+})
+instance.defaults.headers['Content-Type'] = 'application/json'
 
 const getCurrentUserProfile = async (accessToken) => {
-  return axios.get('/me', {
+  return instance.get('/me', {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
@@ -12,7 +14,7 @@ const getCurrentUserProfile = async (accessToken) => {
 }
 
 const getCurrentUserPlaylist = (accessToken) => {
-  return axios.get('/me/playlists?limit=50', {
+  return instance.get('/me/playlists?limit=50', {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

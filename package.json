@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/KimLinhVu/Capstone-Project#readme",
   "dependencies": {
+    "react-file-base64": "^1.0.3",
     "react-icons": "^4.4.0",
     "react-toastify": "^9.0.5"
   }
