@@ -11,7 +11,6 @@ function NavBar () {
   const [profile, setProfile] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [avatar, setAvatar] = useState(null)
-  const image = new Image()
   const navigate = useNavigate()
   
   let profilePicture
@@ -22,7 +21,7 @@ function NavBar () {
       setProfile(res.data)
     }
     const getProfileImage = async () => {
-      const { data } = await image.getProfilePicture()
+      const { data } = await Image.getProfilePicture()
       if (data !== null) {
         setAvatar(data)
       }

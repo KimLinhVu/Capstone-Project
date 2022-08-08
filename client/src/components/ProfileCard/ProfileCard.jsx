@@ -18,13 +18,12 @@ function ProfileCard ({
   const [refresh, setRefresh] = useState(false)
   const [picture, setPicture] = useState(null)
   const navigate = useNavigate()
-  const image = new Image()
 
   let profilePicture
 
   useEffect(() => {
     const getProfileImage = async () => {
-      const { data } = await image.getProfilePicture()
+      const { data } = await Image.getProfilePicture()
       if (data !== null) {
         setPicture(data)
       }
@@ -58,7 +57,7 @@ function ProfileCard ({
                   id='image'
                   type="file"
                   accept="image/*"
-                  onChange={e => image.uploadImage(e, refresh, setRefresh)}
+                  onChange={e => Image.uploadProfileImage(e, refresh, setRefresh)}
                 />
             </label>
           </div>

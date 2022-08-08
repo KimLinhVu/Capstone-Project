@@ -10,6 +10,9 @@ import FollowersView from 'components/FollowersView/FollowersView'
 import { ToastContainer } from 'react-toastify'
 import { notifyError } from 'utils/toast'
 import { useNavigate } from 'react-router-dom'
+import { Tooltip } from '@mui/material'
+import Image from 'utils/image'
+import { MdOutlineEdit } from 'react-icons/md'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 
@@ -33,6 +36,8 @@ function Dashboard () {
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [userPopupId, setUserPopupId] = useState(null)
   const [disableTab, setDisableTab] = useState(true)
+  const [showEdit, setShowEdit] = useState(false)
+  const [backgroundPicture, setBackgroundPicture] = useState(null)
 
   const track = new Tracks()
   const navigate = useNavigate()
@@ -44,7 +49,6 @@ function Dashboard () {
       setSpotifyToken(token)
       fetchUserProfiles()
     }
-    getSpotifyToken()
     const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
@@ -52,6 +56,14 @@ function Dashboard () {
       const res = await getUserProfile()
       setProfile(res.data)
     }
+    const getBackground = async () => {
+      const { data } = await Image.getBackgroundPicture()
+      if (data !== null) {
+        setBackgroundPicture(data)
+      }
+    }
+    getSpotifyToken()
+    getBackground()
   }, [refresh])
 
   useEffect(() => {
@@ -109,8 +121,19 @@ function Dashboard () {
         {spotifyToken
           ? (
         <>
-          <div className="carousel">
-            {/* Background Image */}
+          <div className="background-header" onMouseEnter={() => setShowEdit(true)} onMouseLeave={() => setShowEdit(false)}>
+            <div className="edit-background">
+              <label className={showEdit ? 'upload-image' : 'upload-image disable'}>
+                <Tooltip title='Change background image'><MdOutlineEdit size={40} className='edit'/></Tooltip>
+                <input
+                  id='image'
+                  type="file"
+                  accept="image/*"
+                  onChange={e => Image.uploadBackgroundImage(e, refresh, setRefresh)}
+                />
+              </label>
+            </div>
+            {backgroundPicture ? <img src={backgroundPicture}/> : <img src={require('img/lily.jpeg')} />}
           </div>
           {spotifyProfile &&
             <ProfileCard
