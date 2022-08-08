@@ -145,12 +145,6 @@ function UserPlaylistDetail () {
                     isLoading={isLoading}
                   />
                 </div>
-                <div className="comments">
-                  <CommentContainer
-                    otherUserId={user._id}
-                    playlistId={playlistId}
-                  />
-                </div>
                 <div className="track-header">
                   <span className="num">#</span>
                   <span className="title">Title</span>
@@ -174,6 +168,12 @@ function UserPlaylistDetail () {
                     setUserTrack={setUserTrack}
                     filterSimilarity={filterSimilarity}
                     refresh={refresh}
+                  />
+                </div>
+                <div className="comments">
+                  <CommentContainer
+                    otherUserId={user._id}
+                    playlistId={playlistId}
                   />
                 </div>
               </div>

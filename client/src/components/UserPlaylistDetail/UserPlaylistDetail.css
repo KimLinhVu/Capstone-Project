@@ -184,6 +184,10 @@
   margin-right: auto;
 }
 
+.user-playlist-detail .comments {
+  margin-top: 70px;
+}
+
 /* text styling */
 .user-playlist-detail .left .details p {
   display: flex;

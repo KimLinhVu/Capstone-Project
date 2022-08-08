@@ -21,13 +21,15 @@ function Comment ({
   }, [])
   return (
     <div className="comment">
-      <img src={profilePicture} alt="User pfp"/>
-      <div className="comment-header">
-        <p className="username">{username}</p>
-        <p className="date">{comment.createdAt}</p>
+      <img className='comment-pfp' src={profilePicture} alt="User pfp"/>
+      <div className="comment-content">
+        <div className="comment-header">
+          <p className="username">{username}</p>
+          <p className="date">{comment.createdAt}</p>
+        </div>
+        <p className='comment'>{comment.comment}</p>
+        <p className="likes">Likes: {comment.likes}</p>
       </div>
-      <p className='comment'>{comment.comment}</p>
-      <p className="likes">Likes: {comment.likes}</p>
     </div>
   )
 }
