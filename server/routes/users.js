@@ -10,14 +10,19 @@ const myCache = new NodeCache({ stdTTL: 60 * 5 })
 
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
-    /* check if data has already been cached */
-    if (myCache.has('allUsers')) {
-      return res.status(200).json(myCache.get('allUsers'))
-    }
     /* gets all users except self */
     const userId = req.userId
     const { followers } = req.body
-    const allUsers = await Users.find({ _id: { $ne: userId } })
+    let allUsers
+
+    /* check if data has already been cached */
+    if (myCache.has('allUsers')) {
+      allUsers = myCache.get('allUsers')
+    } else {
+      allUsers = await Users.find({ _id: { $ne: userId } })
+      /* set data in cache on first call */
+      myCache.set('allUsers', allUsers)
+    }
 
     /* filters out users who are private and are not following current user */
     const filteredUsers = allUsers.filter(user => {
@@ -33,9 +38,7 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
       }
       return true
     })
-    /* set data in cache on first call */
-    myCache.set('allUsers', filteredUsers)
-    res.json(filteredUsers)
+    res.status(200).json(filteredUsers)
   } catch (error) {
     next(error)
   }
