@@ -214,7 +214,8 @@ function Dashboard () {
           : (
             <div className="spotify">
               <div className="content">
-                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify Account</a>
+                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Link Spotify Account</a>
+                <p className='required'>*must link Spotify account to use app</p>
                 <button className='logout-btn' onClick={() => navigate('/login')}>Logout</button>
               </div>
             </div>

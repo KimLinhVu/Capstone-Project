@@ -5,7 +5,6 @@ import { notifyError } from 'utils/toast'
 import 'react-toastify/dist/ReactToastify.css'
 import './Login.css'
 import { login } from 'utils/users'
-import { logoutSpotify } from 'utils/spotify'
 
 function Login ({
   setToken,
@@ -17,7 +16,6 @@ function Login ({
   const navigate = useNavigate()
 
   useEffect(() => {
-    logoutSpotify()
     clearToken()
   }, [])
 

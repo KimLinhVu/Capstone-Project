@@ -127,6 +127,13 @@
 .spotify .logout-btn:hover {
   background-color: rgb(193, 53, 53);
   transform: translateY(-3px);
+}
+
+.spotify .required {
+  color: rgba(255, 255, 255, 0.716);
+  margin-top: 5px;
+  font-size: 1rem;
+}
 
 .dashboard .dashboard-background {
   width: 100%;

@@ -12,7 +12,7 @@ function NavBar () {
   const [anchorEl, setAnchorEl] = useState(null)
   const [avatar, setAvatar] = useState(null)
   const navigate = useNavigate()
-  
+
   let profilePicture
 
   useEffect(() => {
@@ -59,9 +59,8 @@ function NavBar () {
       >
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
         {profile && <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>}
-        <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
+        <MenuItem onClick={logoutSpotify}>Unlink Spotify</MenuItem>
         <MenuItem onClick={() => {
-          logoutSpotify()
           navigate('/login')
         }}>Logout</MenuItem>
       </Menu>
