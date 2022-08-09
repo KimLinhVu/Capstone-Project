@@ -27,7 +27,7 @@
 .added-track-header .similarity-container {
   display: flex;
   flex-direction: row;
-  margin-left: 19.5%;
+  margin-left: 19%;
 }
 
 .added-track-header .filter {
@@ -67,4 +67,9 @@
   letter-spacing: .3px;
   color: rgb(96, 95, 95);
   margin: 15px 3px;
+}
+
+.recently-added-view .loading {
+  margin-top: 5%;
+  margin-left: 45%;
 }

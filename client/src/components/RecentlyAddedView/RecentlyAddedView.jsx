@@ -2,6 +2,7 @@ import AddedTrack from 'components/AddedTrack/AddedTrack'
 import React, { useEffect, useState } from 'react'
 import { getAddedTrackRecords } from 'utils/addedTrack'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import ReactLoading from 'react-loading'
 import './RecentlyAddedView.css'
 
 function RecentlyAddedView ({
@@ -12,6 +13,7 @@ function RecentlyAddedView ({
   const [filterSimilarity, setFilterSimilarity] = useState(false)
   const [displayAddedTracks, setDisplayAddedTracks] = useState(null)
   const [userSearch, setUserSearch] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   let addedTrackCards
   let filterSimilarityButton
@@ -25,6 +27,8 @@ function RecentlyAddedView ({
 
       setAddedTracks(sorted)
       setDisplayAddedTracks(sorted)
+
+      setIsLoading(false)
     }
     getAddedTracks()
   }, [])
