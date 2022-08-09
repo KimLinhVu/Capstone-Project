@@ -1,0 +1,54 @@
+.added-track {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 15px;
+  align-items: center;
+  color: var(--txt-med);
+  background: white;
+  border-bottom: .5px solid var(--light-border);
+  min-height: 80px;
+  cursor: pointer;
+}
+
+.added-track:hover {
+  filter: brightness(.9);
+}
+
+.added-track .username {
+  flex: 1.5;
+}
+
+.added-track .song {
+  display: flex;
+  flex: 4.5;
+}
+
+.added-track .song img {
+  margin-right: 10px;
+  max-width: 45px;
+  max-height: 45px;
+}
+
+.added-track .song .song-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.added-track .title {
+  color: var(--txt-dark);
+}
+
+.added-track .artist {
+  font-size: .9em;
+}
+
+.added-track .similarity {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-left: 60px;
+  flex: 1.5;
+}
+
+.added-track .date {
+  flex: 1;
+}

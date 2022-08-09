@@ -15,6 +15,7 @@ import Image from 'utils/image'
 import { MdOutlineEdit } from 'react-icons/md'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
+import RecentlyAddedView from 'components/RecentlyAddedView/RecentlyAddedView'
 
 export const DashboardContext = createContext()
 
@@ -33,6 +34,7 @@ function Dashboard () {
   const [favoriteShow, setFavoriteShow] = useState(false)
   const [followersShow, setFollowersShow] = useState(false)
   const [followingShow, setFollowingShow] = useState(false)
+  const [recentlyAddedShow, setRecentlyAddedShow] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [userPopupId, setUserPopupId] = useState(null)
   const [disableTab, setDisableTab] = useState(true)
@@ -108,6 +110,7 @@ function Dashboard () {
     setFavoriteShow(false)
     setFollowersShow(false)
     setFollowingShow(false)
+    setRecentlyAddedShow(false)
 
     if (disableTab) {
       setPlaylistShow(true)
@@ -160,27 +163,32 @@ function Dashboard () {
                   closeAllTabs()
                   disableTab ? setFollowingShow(false) : setFollowingShow(true)
                 }} className={`${followingShow ? 'tab-show' : ''}`}>Following</button>
+                <button onClick={() => {
+                  closeAllTabs()
+                  disableTab ? setRecentlyAddedShow(false) : setRecentlyAddedShow(true)
+                }} className={`${recentlyAddedShow ? 'tab-show' : ''}`}>Recently Added</button>
               </div>
               <hr />
             </div>
             <div className={`playlist-tab ${playlistShow ? 'show' : ''}`}>
-              <PlaylistView
-                playlist={playlist}
-                selected={selected}
-                setSelected={setSelected}
-                setCurrentAddPlaylist={setCurrentAddPlaylist}
-                currentAddPlaylist={currentAddPlaylist}
-                playlistSearch={playlistSearch}
-                setPlaylistSearch={setPlaylistSearch}
-                displayPlaylist={displayPlaylist}
-                setPlaylist={setPlaylist}
-                spotifyName={spotifyProfile?.display_name}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
+              {playlistShow &&
+                <PlaylistView
+                  playlist={playlist}
+                  selected={selected}
+                  setSelected={setSelected}
+                  setCurrentAddPlaylist={setCurrentAddPlaylist}
+                  currentAddPlaylist={currentAddPlaylist}
+                  playlistSearch={playlistSearch}
+                  setPlaylistSearch={setPlaylistSearch}
+                  displayPlaylist={displayPlaylist}
+                  setPlaylist={setPlaylist}
+                  spotifyName={spotifyProfile?.display_name}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />}
             </div>
             <div className={`favorites-tab ${favoriteShow ? 'show' : ''}`}>
-              {spotifyProfile && profile && (
+              {spotifyProfile && profile && favoriteShow && (
                 <FavoriteView
                   refresh={refresh}
                   setRefresh={setRefresh}
@@ -190,7 +198,7 @@ function Dashboard () {
               )}
             </div>
             <div className={`followers-tab ${followersShow ? 'show' : ''}`}>
-              {profile && (
+              {profile && followersShow && (
                 <FollowersView
                   profile={profile}
                   followers={true}
@@ -200,7 +208,7 @@ function Dashboard () {
               )}
             </div>
             <div className={`followers-tab ${followingShow ? 'show' : ''}`}>
-              {profile && (
+              {profile && followingShow && (
                   <FollowersView
                     profile={profile}
                     followers={false}
@@ -208,6 +216,14 @@ function Dashboard () {
                     setUserPopupId={setUserPopupId}
                   />
               )}
+            </div>
+            <div className={`recently-added-tab ${recentlyAddedShow ? 'show' : ''}`}>
+              {recentlyAddedShow &&
+                <RecentlyAddedView
+                  setPopupIsOpen={setPopupIsOpen}
+                  setUserPopupId={setUserPopupId}
+                />
+              }
             </div>
           </div>
         </>)

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { addTrackToPlaylist, removeTrackFromPlaylist } from 'utils/spotify'
+import { addTrackToPlaylist, getPlaylistDetail, removeTrackFromPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 import { addSimilarityMethodCount, removeSimilarityMethodCount } from 'utils/playlist'
 import Similarity from 'utils/similarity'
 import './UserTrack.css'
+import { addTrackRecord } from 'utils/addedTrack'
 
 function UserTrack ({
   playlistId,
@@ -13,55 +14,77 @@ function UserTrack ({
   similarityMethod,
   trackNumber,
   track,
+  item,
   vector,
+  user,
   userTrackVector,
   setPopupIsOpen,
   setUserTrack
 }) {
-  const [add, setAdd] = useState(true)
+  const [disable, setDisable] = useState(false)
   const similar = new Similarity()
   let trackButton
   const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
 
   const addTrack = async () => {
+    setDisable(true)
     const res = await addTrackToPlaylist(playlistId, track.uri)
     /* sends success or error toast */
     if (res.status === 201) {
-      setAdd(false)
       /* add to similarity method counter */
       await addSimilarityMethodCount(similarityMethod)
       notifySuccess('Track added successfully')
+      item.added = false
     } else {
       notifyError('Error adding track')
     }
 
     /* update track factors */
     await similar.recalculateTrackFactor(userTrackVector, vector)
+
+    /* save added track in database */
+    const { data } = await getPlaylistDetail(playlistId)
+    const playlistObject = {
+      image: data.images[0].url,
+      name: data.name,
+      ownerName: data.owner.display_name
+    }
+    const trackObject = {
+      image: track.album.images[0].url,
+      name: track.name,
+      artist: track.artists[0].name
+    }
+    await addTrackRecord(trackObject, user._id, user.username, similarityScore, playlistObject, Date.now())
+
+    setDisable(false)
   }
 
   const removeTrack = async () => {
+    setDisable(true)
     const res = await removeTrackFromPlaylist(playlistId, track.uri)
     /* sends success or error toast */
     if (res.status === 200) {
-      setAdd(true)
       /* remove from similarity method counter */
       await removeSimilarityMethodCount(similarityMethod)
       notifySuccess('Track removed successfully')
+      item.added = true
     } else {
       notifyError('Error removing track')
     }
+
+    setDisable(false)
   }
 
-  if (add) {
+  if (item.added) {
     trackButton = <AiFillPlusCircle onClick={(e) => {
       addTrack()
       e.stopPropagation()
-    }} className='icon' size={30}/>
+    }} className={disable ? 'track-disable' : 'icon'} size={30} disable={disable}/>
   } else {
     trackButton = <AiFillMinusCircle onClick={(e) => {
       removeTrack()
       e.stopPropagation()
-    }} className='icon' size={30}/>
+    }} className={disable ? 'track-disable' : 'icon'} size={30} disable={disable}/>
   }
 
   return (

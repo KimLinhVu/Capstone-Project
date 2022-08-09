@@ -1,0 +1,75 @@
+.recently-added-view {
+  margin-bottom: 20px;
+}
+
+.recently-added-view .added-track-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.recently-added-view .added-track-search {
+  border: 1px solid var(--light-border);
+  padding: 12px;
+  border-radius: 6px;
+  width: 40%;
+  margin-bottom: 30px;
+}
+
+.recently-added-view .added-track-header {
+  display: flex;
+  flex-direction: row;
+  padding: 0 18px;
+  color: var(--txt-dark);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.added-track-header .similarity-container {
+  display: flex;
+  flex-direction: row;
+  margin-left: 19%;
+}
+
+.added-track-header .filter {
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 2px;
+  color: var(--elements-pink);
+}
+
+.added-track-header .date {
+  margin-left: 4.5%;
+}
+
+.added-track-header .playlist {
+  margin-left: 25%;
+}
+
+.added-track-header .track-info {
+  margin-left: 12%;
+}
+
+.recently-added-view hr {
+  height: 0.8px;
+  background-color: var(--txt-med);
+  border: none;
+}
+
+.recently-added-view .no-tracks {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  margin-left: 5px;
+  color: var(--txt-grey);
+}
+
+.recently-added-view .expire {
+  font-size: .9rem;
+  letter-spacing: .3px;
+  color: rgb(96, 95, 95);
+  margin: 15px 3px;
+}
+
+.recently-added-view .loading {
+  margin-top: 5%;
+  margin-left: 45%;
+}

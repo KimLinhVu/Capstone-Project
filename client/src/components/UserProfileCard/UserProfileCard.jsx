@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getUserProfileById } from 'utils/users'
 import { MdLocationOn } from 'react-icons/md'
+import { AiFillCloseCircle } from 'react-icons/ai'
 import Follower from 'utils/follower'
 import ReactLoading from 'react-loading'
 import './UserProfileCard.css'
@@ -73,6 +74,7 @@ function UserProfileCard ({
         {profile && !isLoading
           ? (
           <div>
+            <AiFillCloseCircle size={35} className='playlist-close-btn' onClick={() => setPopupIsOpen(false)}/>
             <div className="profile-content">
               <div className="profile-content-user">
                 <div className="profile-picture">

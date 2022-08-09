@@ -33,6 +33,7 @@
 .profile-content .profile-content-user {
   display: flex;
   flex-direction: row;
+  margin: 15px 0px;
 }
 
 .profile-content .user-left {
@@ -56,11 +57,24 @@
   flex-direction: row;
 }
 
+.user-profile-card .playlist-close-btn {
+  color: var(--light-border);
+  cursor: pointer;
+  position: absolute;
+  margin-left: 45%;
+  margin-top: 6px;
+}
+
+.user-profile-card .playlist-close-btn:hover {
+  filter: brightness(.8);
+}
+
+
 .user-profile-card .profile-popup {
   width: 870px;
-  height: 600px;
+  height: 620px;
   background: white;
-  padding: 40px;
+  padding: 15px 40px;
   border-radius: 10px;
   z-index: 10;
 }

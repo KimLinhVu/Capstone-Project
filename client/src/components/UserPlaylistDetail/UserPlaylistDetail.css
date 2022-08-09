@@ -22,7 +22,7 @@
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 600px;
 }
 
 .user-playlist-detail .playlist-detail-content {
@@ -61,6 +61,7 @@
   margin-top: 10%;
   margin-left: 20%;
   width: 300px;
+
   align-items: center;
 }
 
