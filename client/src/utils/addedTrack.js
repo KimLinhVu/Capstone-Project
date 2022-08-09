@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-export const addTrackReceipt = (track, otherUserId, username, similarityScore, playlist, addedAt) => {
-  return axios.post('/trackReceipt', {
+export const addTrackRecord = (track, otherUserId, username, similarityScore, playlist, addedAt) => {
+  return axios.post('/addedTrack', {
     track,
     otherUserId,
     username,
@@ -15,8 +15,8 @@ export const addTrackReceipt = (track, otherUserId, username, similarityScore, p
   })
 }
 
-export const getTrackReceipts = () => {
-  return axios.get('/trackReceipt', {
+export const getAddedTrackRecords = () => {
+  return axios.get('/addedTrack', {
     headers: {
       'x-access-token': localStorage.getItem('token')
     }

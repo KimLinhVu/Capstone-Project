@@ -1,4 +1,4 @@
-.track-receipt {
+.added-track {
   display: flex;
   flex-direction: row;
   padding: 5px 15px;
@@ -10,45 +10,45 @@
   cursor: pointer;
 }
 
-.track-receipt:hover {
+.added-track:hover {
   filter: brightness(.9);
 }
 
-.track-receipt .username {
+.added-track .username {
   flex: 1.5;
 }
 
-.track-receipt .song {
+.added-track .song {
   display: flex;
   flex: 4.5;
 }
 
-.track-receipt .song img {
+.added-track .song img {
   margin-right: 10px;
   max-width: 45px;
   max-height: 45px;
 }
 
-.track-receipt .song .song-info {
+.added-track .song .song-info {
   display: flex;
   flex-direction: column;
 }
 
-.track-receipt .title {
+.added-track .title {
   color: var(--txt-dark);
 }
 
-.track-receipt .artist {
+.added-track .artist {
   font-size: .9em;
 }
 
-.track-receipt .similarity {
+.added-track .similarity {
   font-size: 1.1rem;
   font-weight: 600;
   margin-left: 60px;
   flex: 1.5;
 }
 
-.track-receipt .date {
+.added-track .date {
   flex: 1;
 }

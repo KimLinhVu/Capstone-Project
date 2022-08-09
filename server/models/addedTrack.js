@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const trackReceiptSchema = new mongoose.Schema({
+const addedTrackSchema = new mongoose.Schema({
   userId: String,
   otherUserId: String,
   username: String,
@@ -10,4 +10,4 @@ const trackReceiptSchema = new mongoose.Schema({
   addedAt: Date
 })
 
-module.exports = mongoose.model('track receipts', trackReceiptSchema)
+module.exports = mongoose.model('added tracks', addedTrackSchema)

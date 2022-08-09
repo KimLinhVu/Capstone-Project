@@ -2,12 +2,12 @@
   margin-bottom: 20px;
 }
 
-.recently-added-view .receipt-container {
+.recently-added-view .added-track-container {
   max-height: 500px;
   overflow-y: auto;
 }
 
-.recently-added-view .receipt-search {
+.recently-added-view .added-track-search {
   border: 1px solid var(--light-border);
   padding: 12px;
   border-radius: 6px;
@@ -15,7 +15,7 @@
   margin-bottom: 30px;
 }
 
-.recently-added-view .receipt-header {
+.recently-added-view .added-track-header {
   display: flex;
   flex-direction: row;
   padding: 0 18px;
@@ -24,28 +24,28 @@
   margin-bottom: 10px;
 }
 
-.receipt-header .similarity-container {
+.added-track-header .similarity-container {
   display: flex;
   flex-direction: row;
   margin-left: 19.5%;
 }
 
-.receipt-header .filter {
+.added-track-header .filter {
   font-size: 20px;
   cursor: pointer;
   margin-top: 2px;
   color: var(--elements-pink);
 }
 
-.receipt-header .date {
+.added-track-header .date {
   margin-left: 4.5%;
 }
 
-.receipt-header .playlist {
+.added-track-header .playlist {
   margin-left: 25%;
 }
 
-.receipt-header .track-info {
+.added-track-header .track-info {
   margin-left: 12%;
 }
 

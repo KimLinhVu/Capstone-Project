@@ -1,6 +1,6 @@
-import TrackReceipt from 'components/TrackReceipt/TrackReceipt'
+import AddedTrack from 'components/AddedTrack/AddedTrack'
 import React, { useEffect, useState } from 'react'
-import { getTrackReceipts } from 'utils/trackReceipt'
+import { getAddedTrackRecords } from 'utils/addedTrack'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import './RecentlyAddedView.css'
 
@@ -13,12 +13,12 @@ function RecentlyAddedView ({
   const [displayAddedTracks, setDisplayAddedTracks] = useState(null)
   const [userSearch, setUserSearch] = useState('')
 
-  let receiptCards
+  let addedTrackCards
   let filterSimilarityButton
 
   useEffect(() => {
     const getAddedTracks = async () => {
-      const { data } = await getTrackReceipts()
+      const { data } = await getAddedTrackRecords()
 
       /* sort tracks by similarityScore */
       const sorted = data.sort((a, b) => b.similarityScore - a.similarityScore)
@@ -42,8 +42,8 @@ function RecentlyAddedView ({
   }, [filterSimilarity])
 
   if (displayAddedTracks?.length !== 0 && displayAddedTracks) {
-    receiptCards = displayAddedTracks?.map((item, idx) => (
-      <TrackReceipt
+    addedTrackCards = displayAddedTracks?.map((item, idx) => (
+      <AddedTrack
         key={idx}
         track={item.track}
         playlist={item.playlist}
@@ -56,7 +56,7 @@ function RecentlyAddedView ({
       />
     ))
   } else {
-    receiptCards = <p className='no-tracks'>No tracks found</p>
+    addedTrackCards = <p className='no-tracks'>No tracks found</p>
   }
 
   if (filterSimilarity) {
@@ -68,9 +68,9 @@ function RecentlyAddedView ({
   return (
     <div className="recently-added-view">
       <div className="search">
-        <input className='receipt-search 'type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+        <input className='added-track-search 'type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
       </div>
-      <div className="receipt-header">
+      <div className="added-track-header">
         <span className="user">User</span>
         <span className="track-info">Track</span>
         <span className='playlist'>Playlist Added To</span>
@@ -81,8 +81,8 @@ function RecentlyAddedView ({
         <span className="date">Date</span>
       </div>
       <hr></hr>
-      <div className="receipt-container">
-        {receiptCards}
+      <div className="added-track-container">
+        {addedTrackCards}
       </div>
       <p className='expire'>Records will expire after 7 days</p>
     </div>

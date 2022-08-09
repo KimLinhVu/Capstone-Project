@@ -1,7 +1,7 @@
 import React from 'react'
-import './TrackReceipt.css'
+import './AddedTrack.css'
 
-function TrackReceipt ({
+function AddedTrack ({
   track,
   playlist,
   similarityScore,
@@ -13,7 +13,7 @@ function TrackReceipt ({
 }) {
   const date = new Date(addedAt).toLocaleDateString()
   return (
-    <div className="track-receipt" onClick={() => {
+    <div className="added-track" onClick={() => {
       setUserPopupId(userId)
       setPopupIsOpen(true)
     }}>
@@ -44,4 +44,4 @@ function TrackReceipt ({
   )
 }
 
-export default TrackReceipt
+export default AddedTrack
