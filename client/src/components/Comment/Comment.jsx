@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { getUserProfileById } from 'utils/users'
+import { MdOutlineFavoriteBorder, MdOutlineFavorite } from 'react-icons/md'
 import Image from 'utils/image'
 import './Comment.css'
+import { addLike, removeLike } from 'utils/comment'
 
 function Comment ({
   userId,
@@ -9,8 +11,12 @@ function Comment ({
   removeComment
 }) {
   const [profilePicture, setProfilePicture] = useState(null)
+  const [likedComment, setLikedComment] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
+  const [likes, setLikes] = useState(comment.likes)
   const [username, setUsername] = useState(null)
+
+  let likedIcon
 
   useEffect(() => {
     const getUserInformation = async () => {
@@ -23,9 +29,34 @@ function Comment ({
       if (data._id === userId) {
         setShowDelete(true)
       }
+
+      /* find if user already liked the comment */
+      comment.usersLiked.forEach(user => {
+        if (user.userId === userId) {
+          setLikedComment(true)
+        }
+      })
     }
     getUserInformation()
   }, [])
+
+  const handleAddLike = async () => {
+    await addLike(comment._id)
+    setLikes(likes + 1)
+    setLikedComment(true)
+  }
+
+  const handleRemoveLike = async () => {
+    await removeLike(comment._id)
+    setLikes(likes - 1)
+    setLikedComment(false)
+  }
+
+  if (likedComment) {
+    likedIcon = <MdOutlineFavorite size={20} className={'favorite-icon active'} onClick={handleRemoveLike}/>
+  } else {
+    likedIcon = <MdOutlineFavoriteBorder size={20} className={'favorite-icon active'} onClick={handleAddLike}/>
+  }
 
   return (
     <div className="comment">
@@ -37,7 +68,7 @@ function Comment ({
           {showDelete && <button onClick={() => removeComment(comment._id)}>Delete</button>}
         </div>
         <p className='comment'>{comment.comment}</p>
-        <p className="likes">Likes: {comment.likes}</p>
+        <p className="likes">{likedIcon}{likes}</p>
       </div>
     </div>
   )

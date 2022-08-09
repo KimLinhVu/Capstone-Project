@@ -6,7 +6,8 @@ const commentSchema = new mongoose.Schema({
   playlistId: String,
   comment: String,
   createdAt: Date,
-  likes: Number
+  likes: Number,
+  usersLiked: Array
 })
 
 module.exports = mongoose.model('comments', commentSchema)

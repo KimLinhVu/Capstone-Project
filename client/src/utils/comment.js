@@ -32,3 +32,23 @@ export const removeComment = (commentId) => {
     }
   })
 }
+
+export const addLike = (commentId) => {
+  return axios.post('/comment/add-like', {
+    commentId
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const removeLike = (commentId) => {
+  return axios.post('/comment/remove-like', {
+    commentId
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
