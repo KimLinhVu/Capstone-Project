@@ -21,6 +21,7 @@ function UserTrack ({
   const [add, setAdd] = useState(true)
   const similar = new Similarity()
   let trackButton
+  const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
@@ -77,7 +78,7 @@ function UserTrack ({
         </div>
       </div>
       <div className="similarity">
-        <span>{similarityScore.toFixed(2)}</span>
+        <span className={similarityClassName}>{similarityScore.toFixed(2)}</span>
       </div>
       <div className="preview">
         {track.preview_url !== null
