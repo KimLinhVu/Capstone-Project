@@ -28,14 +28,6 @@
   display: none;
 }
 
-.dashboard .carousel {
-  width: 100%;
-  background: url('img/lily.jpeg');
-  background-size: cover;
-  background-position: 5rem;
-  height: 35vh;
-}
-
 /* navlinks section */
 .dashboard .nav {
   margin: 10px 0px;
@@ -105,6 +97,13 @@
   justify-content: center;
 }
 
+.spotify .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .spotify .spotify-link {
   display: flex;
   justify-content: center;
@@ -123,4 +122,69 @@
 .spotify .spotify-link:hover {
   background-color: rgb(49, 92, 49);
   transform: translateY(-3px);
+}
+
+.spotify .logout-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  background-color: rgb(223, 86, 86);
+  box-shadow: 0px 0px 13px 0px rgba(1, 1, 14, 0.239);
+  transition: 200ms ease-in-out;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.spotify .logout-btn:hover {
+  background-color: rgb(193, 53, 53);
+  transform: translateY(-3px);
+}
+
+.spotify .required {
+  color: rgba(255, 255, 255, 0.716);
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.dashboard .dashboard-background {
+  width: 100%;
+}
+
+.dashboard .background-header {
+  width: 100%;
+}
+
+.dashboard .background-header img{
+  width: 100%;
+  object-fit: cover;
+  height: 35vh;
+}
+
+.dashboard .edit-background .upload-image {
+  border: 1px solid white;
+  background: var(--elements-pink);
+  cursor: pointer;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: 27vh;
+  margin-left: 85%;
+  position: absolute;
+}
+
+.dashboard .edit-background .upload-image input{
+  visibility: hidden;
+}
+
+.dashboard .edit-background .edit {
+  color: white;
+  margin-top: 7.5px;
+  margin-left: 9.5px;
+}
+
+.dashboard .edit-background .disable {
+  visibility: hidden;
 }

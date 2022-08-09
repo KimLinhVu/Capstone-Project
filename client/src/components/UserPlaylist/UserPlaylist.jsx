@@ -12,6 +12,7 @@ function UserPlaylist ({
   userVector
 }) {
   const data = {
+    similarity,
     similarityMethod,
     originalPlaylistId: playlistId,
     user,

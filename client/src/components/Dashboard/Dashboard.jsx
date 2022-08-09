@@ -9,6 +9,10 @@ import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
 import { ToastContainer } from 'react-toastify'
 import { notifyError } from 'utils/toast'
+import { useNavigate } from 'react-router-dom'
+import { Tooltip } from '@mui/material'
+import Image from 'utils/image'
+import { MdOutlineEdit } from 'react-icons/md'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 import RecentlyAddedView from 'components/RecentlyAddedView/RecentlyAddedView'
@@ -34,8 +38,11 @@ function Dashboard () {
   const [popupIsOpen, setPopupIsOpen] = useState(false)
   const [userPopupId, setUserPopupId] = useState(null)
   const [disableTab, setDisableTab] = useState(true)
+  const [showEdit, setShowEdit] = useState(false)
+  const [backgroundPicture, setBackgroundPicture] = useState(null)
 
   const track = new Tracks()
+  const navigate = useNavigate()
 
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -44,7 +51,6 @@ function Dashboard () {
       setSpotifyToken(token)
       fetchUserProfiles()
     }
-    getSpotifyToken()
     const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
@@ -52,6 +58,14 @@ function Dashboard () {
       const res = await getUserProfile()
       setProfile(res.data)
     }
+    const getBackground = async () => {
+      const { data } = await Image.getBackgroundPicture()
+      if (data !== null) {
+        setBackgroundPicture(data)
+      }
+    }
+    getSpotifyToken()
+    getBackground()
   }, [refresh])
 
   useEffect(() => {
@@ -110,8 +124,19 @@ function Dashboard () {
         {spotifyToken
           ? (
         <>
-          <div className="carousel">
-            {/* Background Image */}
+          <div className="background-header" onMouseEnter={() => setShowEdit(true)} onMouseLeave={() => setShowEdit(false)}>
+            <div className="edit-background">
+              <label className={showEdit ? 'upload-image' : 'upload-image disable'}>
+                <Tooltip title='Change background image'><MdOutlineEdit size={40} className='edit'/></Tooltip>
+                <input
+                  id='image'
+                  type="file"
+                  accept="image/*"
+                  onChange={e => Image.uploadBackgroundImage(e, refresh, setRefresh)}
+                />
+              </label>
+            </div>
+            {backgroundPicture ? <img src={backgroundPicture}/> : <img src={require('img/lily.jpeg')} />}
           </div>
           {spotifyProfile &&
             <ProfileCard
@@ -205,7 +230,9 @@ function Dashboard () {
           : (
             <div className="spotify">
               <div className="content">
-                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify Account</a>
+                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Link Spotify Account</a>
+                <p className='required'>*must link Spotify account to use app</p>
+                <button className='logout-btn' onClick={() => navigate('/login')}>Logout</button>
               </div>
             </div>
             )}

@@ -24,7 +24,6 @@ function UserProfileCard ({
   const [isFollowing, setIsFollowing] = useState(null)
   const [refresh, setRefresh] = useState(false)
   const follower = new Follower()
-  const image = new Image()
 
   let followButton
   let profileImage
@@ -49,7 +48,7 @@ function UserProfileCard ({
       setIsLoading(false)
     }
     const getProfilePicture = async () => {
-      const { data } = await image.getUserProfilePicture(userId)
+      const { data } = await Image.getUserProfilePicture(userId)
       setProfilePicture(data)
     }
     getProfilePicture()
