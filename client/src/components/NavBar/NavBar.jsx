@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { logoutSpotify } from 'utils/spotify'
 import { Link, useNavigate } from 'react-router-dom'
+import { getUserProfile } from 'utils/users'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Image from 'utils/image'
 import './NavBar.css'
 
 function NavBar () {
+  const [profile, setProfile] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [avatar, setAvatar] = useState(null)
   const navigate = useNavigate()
@@ -14,6 +16,10 @@ function NavBar () {
   let profilePicture
 
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      const res = await getUserProfile()
+      setProfile(res.data)
+    }
     const getProfileImage = async () => {
       const { data } = await Image.getProfilePicture()
       if (data !== null) {
@@ -21,6 +27,7 @@ function NavBar () {
       }
     }
     getProfileImage()
+    fetchUserProfile()
   }, [])
 
   const open = Boolean(anchorEl)
@@ -51,8 +58,11 @@ function NavBar () {
         }}
       >
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
-        <MenuItem onClick={() => navigate('/login')}>Logout</MenuItem>
-        <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
+        {profile && <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>}
+        <MenuItem onClick={logoutSpotify}>Unlink Spotify</MenuItem>
+        <MenuItem onClick={() => {
+          navigate('/login')
+        }}>Logout</MenuItem>
       </Menu>
     </div>
   )

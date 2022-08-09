@@ -9,6 +9,7 @@ import { getUserProfile } from 'utils/users'
 import FollowersView from 'components/FollowersView/FollowersView'
 import { ToastContainer } from 'react-toastify'
 import { notifyError } from 'utils/toast'
+import { useNavigate } from 'react-router-dom'
 import { Tooltip } from '@mui/material'
 import Image from 'utils/image'
 import { MdOutlineEdit } from 'react-icons/md'
@@ -39,6 +40,7 @@ function Dashboard () {
   const [backgroundPicture, setBackgroundPicture] = useState(null)
 
   const track = new Tracks()
+  const navigate = useNavigate()
 
   /* get value of tokens out of the URL */
   useEffect(() => {
@@ -212,7 +214,9 @@ function Dashboard () {
           : (
             <div className="spotify">
               <div className="content">
-                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Log Into Spotify Account</a>
+                <a className="spotify-link" href={`${process.env.REACT_APP_BASE_URL}/spotify/login/`}>Link Spotify Account</a>
+                <p className='required'>*must link Spotify account to use app</p>
+                <button className='logout-btn' onClick={() => navigate('/login')}>Logout</button>
               </div>
             </div>
             )}

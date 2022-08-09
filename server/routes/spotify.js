@@ -160,8 +160,7 @@ router.get('/refresh_token', (req, res) => {
 router.get('/tokens', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const spotifyId = Spotify.locals.spotifyId
-    const tokens = await SpotifyToken.findOne({ userId, spotifyId })
+    const tokens = await SpotifyToken.findOne({ userId })
     res.status(200).json(tokens)
   } catch (error) {
     next(error)
@@ -183,8 +182,7 @@ router.post('/tokens', jwt.verifyJWT, async (req, res, next) => {
 router.delete('/delete-tokens', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const spotifyId = Spotify.locals.spotifyId
-    await SpotifyToken.findOneAndDelete({ userId, spotifyId })
+    await SpotifyToken.findOneAndDelete({ userId })
     res.status(200).json()
   } catch (error) {
     next(error)
