@@ -21,7 +21,7 @@ function UserTrack ({
   const [add, setAdd] = useState(true)
   const similar = new Similarity()
   let trackButton
-  let similarityClassName
+  const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
 
   const addTrack = async () => {
     const res = await addTrackToPlaylist(playlistId, track.uri)
@@ -62,16 +62,6 @@ function UserTrack ({
       removeTrack()
       e.stopPropagation()
     }} className='icon' size={30}/>
-  }
-
-  if (similarityScore >= 80) {
-    similarityClassName = 'green'
-  } else if (similarityScore >= 70) {
-    similarityClassName = 'yellow'
-  } else if (similarityScore >= 50) {
-    similarityClassName = 'orange'
-  } else {
-    similarityClassName = 'red'
   }
 
   return (
