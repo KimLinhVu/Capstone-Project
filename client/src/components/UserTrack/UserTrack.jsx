@@ -22,6 +22,7 @@ function UserTrack ({
   setUserTrack
 }) {
   const [disable, setDisable] = useState(false)
+  const similar = new Similarity()
   let trackButton
   const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
 
@@ -39,7 +40,7 @@ function UserTrack ({
     }
 
     /* update track factors */
-    await Similarity.recalculateTrackFactor(userTrackVector, vector)
+    await similar.recalculateTrackFactor(userTrackVector, vector)
 
     /* save added track in database */
     const { data } = await getPlaylistDetail(playlistId)

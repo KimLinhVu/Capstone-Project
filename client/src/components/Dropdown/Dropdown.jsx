@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
-import Track from 'utils/tracks'
+import Tracks from 'utils/tracks'
 import './Dropdown.css'
 
 function Dropdown ({
@@ -12,13 +12,14 @@ function Dropdown ({
   isLoading
 }) {
   const [isActive, setIsActive] = useState(false)
+  const track = new Tracks()
 
   useEffect(() => {
     if (options.length !== 0) {
       /* sort options array alphabetically */
       setSelected('Add a playlist')
       if (options.length > 1) {
-        Track.sortOptionsTracks(options)
+        track.sortOptionsTracks(options)
       }
     }
   }, [refresh])

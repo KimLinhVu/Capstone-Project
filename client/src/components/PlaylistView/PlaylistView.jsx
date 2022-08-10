@@ -5,7 +5,7 @@ import { addTrackVector, addPlaylistToProfile, saveSimilarityScores } from 'util
 import { AiFillPlusCircle } from 'react-icons/ai'
 import { Tooltip } from '@mui/material'
 import ReactLoading from 'react-loading'
-import Track from 'utils/tracks'
+import Tracks from 'utils/tracks'
 import './PlaylistView.css'
 
 function PlaylistView ({
@@ -23,12 +23,13 @@ function PlaylistView ({
   setRefresh
 }) {
   const [isLoading, setIsLoading] = useState(false)
+  const track = new Tracks()
 
   const handleAddPlaylistOnClick = async () => {
     setIsLoading(true)
 
     /* creates a track vector object out of all tracks in a playlist */
-    const trackVector = await Track.createTrackVector(currentAddPlaylist.playlistId, setPlaylist)
+    const trackVector = await track.createTrackVector(currentAddPlaylist.playlistId, setPlaylist)
 
     /* store track-vector in playlist database */
     await addTrackVector(currentAddPlaylist.playlistId, trackVector)

@@ -3,7 +3,9 @@ import Similarity from './similarity'
 import { getPlaylists } from './playlist'
 
 export default class Tracks {
-  static createTrackVector = async (playlistId, setPlaylist) => {
+  similar = new Similarity()
+
+  createTrackVector = async (playlistId, setPlaylist) => {
     const { data } = await getPlaylistDetail(playlistId)
     if (setPlaylist) {
       setPlaylist(data)
@@ -11,7 +13,7 @@ export default class Tracks {
 
     /* create string of track Ids to use in Spotify API */
     const trackIdArray = []
-    const tracks = await Tracks.getAllPlaylistTracks(data.id)
+    const tracks = await this.getAllPlaylistTracks(data.id)
     tracks.forEach(item => {
       if (item.track !== null) {
         trackIdArray.push(item.track.id)
@@ -39,7 +41,7 @@ export default class Tracks {
       // eslint-disable-next-line no-loop-func
       data.audio_features.forEach(item => {
         if (item !== null) {
-          Tracks.createTrackObject(tempTrackVector, item)
+          this.createTrackObject(tempTrackVector, item)
         } else {
           trackArrayLength -= 1
         }
@@ -53,44 +55,44 @@ export default class Tracks {
     return tempTrackVector
   }
 
-  static createTrackObject = (tempTrackVector, item) => {
+  createTrackObject = (tempTrackVector, item) => {
     Object.keys(tempTrackVector).forEach(key => {
       let itemValue = item[key]
       /* scale certain values down to 0-1 */
       if (key === 'key') {
-        const scaledValue = Similarity.normalizeData(item[key], 0, 11, 1)
+        const scaledValue = this.similar.normalizeData(item[key], 0, 11, 1)
         itemValue = scaledValue
       } else if (key === 'loudness') {
-        const scaledValue = Similarity.normalizeData(item[key], -60, 0, 1)
+        const scaledValue = this.similar.normalizeData(item[key], -60, 0, 1)
         itemValue = scaledValue
       } else if (key === 'time_signature') {
-        const scaledValue = Similarity.normalizeData(item[key], 3, 7, 1)
+        const scaledValue = this.similar.normalizeData(item[key], 3, 7, 1)
         itemValue = scaledValue
       }
       tempTrackVector[key] += itemValue
     })
   }
 
-  static createOptions = async (added) => {
+  createOptions = async (added) => {
     const prof = await getCurrentUserProfile()
     const { data } = await getPlaylists(prof.data.id, added)
-    const options = Tracks.convertToOptionsArray(data)
+    const options = this.convertToOptionsArray(data)
 
     const filterOptions = options.filter((item) => (
       item.value.spotifyId === item.value.playlist.owner.id
     ))
-    Tracks.sortOptionsTracks(filterOptions)
+    this.sortOptionsTracks(filterOptions)
     return filterOptions
   }
 
-  static convertToOptionsArray = (playlist) => {
+  convertToOptionsArray = (playlist) => {
     const newArray = playlist?.map(item => (
       { key: item.playlist.id, value: item, label: item.playlist.name }
     ))
     return newArray
   }
 
-  static sortOptionsTracks = (options) => {
+  sortOptionsTracks = (options) => {
     options.sort((a, b) => {
       if (a.label.toLowerCase() < b.label.toLowerCase()) { return -1 }
       if (a.label.toLowerCase() > b.label.toLowerCase()) { return 1 }
@@ -98,7 +100,7 @@ export default class Tracks {
     })
   }
 
-  static getAllPlaylistTracks = async (playlistId) => {
+  getAllPlaylistTracks = async (playlistId) => {
     let offset = 0
     let tracks = await getPlaylistItems(playlistId, offset)
     const allTracks = tracks.data.items.map(item => item)
@@ -111,7 +113,7 @@ export default class Tracks {
     return allTracks.flat()
   }
 
-  static getAllTrackDetails = async (tracks) => {
+  getAllTrackDetails = async (tracks) => {
     const trackArray = []
     const trackIds = tracks.map(item => item.id)
 
@@ -124,7 +126,7 @@ export default class Tracks {
     return trackArray.flat()
   }
 
-  static convertDuration = (millis) => {
+  convertDuration = (millis) => {
     const minutes = Math.floor(millis / 60000)
     const seconds = ((millis % 60000) / 1000).toFixed(0)
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
