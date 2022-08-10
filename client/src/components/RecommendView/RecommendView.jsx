@@ -24,6 +24,7 @@ function RecommendView () {
   const { playlistId } = useParams()
 
   let filterSimilarityButton
+  let userCards
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -94,6 +95,29 @@ function RecommendView () {
     filterSimilarityButton = <IoMdArrowDropdown className='filter'/>
   }
 
+  if (isLoading) {
+    userCards = <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
+  } else if (displayUsers?.length !== 0 && displayUsers !== null) {
+    userCards = displayUsers?.map((item, idx) => {
+      return (
+        <UserPlaylist
+          key={idx}
+          following={profile.following}
+          user={item.user.user}
+          playlist={item.playlist.playlist}
+          similarity={item.similarityScore.toFixed(2)}
+          similarityMethod={profile.similarityMethod}
+          userId={item.playlist.userId}
+          playlistId={playlistId}
+          vector={vector}
+          userVector={item.userVector}
+        />
+      )
+    })
+  } else {
+    userCards = <p className='no-users'>No Users Found</p>
+  }
+
   return (
     <div className="recommend-view">
       <NavBar />
@@ -102,24 +126,7 @@ function RecommendView () {
           <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
           <span className='filter-similarity' onClick={() => setFilterSimilarity(!filterSimilarity)}>Similarity{filterSimilarityButton}</span>
         </div>
-        {displayUsers?.length !== 0 && displayUsers !== null
-          ? displayUsers?.map((item, idx) => {
-            return (
-              <UserPlaylist
-                key={idx}
-                following={profile.following}
-                user={item.user.user}
-                playlist={item.playlist.playlist}
-                similarity={item.similarityScore.toFixed(2)}
-                similarityMethod={profile.similarityMethod}
-                userId={item.playlist.userId}
-                playlistId={playlistId}
-                vector={vector}
-                userVector={item.userVector}
-              />
-            )
-          })
-          : <p className='no-users'>No Users Found</p>}
+        {userCards}
       </div>
       {!isLoading
         ? (

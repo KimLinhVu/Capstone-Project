@@ -1,10 +1,8 @@
 import axios from 'axios'
 
-const hasTokenExpired = (accessToken, timeStamp, expiresIn) => {
-  if (!accessToken || !timeStamp) {
-    return false
-  }
-  const timeElapsed = Date.now() - timeStamp
+const hasTokenExpired = (timeStamp, expiresIn) => {
+  const time = new Date(timeStamp)
+  const timeElapsed = Date.now() - time.getTime()
   return (timeElapsed / 1000) > Number(expiresIn)
 }
 
@@ -40,7 +38,7 @@ export const getSpotifyAccessTokens = async () => {
   })
   const { accessToken, refreshToken, expiresIn, timeStamp } = data
 
-  if (hasTokenExpired(refreshToken, timeStamp, expiresIn) || !accessToken) {
+  if (hasTokenExpired(timeStamp, expiresIn) || !accessToken) {
     await refreshTokens(refreshToken)
   }
   return accessToken

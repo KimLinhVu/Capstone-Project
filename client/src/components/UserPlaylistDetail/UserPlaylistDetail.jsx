@@ -11,6 +11,7 @@ import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 import Track from 'utils/tracks'
 import './UserPlaylistDetail.css'
 import { getUserProfile } from 'utils/users'
+import { getSimilarityScore } from 'utils/playlist'
 
 function UserPlaylistDetail () {
   const [userPlaylist, setUserPlaylist] = useState(null)
@@ -28,7 +29,7 @@ function UserPlaylistDetail () {
   const [spotifyProfile, setSpotifyProfile] = useState(null)
   const { playlistId } = useParams()
   const location = useLocation()
-  const { similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
+  const { similarity, similarityMethod, originalPlaylistId, user, vector, userVector } = location?.state
   const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
   const [currentVector, setCurrentVector] = useState(vector)
   const [currentSimilarity, setCurrentSimilarity] = useState(similarity)
@@ -60,6 +61,11 @@ function UserPlaylistDetail () {
 
       setIsLoading(false)
     }
+    const getCurrentSimilarity = async () => {
+      const { data } = await getSimilarityScore(originalPlaylistId, playlistId, similarityMethod)
+      setCurrentSimilarity(data.toFixed(2))
+    }
+    getCurrentSimilarity()
     getProfiles()
     fetchPlaylist()
     getDropdownOptions()
@@ -72,6 +78,13 @@ function UserPlaylistDetail () {
     } else {
       setCurrentPlaylistId(currentAddPlaylist.playlistId)
       setCurrentVector(currentAddPlaylist.trackVector)
+
+      /* get similarity score between new playlist */
+      const updateSimilarityScore = async () => {
+        const { data } = await getSimilarityScore(currentAddPlaylist.playlistId, playlistId, similarityMethod)
+        setCurrentSimilarity(data.toFixed(2))
+      }
+      updateSimilarityScore()
       setRefresh(!refresh)
     }
   }, [currentAddPlaylist])
@@ -112,6 +125,10 @@ function UserPlaylistDetail () {
                   <button onClick={handleViewFeaturesOnClick} className='view-features'>View Audio Features</button>
                   <button className='follow' onClick={() => setProfilePopup(true)}>{user.username}&apos;s Profile</button>
                 </div>
+              </div>
+              <div className="similarity-score">
+                <p className='header-tag'>SIMILARITY</p>
+                <button className='current-similarity'>{currentSimilarity}</button>
               </div>
             </div>
             <div className="playlist-detail-content">

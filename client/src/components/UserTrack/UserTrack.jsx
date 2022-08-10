@@ -23,6 +23,7 @@ function UserTrack ({
 }) {
   const [disable, setDisable] = useState(false)
   let trackButton
+  const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
 
   const addTrack = async () => {
     setDisable(true)
@@ -99,7 +100,7 @@ function UserTrack ({
         </div>
       </div>
       <div className="similarity">
-        <span>{similarityScore.toFixed(2)}</span>
+        <span className={similarityClassName}>{similarityScore.toFixed(2)}</span>
       </div>
       <div className="preview">
         {track.preview_url !== null

@@ -49,8 +49,8 @@ function LineChart ({
     {
       label: userPlaylistName,
       data: Object.values(userTrackVector),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)'
+      borderColor: 'rgb(103, 122, 200)',
+      backgroundColor: 'rgba(95, 119, 224, 0.5)'
     }
     ]
   }

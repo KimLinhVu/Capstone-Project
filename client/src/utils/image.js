@@ -1,14 +1,21 @@
 import axios from 'axios'
 
 export default class Image {
-  uploadImage = async (e, refresh, setRefresh) => {
+  static uploadProfileImage = async (e, refresh, setRefresh) => {
     const file = e.target.files[0]
-    const base64 = await this.convertBase64(file)
-    await this.addProfilePicture(base64)
+    const base64 = await Image.convertBase64(file)
+    await Image.addProfilePicture(base64)
     setRefresh(!refresh)
   }
 
-  convertBase64 = (file) => {
+  static uploadBackgroundImage = async (e, refresh, setRefresh) => {
+    const file = e.target.files[0]
+    const base64 = await Image.convertBase64(file)
+    await Image.addBackgroundPicture(base64)
+    setRefresh(!refresh)
+  }
+
+  static convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader()
       fileReader.readAsDataURL(file)
@@ -23,7 +30,7 @@ export default class Image {
     })
   }
 
-  addProfilePicture = (base64) => {
+  static addProfilePicture = (base64) => {
     return axios.post('/image', {
       base64
     }, {
@@ -33,7 +40,17 @@ export default class Image {
     })
   }
 
-  getProfilePicture = () => {
+  static addBackgroundPicture = (base64) => {
+    return axios.post('/image/background', {
+      base64
+    }, {
+      headers: {
+        'x-access-token': localStorage.getItem('token')
+      }
+    })
+  }
+
+  static getProfilePicture = () => {
     return axios.get('/image', {
       headers: {
         'x-access-token': localStorage.getItem('token')
@@ -41,7 +58,15 @@ export default class Image {
     })
   }
 
-  getUserProfilePicture = (userId) => {
+  static getBackgroundPicture = () => {
+    return axios.get('/image/background', {
+      headers: {
+        'x-access-token': localStorage.getItem('token')
+      }
+    })
+  }
+
+  static getUserProfilePicture = (userId) => {
     return axios.get('/image/user', {
       headers: {
         'x-access-token': localStorage.getItem('token'),

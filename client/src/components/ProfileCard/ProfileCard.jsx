@@ -18,13 +18,12 @@ function ProfileCard ({
   const [refresh, setRefresh] = useState(false)
   const [picture, setPicture] = useState(null)
   const navigate = useNavigate()
-  const image = new Image()
 
   let profilePicture
 
   useEffect(() => {
     const getProfileImage = async () => {
-      const { data } = await image.getProfilePicture()
+      const { data } = await Image.getProfilePicture()
       if (data !== null) {
         setPicture(data)
       }
@@ -58,7 +57,7 @@ function ProfileCard ({
                   id='image'
                   type="file"
                   accept="image/*"
-                  onChange={e => image.uploadImage(e, refresh, setRefresh)}
+                  onChange={e => Image.uploadProfileImage(e, refresh, setRefresh)}
                 />
             </label>
           </div>
@@ -81,9 +80,11 @@ function ProfileCard ({
                   'aria-labelledby': 'basic-button'
                 }}
               >
-                <MenuItem onClick={() => navigate('/login')}>Logout</MenuItem>
-                <MenuItem onClick={logoutSpotify}>Logout Spotify</MenuItem>
                 <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>
+                <MenuItem onClick={logoutSpotify}>Unlink Spotify</MenuItem>
+                <MenuItem onClick={() => {
+                  navigate('/login')
+                }}>Logout</MenuItem>
               </Menu>
             </div>
             <div className="location">

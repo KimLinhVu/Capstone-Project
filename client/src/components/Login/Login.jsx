@@ -12,12 +12,17 @@ function Login ({
 }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [disabled, setDisabled] = useState(true)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     clearToken()
   }, [])
+
+  useEffect(() => {
+    username === '' || password === '' ? setDisabled(true) : setDisabled(false)
+  }, [username, password])
 
   const handleOnSubmitLogin = async (e) => {
     try {
@@ -41,7 +46,7 @@ function Login ({
           <p>Password</p>
           <input type="password" name='password' onChange={(e) => setPassword(e.target.value)} value={password}/>
         </label>
-        <button className='login-btn' onClick={handleOnSubmitLogin}>Login</button>
+        <button disabled={disabled} className={disabled ? 'login-btn disable' : 'login-btn'} onClick={handleOnSubmitLogin}>Login</button>
         <Link to="/signup"><p className='register'>Register Now</p></Link>
       </div>
       <ToastContainer

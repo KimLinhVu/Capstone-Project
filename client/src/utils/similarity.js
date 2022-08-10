@@ -100,6 +100,18 @@ class Similarity {
     /* scale differenceSum to between 0-100 */
     return 100 - Similarity.normalizeData(differenceSum, 0, maxValue, 100)
   }
+
+  static getSimilarityColorClass = (similarityScore) => {
+    if (similarityScore >= 80) {
+      return 'green'
+    } else if (similarityScore >= 70) {
+      return 'yellow'
+    } else if (similarityScore >= 50) {
+      return 'orange'
+    } else {
+      return 'red'
+    }
+  }
 }
 
 module.exports = Similarity

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Signup.css'
 import { useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
@@ -19,6 +19,7 @@ function Signup () {
   const [place, setPlace] = useState(null)
   const [followingChecked, setFollowingChecked] = useState(false)
   const [privacy, setPrivacy] = useState(false)
+  const [disabled, setDisabled] = useState(true)
   const navigate = useNavigate()
 
   /* set up Google Map Places autocomplete */
@@ -26,6 +27,10 @@ function Signup () {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries
   })
+
+  useEffect(() => {
+    username === '' || password === '' || place === null ? setDisabled(true) : setDisabled(false)
+  }, [username, password, place])
 
   if (!isLoaded) {
     return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
@@ -106,7 +111,7 @@ function Signup () {
           </div>
             )
           : null}
-        <button onClick={handleOnSubmitSignup} disabled={place === null || username === '' || password === ''} className='signup-btn'>Sign Up</button>
+        <button onClick={handleOnSubmitSignup} disabled={disabled} className={disabled ? 'signup-btn disable' : 'signup-btn'}>Sign Up</button>
       </div>
       <ToastContainer
         position="top-center"

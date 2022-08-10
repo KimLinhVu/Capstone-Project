@@ -4,13 +4,24 @@ const router = express.Router()
 
 const Users = require('../models/Users')
 const Playlist = require('../models/Playlists')
+const cache = require('../utils/cache')
+const myCache = cache.myCache
 
 router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     /* gets all users except self */
     const userId = req.userId
     const { followers } = req.body
-    const allUsers = await Users.find({ _id: { $ne: userId } })
+    let allUsers
+
+    /* check if data has already been cached */
+    if (myCache.has('allUsers')) {
+      allUsers = myCache.get('allUsers')
+    } else {
+      allUsers = await Users.find({ _id: { $ne: userId } })
+      /* set data in cache on first call */
+      myCache.set('allUsers', allUsers)
+    }
 
     /* filters out users who are private and are not following current user */
     const filteredUsers = allUsers.filter(user => {
@@ -26,7 +37,7 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
       }
       return true
     })
-    res.json(filteredUsers)
+    res.status(200).json(filteredUsers)
   } catch (error) {
     next(error)
   }
