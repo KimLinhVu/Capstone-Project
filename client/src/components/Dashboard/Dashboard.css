@@ -5,6 +5,7 @@
   background: var(--background-color);
   padding: 0% 5%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .dashboard .dashboard-right {
@@ -163,6 +164,10 @@
   height: 35vh;
 }
 
+.dashboard .edit-background {
+  position: relative;
+}
+
 .dashboard .edit-background .upload-image {
   border: 1px solid white;
   background: var(--elements-pink);
@@ -171,7 +176,7 @@
   width: 60px;
   height: 60px;
   margin-top: 27vh;
-  margin-left: 85%;
+  margin-left: 95%;
   position: absolute;
 }
 
