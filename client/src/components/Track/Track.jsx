@@ -6,7 +6,6 @@ function Track ({
   track,
   trackNumber
 }) {
-  const tracks = new Tracks()
   return (
     <div className="track">
       {track && (
@@ -20,7 +19,7 @@ function Track ({
             </div>
           </div>
           <div className="track-right">
-            <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
+            <span className="time">{Tracks.convertDuration(track.duration_ms)}</span>
           </div>
         </>
       )}

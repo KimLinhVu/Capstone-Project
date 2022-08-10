@@ -1,24 +1,24 @@
 const axios = require('axios')
 class Similarity {
-  getTrackFactors = async () => {
+  static getTrackFactors = async () => {
     const { data } = await axios.get('/trackFactor')
     delete data._id
     return data
   }
 
-  updateTrackFactors = (trackFactor) => {
+  static updateTrackFactors = (trackFactor) => {
     return axios.post('/trackFactor', {
       trackFactor
     })
   }
 
-  recalculateTrackFactor = async (userTrackVector, vector) => {
+  static recalculateTrackFactor = async (userTrackVector, vector) => {
     /* get values from vector objects */
     const trackVector = Object.values(userTrackVector)
     const playlistVector = Object.values(vector)
 
     /* get current track factors */
-    const trackFactor = await this.getTrackFactors()
+    const trackFactor = await Similarity.getTrackFactors()
     const trackFactorKeys = Object.keys(trackFactor)
     const trackFactorValues = Object.values(trackFactor)
 
@@ -37,37 +37,26 @@ class Similarity {
       newTrackFactor[trackFactorKeys[i]] = midpoint.toFixed(2)
     }
     /* update track factor in db */
-    await this.updateTrackFactors(newTrackFactor)
-
-    /* resync all playlists with new track factors */
-    await this.updateAllSimilarityScores()
+    await Similarity.updateTrackFactors(newTrackFactor)
   }
 
-  updateAllSimilarityScores = async () => {
-    return axios.post('/playlist/update-similarity-scores')
-  }
-
-  getSimilarityScore = async (similarityMethod, vector, userVector) => {
+  static getSimilarityScore = async (similarityMethod, vector, userVector) => {
     if (similarityMethod === 0) {
-      return this.calculateCosineSimilarity(vector, userVector)
+      return Similarity.calculateCosineSimilarity(vector, userVector)
     } else {
-      return await this.calculateOwnSimilarity(vector, userVector)
+      return await Similarity.calculateOwnSimilarity(vector, userVector)
     }
   }
 
-  normalizeData = (x, min, max, scale) => {
+  static normalizeData = (x, min, max, scale) => {
     /* normalizes data from 0 - scale */
     const result = ((x - min) / (max - min)) * scale
     return result
   }
 
-  convertObjectToVector = (trackObject) => {
-    return Object.values(trackObject)
-  }
-
-  calculateCosineSimilarity = (a, b) => {
-    a = this.convertObjectToVector(a)
-    b = this.convertObjectToVector(b)
+  static calculateCosineSimilarity = (a, b) => {
+    a = Object.values(a)
+    b = Object.values(b)
     if (JSON.stringify(a) === JSON.stringify(b)) {
       return 100
     }
@@ -85,21 +74,21 @@ class Similarity {
       return 0
     }
     const similarity = Math.acos((dotproduct) / ((mA) * (mB)))
-    const normalized = this.normalizeData(similarity, 0, Math.acos(0), 100)
+    const normalized = Similarity.normalizeData(similarity, 0, Math.acos(0), 100)
     return 100 - normalized
   }
 
-  calculateOwnSimilarity = async (a, b) => {
+  static calculateOwnSimilarity = async (a, b) => {
     /* calculates similarity based on difference between values
     in same position
-    range from 0 - 100; closer to 0 means more similar */
-    a = this.convertObjectToVector(a)
-    b = this.convertObjectToVector(b)
+    range from 0 - 100; closer to 100 means more similar */
+    a = Object.values(a)
+    b = Object.values(b)
     let differenceSum = 0
     let maxValue = 0
 
-    const trackFactors = await this.getTrackFactors()
-    const scaleValueArray = this.convertObjectToVector(trackFactors)
+    const trackFactors = await Similarity.getTrackFactors()
+    const scaleValueArray = Object.values(trackFactors)
     for (let i = 0; i < a.length; i++) {
       let difference = Math.abs(a[i] - b[i])
       a[i] >= b[i] ? maxValue += scaleValueArray[i] * a[i] : maxValue += scaleValueArray[i] * b[i]
@@ -109,7 +98,7 @@ class Similarity {
       differenceSum += difference
     }
     /* scale differenceSum to between 0-100 */
-    return 100 - this.normalizeData(differenceSum, 0, maxValue, 100)
+    return 100 - Similarity.normalizeData(differenceSum, 0, maxValue, 100)
   }
 
   static getSimilarityColorClass = (similarityScore) => {

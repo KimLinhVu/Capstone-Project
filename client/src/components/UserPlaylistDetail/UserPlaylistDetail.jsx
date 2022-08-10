@@ -8,7 +8,7 @@ import ChartPopup from 'components/ChartPopup/ChartPopup'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import Dropdown from 'components/Dropdown/Dropdown'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
-import Tracks from 'utils/tracks'
+import Track from 'utils/tracks'
 import './UserPlaylistDetail.css'
 import { getUserProfile } from 'utils/users'
 import { getSimilarityScore } from 'utils/playlist'
@@ -33,7 +33,6 @@ function UserPlaylistDetail () {
   const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
   const [currentVector, setCurrentVector] = useState(vector)
   const [currentSimilarity, setCurrentSimilarity] = useState(similarity)
-  const track = new Tracks()
 
   let filterSimilarityButton
 
@@ -57,7 +56,7 @@ function UserPlaylistDetail () {
     const getDropdownOptions = async () => {
       setIsLoading(true)
 
-      const result = await track.createOptions(true)
+      const result = await Track.createOptions(true)
       setOptions(result)
 
       setIsLoading(false)

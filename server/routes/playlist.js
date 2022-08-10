@@ -253,14 +253,4 @@ router.get('/get-random-playlist', jwt.verifyJWT, async (req, res, next) => {
   }
 })
 
-/* updates all similarity scores between playlists in db */
-router.post('/update-similarity-scores', async (req, res, next) => {
-  try {
-    await Similarity.updateSimilarityScores()
-    res.status(200).json()
-  } catch (error) {
-    next(error)
-  }
-})
-
 module.exports = router
