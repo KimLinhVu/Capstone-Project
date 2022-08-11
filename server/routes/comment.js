@@ -8,7 +8,7 @@ router.post('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const { comment, createdAt, otherUserId, playlistId } = req.body
-    const newComment = new Comment({ userId, otherUserId, playlistId, comment, createdAt, likes: 0, usersLiked: [] })
+    const newComment = new Comment({ userId, otherUserId, playlistId, comment, createdAt, likes: 0, usersLiked: [], isEdited: false })
     await newComment.save()
     res.status(200).json()
   } catch (error) {
@@ -63,6 +63,19 @@ router.post('/remove-like', jwt.verifyJWT, async (req, res, next) => {
       $pull: {
         usersLiked: { userId }
       }
+    })
+    res.status(200).json()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/edit', jwt.verifyJWT, async (req, res, next) => {
+  try {
+    const { commentId, comment } = req.body
+    await Comment.findOneAndUpdate({ _id: commentId }, {
+      comment,
+      isEdited: true
     })
     res.status(200).json()
   } catch (error) {

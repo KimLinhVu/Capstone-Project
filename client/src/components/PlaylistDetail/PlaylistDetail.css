@@ -126,7 +126,13 @@
   color: black;
 }
 
-.playlist-detail p {
+.playlist-detail .playlist-header-info p {
+  color: rgb(100, 99, 99);
+  font-size: 1.2rem;
+  letter-spacing: .3px;
+}
+
+.playlist-detail-content .details p {
   color: rgb(100, 99, 99);
   font-size: 1.2rem;
   letter-spacing: .3px;

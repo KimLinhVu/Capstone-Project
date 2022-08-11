@@ -7,7 +7,8 @@ const commentSchema = new mongoose.Schema({
   comment: String,
   createdAt: Date,
   likes: Number,
-  usersLiked: Array
+  usersLiked: Array,
+  isEdited: Boolean
 })
 
 module.exports = mongoose.model('comments', commentSchema)

@@ -20,6 +20,7 @@ function RecentlyAddedView ({
 
   useEffect(() => {
     const getAddedTracks = async () => {
+      setIsLoading(true)
       const { data } = await getAddedTrackRecords()
 
       /* sort tracks by similarityScore */
@@ -72,7 +73,7 @@ function RecentlyAddedView ({
   return (
     <div className="recently-added-view">
       <div className="search">
-        <input className='added-track-search 'type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+        <input className='added-track-search' type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
       </div>
       <div className="added-track-header">
         <span className="user">User</span>
@@ -86,7 +87,7 @@ function RecentlyAddedView ({
       </div>
       <hr></hr>
       <div className="added-track-container">
-        {addedTrackCards}
+        {!isLoading ? addedTrackCards : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
       <p className='expire'>Records will expire after 7 days</p>
     </div>

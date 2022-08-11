@@ -1,0 +1,87 @@
+.comment {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 13px;
+  border-bottom: 1px solid var(--light-border);
+}
+
+.comment .comment-pfp {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.comment .comment-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.comment .comment-content .comment-header {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 3px;
+}
+
+.comment .comment-header-left {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.comment .comment-header-right {
+  align-self: flex-end;
+  justify-self: flex-start;
+}
+
+.comment .likes {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  margin-bottom: 7px;
+}
+
+/* text styling */
+.comment-header .username {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.comment-header .date {
+  font-weight: 400;
+  font-size: .9rem;
+  color: rgb(96, 95, 95);
+  margin-top: 2px;
+}
+
+.comment .user-comment {
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  margin-left: 3px;
+}
+
+.comment .favorite-icon {
+  color: var(--elements-pink);
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 50%;
+}
+
+.comment .favorite-icon:hover {
+  background: rgba(192, 180, 180, 0.56);
+}
+
+.comment .edit-input {
+  width: 99.6%;
+  border: 1px solid var(--light-border);
+  padding: 10px;
+  font-size: .9rem;
+  border-radius: 4px;
+  height: 50px;
+  margin-top: 5px;
+}

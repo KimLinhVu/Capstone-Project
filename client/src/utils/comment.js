@@ -52,3 +52,31 @@ export const removeLike = (commentId) => {
     }
   })
 }
+
+export const editComment = (commentId, comment) => {
+  return axios.post('/comment/edit', {
+    commentId,
+    comment
+  }, {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}
+
+export const calculateCommentDate = (date) => {
+  const commentDate = new Date(date)
+  const currentDate = new Date(Date.now())
+  const difference = currentDate.getTime() - commentDate.getTime()
+
+  const diffMinutes = Math.floor((difference / 1000) / 60)
+  if (diffMinutes < 60) {
+    return diffMinutes === 1 ? `${diffMinutes} minute ago` : `${diffMinutes} minutes ago`
+  } else if (diffMinutes < 1440) {
+    const hours = Math.floor(diffMinutes / 60)
+    return hours === 1 ? `${hours} hour ago` : `${hours} hours ago`
+  } else {
+    const days = Math.floor((diffMinutes / 60) / 24)
+    return days === 1 ? `${days} day ago` : `${days} days ago`
+  }
+}

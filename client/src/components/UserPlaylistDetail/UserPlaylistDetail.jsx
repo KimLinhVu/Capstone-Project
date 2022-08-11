@@ -34,6 +34,7 @@ function UserPlaylistDetail () {
   const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
   const [currentVector, setCurrentVector] = useState(vector)
   const [currentSimilarity, setCurrentSimilarity] = useState(similarity)
+  const [userId, setUserId] = useState(user._id)
   const track = new Tracks()
 
   let filterSimilarityButton
@@ -177,6 +178,8 @@ function UserPlaylistDetail () {
                     userId={profile.data._id}
                     otherUserId={user._id}
                     playlistId={playlistId}
+                    setPopupIsOpen={setProfilePopup}
+                    setUserId={setUserId}
                   />
                 </div>
               </div>
@@ -195,7 +198,7 @@ function UserPlaylistDetail () {
       {profilePopup && profile && spotifyProfile &&
         <UserProfileCard
           setPopupIsOpen={setProfilePopup}
-          userId={user._id}
+          userId={userId}
           currentProfile={profile}
           spotifyProfile={spotifyProfile}
         />}
