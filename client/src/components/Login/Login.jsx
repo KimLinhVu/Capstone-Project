@@ -37,7 +37,7 @@ function Login ({
   return (
     <div className="login">
       <div className="content">
-        <h1>Login</h1>
+        <h1>Spotifinder</h1>
         <label>
           <p>Username</p>
           <input type="text" name="user" onChange={(e) => setUsername(e.target.value)} value={username}/>

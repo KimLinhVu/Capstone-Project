@@ -1,5 +1,6 @@
 import React from 'react'
 import './AddedTrack.css'
+import Similarity from 'utils/similarity'
 
 function AddedTrack ({
   track,
@@ -12,6 +13,7 @@ function AddedTrack ({
   setUserPopupId
 }) {
   const date = new Date(addedAt).toLocaleDateString()
+  const classColor = Similarity.getSimilarityColorClass(similarityScore)
   return (
     <div className="added-track" onClick={() => {
       setUserPopupId(userId)
@@ -35,7 +37,7 @@ function AddedTrack ({
         </div>
       </div>
       <div className="similarity">
-        <span>{similarityScore.toFixed(2)}</span>
+        <span className={classColor}>{similarityScore.toFixed(2)}</span>
       </div>
       <div className="time">
         <span>{date}</span>

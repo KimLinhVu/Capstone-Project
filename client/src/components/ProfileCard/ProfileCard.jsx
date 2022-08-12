@@ -40,7 +40,7 @@ function ProfileCard ({
   }
 
   if (picture === null) {
-    profilePicture = spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="profile picture" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
+    profilePicture = <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
   } else {
     profilePicture = <img className='profile-picture' src={picture} alt="profile picture"/>
   }

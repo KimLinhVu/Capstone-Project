@@ -28,6 +28,7 @@ function Comment ({
 
   let likedIcon
   let commentInput
+  let commentPicture
 
   useEffect(() => {
     const getUserInformation = async () => {
@@ -35,7 +36,7 @@ function Comment ({
       setUsername(data.username)
 
       const res = await Image.getUserProfilePicture(comment.userId)
-      res ? setProfilePicture(res.data) : setProfilePicture('img/blueflower.jpeg')
+      res.data ? setProfilePicture(res.data) : setProfilePicture(null)
 
       if (data._id === userId) {
         setShowDelete(true)
@@ -95,12 +96,18 @@ function Comment ({
     commentInput = comment.comment
   }
 
+  if (profilePicture) {
+    commentPicture = <img className='comment-pfp'
+    src={profilePicture} alt="User pfp"
+    onClick={handleProfileOnClick}
+    />
+  } else {
+    commentPicture = <img className='comment-pfp' src={require('img/blueflower.jpeg')} onClick={handleProfileOnClick}/>
+  }
+
   return (
     <div className="comment">
-      <img className='comment-pfp'
-        src={profilePicture} alt="User pfp"
-        onClick={handleProfileOnClick}
-      />
+      {commentPicture}
       <div className="comment-content">
         <div className="comment-header">
           <div className="comment-header-left">
