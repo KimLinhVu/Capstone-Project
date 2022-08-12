@@ -24,21 +24,7 @@ router.get('/', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
     const addedTracks = await AddedTrack.find({ userId })
-
-    /* delete expired addedTracks */
-    const promises = addedTracks.map(async (addedTrack) => {
-      const addedTrackDate = new Date(addedTrack.addedAt)
-      const addedTrackSeconds = addedTrackDate.getTime() / 1000
-      const timeNow = Date.now() / 1000
-
-      /* delete if longer than 7 days */
-      if ((timeNow - addedTrackSeconds) > SEVEN_DAYS) {
-        await AddedTrack.findOneAndRemove({ _id: addedTrack._id })
-      }
-    })
-    await Promise.all(promises)
-    const newaddedTracks = await AddedTrack.find({ userId })
-    newaddedTracks ? res.status(200).json(newaddedTracks) : res.status(200).json(null)
+    addedTracks ? res.status(200).json(addedTracks) : res.status(200).json(null)
   } catch (error) {
     next(error)
   }
