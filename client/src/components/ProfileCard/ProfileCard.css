@@ -24,7 +24,7 @@
 
 .profile-card .user-info {
   margin: 10px 10px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .profile-card .user-info .header {
@@ -37,13 +37,17 @@
   cursor: pointer;
 }
 
-.profile-card .user-info .location {
+.profile-card .user-info .location, .privacy{
   display: flex;
   flex-direction: row;
+  margin-bottom: 7px;
+  gap: 8px;
+  margin-top: 5px;
 }
 
+
 .profile-card .spotify-info {
-  margin: 40px 0px;
+  margin: 25px 0px;
   padding: 10px;
   border-radius: 6px;
   background: var(--background-color);

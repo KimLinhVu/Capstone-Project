@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
-import { MdLocationOn, MdOutlineEdit } from 'react-icons/md'
+import { MdLocationOn, MdOutlineEdit, MdOutlinePublic, MdOutlinePublicOff } from 'react-icons/md'
 import { FaSpotify } from 'react-icons/fa'
 import Image from 'utils/image'
 import { IoMdSettings } from 'react-icons/io'
@@ -90,6 +90,10 @@ function ProfileCard ({
             <div className="location">
               <MdLocationOn className='icon' size={25}/>
               <p className='address'>{profile.location.formatted_address}</p>
+            </div>
+            <div className="privacy">
+              {profile.isPrivate ? <MdOutlinePublicOff className='icon' size={25}/> : <MdOutlinePublic className='icon' size={25}/>}
+              <p>{profile.isPrivate ? 'Private' : 'Public'}</p>
             </div>
           </div>
           <hr />
