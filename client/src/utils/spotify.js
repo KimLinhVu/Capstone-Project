@@ -9,7 +9,7 @@ const hasTokenExpired = (timeStamp, expiresIn) => {
 const refreshTokens = async (refreshToken) => {
   const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${refreshToken}`)
 
-  await axios.post('/playlist/', {
+  await axios.post('/spotify/tokens', {
     accessToken: data.access_token,
     timeStamp: Date.now()
   }, {

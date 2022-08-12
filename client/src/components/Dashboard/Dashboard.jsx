@@ -50,6 +50,7 @@ function Dashboard () {
       const token = await getSpotifyAccessTokens()
       setSpotifyToken(token)
       fetchUserProfiles()
+      getBackground()
     }
     const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
@@ -65,7 +66,6 @@ function Dashboard () {
       }
     }
     getSpotifyToken()
-    getBackground()
   }, [refresh])
 
   useEffect(() => {
@@ -91,8 +91,10 @@ function Dashboard () {
 
       currentResult.data.length === 0 ? setDisableTab(true) : setDisableTab(false)
     }
-    addUserPlaylist()
-  }, [currentAddPlaylist, refresh])
+    if (spotifyToken) {
+      addUserPlaylist()
+    }
+  }, [currentAddPlaylist, refresh, spotifyToken])
 
   useEffect(() => {
     /* displays playlists included in search input */

@@ -33,7 +33,7 @@ function Signup () {
   }, [username, password, place])
 
   if (!isLoaded) {
-    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
+    return <ReactLoading color='#B1A8A6' type='spin' className='signup-loading'/>
   }
 
   const handleOnSubmitSignup = async () => {
