@@ -36,7 +36,7 @@ app.use('/comment', commentRouter)
 
 const devPassword = 'test123'
 
-mongoose.connect('mongodb://localhost:27017/Spotify-Project').then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log('Database connected...')
 }).catch(err => {
   console.log('Database not connected ' + err)

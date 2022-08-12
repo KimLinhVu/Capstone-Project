@@ -1,2 +1,2 @@
 #update similarity scores between playlists and removes expired track records every 5th minute
-*/5 * * * * cd ~CodePath/Capstone-Project/server && node cron/update.js
+*/5 * * * * cd /Users/kimlinh/CodePath/Capstone-Project/server && /usr/local/bin/node cron/update.js

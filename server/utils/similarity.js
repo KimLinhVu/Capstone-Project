@@ -1,5 +1,6 @@
 const axios = require('axios')
 const PlaylistSimilarity = require('../models/PlaylistSimilarity')
+require('dotenv').config()
 
 class Similarity {
   static getTrackFactors = async () => {

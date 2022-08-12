@@ -38,9 +38,6 @@ class Similarity {
     }
     /* update track factor in db */
     await this.updateTrackFactors(newTrackFactor)
-
-    /* resync all playlists with new track factors */
-    await this.updateAllSimilarityScores()
   }
 
   updateAllSimilarityScores = async () => {
