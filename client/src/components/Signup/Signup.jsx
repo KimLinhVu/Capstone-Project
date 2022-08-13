@@ -15,6 +15,7 @@ const libraries = ['places']
 function Signup () {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(null)
   const [followingChecked, setFollowingChecked] = useState(false)
@@ -38,6 +39,10 @@ function Signup () {
 
   const handleOnSubmitSignup = async () => {
     try {
+      if (password !== confirmPassword) {
+        notifyError('Passwords do not match.')
+        return
+      }
       await signup(username, password, place, privacy, followingChecked)
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
@@ -83,10 +88,18 @@ function Signup () {
         <label>
           <p>Password</p>
           <input
-            type="text"
-            name='password'
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          />
+        </label>
+        <label>
+          <p>Confirm Password</p>
+          <input
+            type="password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
           />
         </label>
@@ -97,9 +110,9 @@ function Signup () {
           restrictions={{ country: ['us'] }}
           onLoad={onLoad}
           onPlaceChanged={onPlaceChanged}
-        >
-          <input type="text" onChange={() => { setPlace(null) }}/>
-        </Autocomplete>
+          >
+            <input type="text" onChange={() => { setPlace(null) }}/>
+          </Autocomplete>
         </label>
         <div className="switch">
           <FormControlLabel control={<Switch onChange={(e) => setPrivacy(e.target.checked)}/>} label="Private Account" />

@@ -9,10 +9,15 @@
 
 .recently-added-view .added-track-search {
   border: 1px solid var(--light-border);
-  padding: 12px;
+  padding: 12px 20px;
   border-radius: 6px;
   width: 40%;
   margin-bottom: 30px;
+}
+
+.recently-added-view .added-track-search:focus {
+  outline: none;
+  border: 1px solid var(--elements-pink);
 }
 
 .recently-added-view .added-track-header {

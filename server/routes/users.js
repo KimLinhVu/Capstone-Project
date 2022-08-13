@@ -206,7 +206,7 @@ router.get('/get-follower-favorite', jwt.verifyJWT, async (req, res, next) => {
     const userId = req.userId
     const result = await Users.findOne({ _id: userId })
     const filteredUsers = []
-    const promises = result.followFavorites.map(async (user) => {
+    const promises = result?.followFavorites?.map(async (user) => {
       const data = await Users.findOne({ _id: user.playlist.userId })
       if (data.isPrivate) {
         if (data.showFollowing === true) {

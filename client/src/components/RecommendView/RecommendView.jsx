@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { getAllUsers, getUserProfile } from 'utils/users'
+import React, { useState, useEffect, useRef } from 'react'
+import { getAllUsers, getUserProfile, getUserPlaylists } from 'utils/users'
 import { useParams } from 'react-router-dom'
-import { getPlaylistTrackVector } from 'utils/playlist'
+import { getPlaylistTrackVector, getSimilarityScore } from 'utils/playlist'
 import UserPlaylist from 'components/UserPlaylist/UserPlaylist'
 import Map from 'components/Map/Map'
 import ReactLoading from 'react-loading'
 import NavBar from 'components/NavBar/NavBar'
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import { IoMdArrowDropdown, IoMdArrowDropup, IoMdClose } from 'react-icons/io'
+import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
+import { AiOutlineSearch } from 'react-icons/ai'
 import './RecommendView.css'
+
+const libraries = ['places']
 
 function RecommendView () {
   const [profile, setProfile] = useState(null)
@@ -21,10 +25,22 @@ function RecommendView () {
   const [isLoading, setIsLoading] = useState(true)
   const [userSearch, setUserSearch] = useState('')
   const [filterSimilarity, setFilterSimilarity] = useState(false)
+  const [autocomplete, setAutocomplete] = useState(null)
+  const [place, setPlace] = useState(null)
+  const [center, setCenter] = useState(userLocation)
+  const [searchFocus, setSearchFocus] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const mapSearchInput = useRef()
   const { playlistId } = useParams()
 
   let filterSimilarityButton
   let userCards
+
+  /* set up Google Map Places autocomplete */
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries
+  })
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -33,12 +49,26 @@ function RecommendView () {
       const { data } = await getUserProfile()
       setProfile(data)
       setUserLocation(data.location.geometry.location)
+      setCenter(data.location.geometry.location)
 
       /* fetches filtered users in database and adds them to a location array */
       const result = await getAllUsers(data.followers)
       setAllUsers(result.data)
       const userArray = addUsersToLocationArray(result.data)
-      setUsersLocationArray(userArray)
+
+      const promises = userArray.map(async (user) => {
+        const { data } = await getUserPlaylists(user.user._id)
+        data?.map(async (playlist) => {
+          const userVector = playlist.trackVector
+
+          const res = await getSimilarityScore(playlistId, playlist.playlistId, user.user.similarityMethod)
+          const similarityScore = res.data
+
+          const newTrackObject = { user, playlist, similarityScore, userVector }
+          setUsersLocationArray(old => [...old, newTrackObject])
+        })
+      })
+      await Promise.all(promises)
 
       /* fetches playlist track vector */
       const trackVector = await getPlaylistTrackVector(playlistId)
@@ -54,11 +84,11 @@ function RecommendView () {
       setDisplayUsers(null)
     } else {
       /* sorts users array by similarity score filter */
-      let newArray = users.sort((a, b) => {
+      let newArray = users.flat().sort((a, b) => {
         return b.similarityScore - a.similarityScore
       })
       if (filterSimilarity) {
-        newArray = users.slice().reverse()
+        newArray = users.flat().slice().reverse()
       }
       setCurrentUsers(newArray)
       setDisplayUsers(newArray)
@@ -67,12 +97,18 @@ function RecommendView () {
 
   useEffect(() => {
     /* displays users included in search input */
-    const newArray = currentUsers?.filter(item => item.user.user.username.toLowerCase().includes(userSearch.toLowerCase()))
+    const newArray = currentUsers?.flat().filter(item => item.user.user.username.toLowerCase().includes(userSearch.toLowerCase()))
     if (filterSimilarity) {
       newArray.reverse()
     }
     setDisplayUsers(newArray)
   }, [userSearch, filterSimilarity])
+
+  useEffect(() => {
+    if (place !== null) {
+      setCenter(place.geometry.location)
+    }
+  }, [place])
 
   const addUsersToLocationArray = (users) => {
     const resultArray = []
@@ -98,7 +134,7 @@ function RecommendView () {
   if (isLoading) {
     userCards = <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
   } else if (displayUsers?.length !== 0 && displayUsers !== null) {
-    userCards = displayUsers?.map((item, idx) => {
+    userCards = displayUsers?.flat().map((item, idx) => {
       return (
         <UserPlaylist
           key={idx}
@@ -118,12 +154,68 @@ function RecommendView () {
     userCards = <p className='no-users'>No Users Found</p>
   }
 
+  const onPlaceChanged = () => {
+    /* sets place state only if user chooses an autocorrect option */
+    if (autocomplete !== null) {
+      const placeObject = autocomplete.getPlace()
+      if (Object.keys(placeObject).length <= 1) {
+        setPlace(null)
+      } else {
+        setPlace(placeObject)
+        setSearchValue(placeObject.formatted_address)
+      }
+    } else {
+      setPlace(null)
+    }
+  }
+
+  /* set up city/state autocomplete */
+  const onLoad = (autocomplete) => {
+    setAutocomplete(autocomplete)
+  }
+
+  if (!isLoaded) {
+    return <ReactLoading color='#B1A8A6' type='spin' className='signup-loading'/>
+  }
+
   return (
     <div className="recommend-view">
       <NavBar />
+      <div className="map-filter">
+        <AiOutlineSearch className={searchFocus ? 'search-icon focus' : 'search-icon'} size={25}/>
+        <IoMdClose onClick={() => {
+          setSearchValue('')
+          mapSearchInput.current.focus()
+        }} className='clear-search' size={26}/>
+        <Autocomplete
+          types={['locality']}
+          restrictions={{ country: ['us'] }}
+          onLoad={onLoad}
+          onPlaceChanged={onPlaceChanged}
+        >
+          <input type="text"
+            placeholder='Search By Location'
+            className='map-filter-input'
+            onChange={(e) => {
+              setPlace(null)
+              setSearchValue(e.target.value)
+            }}
+            onFocus={() => setSearchFocus(true)}
+            onBlur={() => setSearchFocus(false)}
+            value={searchValue}
+            ref={mapSearchInput}
+          />
+        </Autocomplete>
+      </div>
       <div className="users">
         <div className="header">
-          <input type="text" placeholder='Search For A User' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+          <AiOutlineSearch className={searchFocus ? 'search-icon user focus' : 'search-icon user'} size={20}/>
+          <input
+            type="text"
+            placeholder='Search By User'
+            value={userSearch}
+            onChange={(e) => setUserSearch(e.target.value)}
+          />
           <span className='filter-similarity' onClick={() => setFilterSimilarity(!filterSimilarity)}>Similarity{filterSimilarityButton}</span>
         </div>
         {userCards}
@@ -134,10 +226,9 @@ function RecommendView () {
           userLocation={userLocation}
           allUsers={allUsers}
           usersLocationArray={usersLocationArray}
-          playlistId={playlistId}
           setUsers={setUsers}
-          similarityMethod={profile?.similarityMethod}
           setIsLoading={setIsLoading}
+          center={center}
         />
           )
         : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}

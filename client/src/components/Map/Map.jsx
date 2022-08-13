@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react'
-import { getUserPlaylists } from 'utils/users'
+import React, { useState, useEffect } from 'react'
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api'
-import { getSimilarityScore } from 'utils/playlist'
 import ReactLoading from 'react-loading'
+import './Map.css'
 
 const libraries = ['places']
 
@@ -10,13 +9,14 @@ function Map ({
   userLocation,
   allUsers,
   usersLocationArray,
-  playlistId,
   setUsers,
-  similarityMethod,
-  setIsLoading
+  setIsLoading,
+  center
 }) {
   const [map, setMap] = useState(null)
   const [onLoad, setOnLoad] = useState(true)
+  const [boundsChanged, setBoundsChanged] = useState(false)
+  const [zoom, setZoom] = useState(10)
   /* show users based on map zoom and not clicking on marker */
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -24,27 +24,30 @@ function Map ({
   })
 
   const markerArray = [userLocation]
-  const center = useMemo(() => (userLocation), [])
 
   const options = {
     streetViewControl: false,
     fullscreenControl: false,
-    minZoom: 4,
-    maxZoom: 20
+    minZoom: 5,
+    maxZoom: 10
   }
 
-  const onBoundsChanged = () => {
+  useEffect(() => {
     setIsLoading(true)
     /* check which markers are currently in view of map bounds */
     setUsers([])
     markerArray?.forEach(item => {
       const inBounds = map?.getBounds()?.contains(item)
       if (inBounds) {
-        handleMarkerOnClick(item)
+        handleMarkerOnBoundsChanged(item)
       }
     })
     setIsLoading(false)
-  }
+  }, [boundsChanged, center])
+
+  useEffect(() => {
+    setZoom(10)
+  }, [center])
 
   if (!isLoaded) {
     return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
@@ -52,39 +55,38 @@ function Map ({
 
   const handleMarkerOnClick = async (location) => {
     setIsLoading(true)
+    setUsers([])
     /* returns all users who are in the location of the marker clicked */
     const resultArray = usersLocationArray.filter(user => {
-      return user.location.lat === location.lat && user.location.lng === location.lng
+      return user.user.location.lat === location.lat && user.user.location.lng === location.lng
     })
 
-    /* fetch similarity score for each user's playlists */
-    resultArray.map(async (user) => {
-      setUsers([])
-      const { data } = await getUserPlaylists(user.user._id)
-      data?.map(async (playlist) => {
-        const userVector = playlist.trackVector
+    setUsers(old => [...old, resultArray])
+    setIsLoading(false)
+  }
 
-        const res = await getSimilarityScore(playlistId, playlist.playlistId, similarityMethod)
-        const similarityScore = res.data
-
-        const newTrackObject = { user, playlist, similarityScore, userVector }
-        setUsers(old => [...old, newTrackObject])
-      })
+  const handleMarkerOnBoundsChanged = async (location) => {
+    setIsLoading(true)
+    /* returns all users who are in the location of the marker clicked */
+    const resultArray = usersLocationArray.filter(user => {
+      return user.user.location.lat === location.lat && user.user.location.lng === location.lng
     })
+
+    setUsers(old => [...old, resultArray])
     setIsLoading(false)
   }
 
   return (
     <GoogleMap
-      zoom={8}
+      zoom={zoom}
       center={center}
       options={options}
       mapContainerClassName="map-container"
-      onZoomChanged={onBoundsChanged}
-      onDragEnd={onBoundsChanged}
+      onZoomChanged={() => setBoundsChanged(!boundsChanged)}
+      onDragEnd={() => setBoundsChanged(!boundsChanged)}
       onBoundsChanged={() => {
         if (onLoad) {
-          onBoundsChanged()
+          setBoundsChanged(!boundsChanged)
           setOnLoad(false)
         }
       }}
@@ -93,9 +95,18 @@ function Map ({
       }}
     >
       <Marker
-        position={center}
-        label='User Location'
+        position={userLocation}
         onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
+        icon={{
+          url: require('img/user.png')
+        }}
+      />
+      <Marker
+        position={center}
+        onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
+        icon={{
+          url: require('img/user.png')
+        }}
       />
       {allUsers?.map((user, idx) => {
         const position = user.location.geometry.location
@@ -110,8 +121,10 @@ function Map ({
           <Marker
             key={idx}
             position={position}
-            label={user.location.name}
             onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
+            icon={{
+              url: require('img/music.png')
+            }}
           />)
         }
       })}

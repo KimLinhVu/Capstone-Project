@@ -27,6 +27,7 @@ function UserPlaylist ({
         <div className="info">
           <span className="playlist-title">{playlist.name}</span>
           <span className='username'>{user.username}</span>
+          <span className="user-location">{user.location.formatted_address}</span>
         </div>
       </div>
       <div className="right">

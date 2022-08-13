@@ -31,7 +31,7 @@
 
 /* navlinks section */
 .dashboard .nav {
-  margin: 10px 0px;
+  margin-bottom: 10px;
   padding: 10px 0px 0px 0px;
 }
 
@@ -192,4 +192,8 @@
 
 .dashboard .edit-background .disable {
   visibility: hidden;
+}
+
+.dashboard input {
+  font-size: 1rem;
 }

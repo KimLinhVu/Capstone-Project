@@ -20,9 +20,14 @@
 
 .playlist-view .playlist-header .playlist-searchbar {
   border: 1px solid var(--light-border);
-  padding: 12px;
+  padding: 10px 20px;
   border-radius: 6px;
   width: 40%;
+}
+
+.playlist-view .playlist-header .playlist-searchbar:focus {
+  border: 1px solid var(--elements-pink);
+  outline: none;
 }
 
 .playlist-view .playlist-header .playlist-action {

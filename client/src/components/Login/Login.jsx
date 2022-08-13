@@ -37,7 +37,7 @@ function Login ({
   return (
     <div className="login">
       <div className="content">
-        <h1>Spotifinder</h1>
+        <img className='spotifinder-logo' src={require('img/logo.png')} alt="Spotifinder Logo" />
         <label>
           <p>Username</p>
           <input type="text" name="user" onChange={(e) => setUsername(e.target.value)} value={username}/>
