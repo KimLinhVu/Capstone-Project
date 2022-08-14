@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addTrackToPlaylist, getPlaylistDetail, removeTrackFromPlaylist } from 'utils/spotify'
 import { notifyError, notifySuccess } from 'utils/toast'
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
@@ -6,6 +6,7 @@ import { addSimilarityMethodCount, removeSimilarityMethodCount } from 'utils/pla
 import Similarity from 'utils/similarity'
 import './UserTrack.css'
 import { addTrackRecord } from 'utils/addedTrack'
+import { addSpotifyUri, getTrackDetails } from 'utils/shazam'
 
 function UserTrack ({
   playlistId,
@@ -19,12 +20,32 @@ function UserTrack ({
   user,
   userTrackVector,
   setPopupIsOpen,
-  setUserTrack
+  setUserTrack,
+  refresh
 }) {
   const [disable, setDisable] = useState(false)
+  const [trackPreview, setTrackPreview] = useState(null)
   const similar = new Similarity()
   let trackButton
   const similarityClassName = Similarity.getSimilarityColorClass(similarityScore)
+
+  useEffect(() => {
+    const trackId = track.id
+    const trackSearchParams = track.name.concat(' ', track.artists[0].name).replaceAll(' ', '%20')
+    const getPreviewUri = async () => {
+      const { data } = await getTrackDetails(trackId, trackSearchParams)
+      setTrackPreview(data)
+    }
+    const addPreviewUri = async () => {
+      setTrackPreview(track.preview_url)
+      await addSpotifyUri(trackId, track.preview_url)
+    }
+    if (track.preview_url === null) {
+      getPreviewUri()
+    } else {
+      addPreviewUri()
+    }
+  }, [refresh])
 
   const addTrack = async () => {
     setDisable(true)
@@ -52,7 +73,8 @@ function UserTrack ({
     const trackObject = {
       image: track.album.images[0].url,
       name: track.name,
-      artist: track.artists[0].name
+      artist: track.artists[0].name,
+      trackUri: trackPreview
     }
     await addTrackRecord(trackObject, user._id, user.username, similarityScore, playlistObject, Date.now())
 
@@ -104,11 +126,7 @@ function UserTrack ({
         <span className={similarityClassName}>{similarityScore.toFixed(2)}</span>
       </div>
       <div className="preview">
-        {track.preview_url !== null
-          ? (
-          <audio controls src={track.preview_url}></audio>
-            )
-          : <p className='no-preview'>No preview available</p>}
+        <audio controls src={trackPreview}></audio>
       </div>
       {trackButton}
     </div>

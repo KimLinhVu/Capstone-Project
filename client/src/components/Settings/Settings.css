@@ -8,6 +8,11 @@
   background-size: cover;
 }
 
+.setting-loading {
+  margin-left: 50%;
+  margin-top: 50%;
+}
+
 .setting .content {
   width: 550px;
   border-radius: 13px;

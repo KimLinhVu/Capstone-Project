@@ -24,6 +24,7 @@ const imageRouter = require('./routes/image')
 const trackFactor = require('./routes/trackFactor')
 const addedTrack = require('./routes/addedTrack')
 const commentRouter = require('./routes/comment')
+const spotifyTrackRouter = require('./routes/spotifyTrack')
 const { BadRequestError } = require('./utils/errors')
 
 app.use('/trackFactor', trackFactor)
@@ -33,6 +34,7 @@ app.use('/users', userRouter)
 app.use('/image', imageRouter)
 app.use('/addedTrack', addedTrack)
 app.use('/comment', commentRouter)
+app.use('/spotifyTrack', spotifyTrackRouter)
 
 const devPassword = 'test123'
 

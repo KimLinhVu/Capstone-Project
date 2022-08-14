@@ -1,4 +1,6 @@
 const AddedTrack = require('../models/addedTrack')
+const Users = require('../models/Users')
+
 class addedTrack {
   static removeExpiredTracks = async () => {
     const tracks = await AddedTrack.find()
@@ -15,6 +17,27 @@ class addedTrack {
       }
     })
     await Promise.all(promises)
+  }
+
+  static filterAddedTracks = async (addedTracks, userId) => {
+    const filteredTracks = []
+
+    /* filter out private users */
+    const promises = addedTracks?.map(async (track) => {
+      const data = await Users.findOne({ _id: track.otherUserId })
+      if (data.isPrivate) {
+        if (data.showFollowing === true) {
+          const found = data.following?.some(obj => obj.userId === userId)
+          if (found) {
+            filteredTracks.push(track)
+          }
+        }
+      } else {
+        filteredTracks.push(track)
+      }
+    })
+    await Promise.all(promises)
+    return filteredTracks
   }
 }
 

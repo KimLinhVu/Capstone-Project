@@ -40,7 +40,7 @@ function Settings () {
   }, [username, place, privacy, followingChecked])
 
   if (!isLoaded) {
-    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
+    return <ReactLoading color='#B1A8A6' type='spin' className='setting-loading'/>
   }
 
   if (privacy) {

@@ -36,6 +36,9 @@ export const getSpotifyAccessTokens = async () => {
       'x-access-token': localStorage.getItem('token')
     }
   })
+  if (data === null) {
+    return null
+  }
   const { accessToken, refreshToken, expiresIn, timeStamp } = data
 
   if (hasTokenExpired(timeStamp, expiresIn) || !accessToken) {

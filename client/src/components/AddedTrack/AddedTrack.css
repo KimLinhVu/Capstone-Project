@@ -20,7 +20,16 @@
 
 .added-track .song {
   display: flex;
-  flex: 4.5;
+  flex: 3;
+}
+
+.added-track .preview {
+  margin-left: 5px;
+  flex: 3;
+}
+
+.added-track audio {
+  width: 170px;
 }
 
 .added-track .song img {
@@ -32,6 +41,10 @@
 .added-track .song .song-info {
   display: flex;
   flex-direction: column;
+}
+
+.added-track .playlist {
+  flex: 3;
 }
 
 .added-track .title {

@@ -69,7 +69,7 @@ function PlaylistView ({
       </div>
         <div className='playlist-container'>
           <div className="header">
-            <h3>{spotifyName}&apos;s Playlists</h3>
+            <h3>My Playlists</h3>
           </div>
           {displayPlaylist && !isLoading
             ? (

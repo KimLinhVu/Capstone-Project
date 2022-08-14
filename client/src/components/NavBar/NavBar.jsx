@@ -59,7 +59,10 @@ function NavBar () {
       >
         <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
         {profile && <MenuItem onClick={() => navigate('/settings', { state: { profile } })}>Change Settings</MenuItem>}
-        <MenuItem onClick={logoutSpotify}>Unlink Spotify</MenuItem>
+        <MenuItem onClick={() => {
+          logoutSpotify()
+          navigate('/')
+        }}>Unlink Spotify</MenuItem>
         <MenuItem onClick={() => {
           navigate('/login')
         }}>Logout</MenuItem>
