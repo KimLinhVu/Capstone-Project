@@ -9,6 +9,8 @@ import NavBar from 'components/NavBar/NavBar'
 import { IoMdArrowDropdown, IoMdArrowDropup, IoMdClose } from 'react-icons/io'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { AiOutlineSearch } from 'react-icons/ai'
+import { ToastContainer } from 'react-toastify'
+import { notifyError } from 'utils/toast'
 import './RecommendView.css'
 
 const libraries = ['places']
@@ -23,6 +25,7 @@ function RecommendView () {
   const [usersLocationArray, setUsersLocationArray] = useState([])
   const [vector, setVector] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [locationIsLoading, setLocationIsLoading] = useState(false)
   const [userSearch, setUserSearch] = useState('')
   const [filterSimilarity, setFilterSimilarity] = useState(false)
   const [autocomplete, setAutocomplete] = useState(null)
@@ -174,13 +177,28 @@ function RecommendView () {
     setAutocomplete(autocomplete)
   }
 
+  const handleCurrentLocation = async () => {
+    setLocationIsLoading(true)
+    const success = (position) => {
+      const coordinates = { lat: position.coords.latitude, lng: position.coords.longitude }
+      setCenter(coordinates)
+      setLocationIsLoading(false)
+    }
+    const error = () => {
+      notifyError('Permission to access location denied')
+      setLocationIsLoading(false)
+    }
+    navigator.geolocation.getCurrentPosition(success, error)
+  }
+
   if (!isLoaded) {
-    return <ReactLoading color='#B1A8A6' type='spin' className='signup-loading'/>
+    return <ReactLoading color='#B1A8A6' type='spin' className='recommend-loading'/>
   }
 
   return (
     <div className="recommend-view">
       <NavBar />
+      <button className={locationIsLoading ? 'get-location-btn inactive' : 'get-location-btn'} disabled={locationIsLoading} onClick={handleCurrentLocation}>Navigate to Current Location</button>
       <div className="map-filter">
         <AiOutlineSearch className={searchFocus ? 'search-icon focus' : 'search-icon'} size={25}/>
         <IoMdClose onClick={() => {
@@ -232,6 +250,18 @@ function RecommendView () {
         />
           )
         : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

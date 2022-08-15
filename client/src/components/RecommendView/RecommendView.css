@@ -4,6 +4,37 @@
   height: 100vh;
 }
 
+.recommend-view .get-location-btn {
+  position: absolute;
+  margin-top: 102px;
+  z-index: 10;
+  margin-left: 84%;
+  padding: 10px;
+  color: white;
+  background: var(--elements-pink);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.135);
+  transition: 200ms ease-in-out;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.recommend-view .get-location-btn:hover {
+  background: var(--elements-darkpink);
+  box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.341);
+}
+
+.recommend-view .inactive {
+  background: rgb(230, 199, 211);
+  box-shadow: none;
+}
+
+.recommend-view .inactive:hover {
+  background: rgb(230, 199, 211);
+  box-shadow: none;
+}
+
 .recommend-view .map-filter {
   position: absolute;
   margin-top: 100px;
@@ -101,4 +132,9 @@
   margin-right: auto;
   margin-top: 20px;
   font-size: 1.2rem;
+}
+
+.recommend-loading {
+  margin-top: 23%;
+  margin-left: 50%;
 }

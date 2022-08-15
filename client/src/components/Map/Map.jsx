@@ -95,13 +95,6 @@ function Map ({
       }}
     >
       <Marker
-        position={userLocation}
-        onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
-        icon={{
-          url: require('img/user.png')
-        }}
-      />
-      <Marker
         position={center}
         onClick={(e) => (handleMarkerOnClick(e.latLng.toJSON()))}
         icon={{

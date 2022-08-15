@@ -43,6 +43,7 @@ function Signup () {
         notifyError('Passwords do not match.')
         return
       }
+      setDisabled(true)
       await signup(username, password, place, privacy, followingChecked)
       notifySuccess('Successfully created an account. Redirecting...')
       setTimeout(() => navigate('/login'), 2000)
