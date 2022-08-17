@@ -29,7 +29,7 @@ function Map ({
     streetViewControl: false,
     fullscreenControl: false,
     minZoom: 5,
-    maxZoom: 10
+    maxZoom: 15
   }
 
   useEffect(() => {
