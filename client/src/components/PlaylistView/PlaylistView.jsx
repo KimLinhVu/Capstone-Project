@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Dropdown from 'components/Dropdown/Dropdown'
 import PlaylistCard from 'components/PlaylistCard/PlaylistCard'
 import { addTrackVector, addPlaylistToProfile, saveSimilarityScores } from 'utils/playlist'
-import { AiFillPlusCircle } from 'react-icons/ai'
+import { AiFillPlusCircle, AiOutlineSearch } from 'react-icons/ai'
 import { Tooltip } from '@mui/material'
 import ReactLoading from 'react-loading'
 import Tracks from 'utils/tracks'
@@ -48,6 +48,7 @@ function PlaylistView ({
   return (
     <div className='playlist-view'>
       <div className="playlist-header">
+        <AiOutlineSearch className='dashboard-search-icon' size={25}/>
         <input type="text" placeholder='Search For A Playlist' className='playlist-searchbar' value={playlistSearch} onChange={(e) => setPlaylistSearch(e.target.value)}/>
         <div className='playlist-action'>
           {playlist

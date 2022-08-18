@@ -61,7 +61,9 @@ function UserTrack ({
     }
 
     /* update track factors */
-    await similar.recalculateTrackFactor(userTrackVector, vector)
+    if (similarityMethod === 'own similarity') {
+      await similar.recalculateTrackFactor(userTrackVector, vector)
+    }
 
     /* save added track in database */
     const { data } = await getPlaylistDetail(playlistId)
