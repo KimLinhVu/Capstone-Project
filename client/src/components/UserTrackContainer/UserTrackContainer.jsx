@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Tracks from 'utils/tracks'
 import UserTrack from 'components/UserTrack/UserTrack'
 import { getTracksAudioFeatures } from 'utils/spotify'
@@ -21,10 +21,14 @@ function UserTrackContainer ({
   refresh
 }) {
   const [tracks, setTracks] = useState(null)
+  const [displayTracks, setDisplayTracks] = useState([])
   const [trackDetails, setTrackDetails] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [numTracks, setNumTracks] = useState(6)
+  const [refreshTrack, setRefreshTrack] = useState(false)
   const track = new Tracks()
   const similar = new Similarity()
+  const containerRef = useRef()
 
   /* calculate similarity score for each track and sort */
   /* implement filter by similarity score option */
@@ -79,6 +83,7 @@ function UserTrackContainer ({
       const trackDetailArray = await track.getAllTrackDetails(tempTracks)
       setTrackDetails(trackDetailArray)
       setTracks(tempTracks)
+      setDisplayTracks(tempTracks?.slice(0, numTracks))
 
       setIsLoading(false)
     }
@@ -87,18 +92,37 @@ function UserTrackContainer ({
 
   useEffect(() => {
     if (tracks && trackDetails) {
-      const tempTracks = tracks.slice().reverse()
+      const tempTracks = displayTracks.slice().reverse()
       const trackDetailArray = trackDetails.slice().reverse()
       setTrackDetails(trackDetailArray)
-      setTracks(tempTracks)
+      setDisplayTracks(tempTracks)
+      setRefreshTrack(!refreshTrack)
     }
   }, [filterSimilarity])
 
+  useEffect(() => {
+    setDisplayTracks(tracks?.slice(0, numTracks))
+  }, [numTracks])
+
+  const handleOnScroll = () => {
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current
+
+      /* when user scrolls to bottom of div */
+      if (scrollTop + clientHeight >= (scrollHeight - 0.5)) {
+        setNumTracks(numTracks + 6)
+      }
+    }
+  }
+
   return (
-    <div className="user-track-container">
+    <div className="user-track-container"
+      onScroll={handleOnScroll}
+      ref={containerRef}
+    >
       <div className="tracks">
         {!isLoading
-          ? tracks?.map((item, idx) => (
+          ? displayTracks?.map((item, idx) => (
           <UserTrack
             key={idx}
             similarityScore={item.similarity}
@@ -113,6 +137,7 @@ function UserTrackContainer ({
             userTrackVector={item.vector}
             setPopupIsOpen={setPopupIsOpen}
             setUserTrack={setUserTrack}
+            refresh={refreshTrack}
           />
           ))
           : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}

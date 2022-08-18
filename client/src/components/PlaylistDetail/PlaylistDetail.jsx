@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPlaylistDetail } from 'utils/spotify'
+import { getPlaylistDetail, getCurrentUserProfile } from 'utils/spotify'
 import NavBar from 'components/NavBar/NavBar'
 import GenreContainer from 'components/GenreContainer/GenreContainer'
 import Tracks from 'utils/tracks'
@@ -10,12 +10,19 @@ import './PlaylistDetail.css'
 import { addTrackVector, saveSimilarityScores } from 'utils/playlist'
 import { ToastContainer } from 'react-toastify'
 import { notifyError, notifySuccess } from 'utils/toast'
+import CommentContainer from 'components/CommentContainer/CommentContainer'
+import { getUserProfile } from 'utils/users'
+import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 
 function PlaylistDetail () {
+  const [profile, setProfile] = useState(null)
+  const [spotifyProfile, setSpotifyProfile] = useState(null)
   const [playlist, setPlaylist] = useState(null)
+  const [userId, setUserId] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [tracks, setTracks] = useState(null)
   const [resyncIsLoading, setResyncIsLoading] = useState(false)
+  const [popupIsOpen, setPopupIsOpen] = useState(false)
   const { playlistId } = useParams()
   const track = new Tracks()
 
@@ -28,6 +35,13 @@ function PlaylistDetail () {
 
       const allTracks = await track.getAllPlaylistTracks(playlistId)
       setTracks(allTracks)
+
+      const user = await getUserProfile()
+      setProfile(user)
+      setUserId(user.data._id)
+
+      const spotify = await getCurrentUserProfile()
+      setSpotifyProfile(spotify.data)
 
       setIsLoading(false)
     }
@@ -70,24 +84,44 @@ function PlaylistDetail () {
             </div>
           </div>
           <div className='playlist-detail-content'>
-            <div className="left">
-              <div className="details">
-                <p><span>Owner</span> {playlist.owner.display_name}</p>
-                <p><span>Followers</span> {playlist.followers.total}</p>
-                <p><span>Privacy</span> {playlist.public ? 'public' : 'private'}</p>
-                <p><span>Songs</span> {playlist.tracks.total}</p>
+            <div className='upper'>
+              <div className="left">
+                <div className="details">
+                  <p><span>Owner</span> {playlist.owner.display_name}</p>
+                  <p><span>Followers</span> {playlist.followers.total}</p>
+                  <p><span>Privacy</span> {playlist.public ? 'public' : 'private'}</p>
+                  <p><span>Songs</span> {playlist.tracks.total}</p>
+                </div>
+              </div>
+              <div className="right">
+                <GenreContainer tracks={playlist.tracks.items}/>
+                <TrackContainer
+                  tracks={tracks}
+                  isLoading={isLoading}
+                />
               </div>
             </div>
-            <div className="right">
-              <GenreContainer tracks={playlist.tracks.items}/>
-              <TrackContainer
-                tracks={tracks}
-                isLoading={isLoading}
-              />
+            <div className="comments">
+              {userId && (
+                <CommentContainer
+                  userId={userId}
+                  setUserId={setUserId}
+                  otherUserId={userId}
+                  playlistId={playlistId}
+                  setPopupIsOpen={setPopupIsOpen}
+                />
+              )}
             </div>
           </div>
       </div>
         : <ReactLoading color='#B1A8A6' type='spin' className='playlist-loading'/>}
+      {popupIsOpen && profile && spotifyProfile &&
+        <UserProfileCard
+          setPopupIsOpen={setPopupIsOpen}
+          userId={userId}
+          currentProfile={profile}
+          spotifyProfile={spotifyProfile}
+        />}
       <ToastContainer
         position="top-center"
         limit={1}

@@ -12,6 +12,7 @@ import Tracks from 'utils/tracks'
 import './UserPlaylistDetail.css'
 import { getUserProfile } from 'utils/users'
 import { getSimilarityScore } from 'utils/playlist'
+import CommentContainer from 'components/CommentContainer/CommentContainer'
 
 function UserPlaylistDetail () {
   const [userPlaylist, setUserPlaylist] = useState(null)
@@ -33,6 +34,7 @@ function UserPlaylistDetail () {
   const [currentPlaylistId, setCurrentPlaylistId] = useState(originalPlaylistId)
   const [currentVector, setCurrentVector] = useState(vector)
   const [currentSimilarity, setCurrentSimilarity] = useState(similarity)
+  const [userId, setUserId] = useState(user._id)
   const track = new Tracks()
 
   let filterSimilarityButton
@@ -40,11 +42,13 @@ function UserPlaylistDetail () {
   useEffect(() => {
     /* get current user profile and spotifyProfile */
     const getProfiles = async () => {
+      setIsLoading(true)
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
 
       const res = await getUserProfile()
       setProfile(res)
+      setIsLoading(false)
     }
     const fetchPlaylist = async () => {
       const { data } = await getPlaylistDetail(playlistId)
@@ -169,6 +173,15 @@ function UserPlaylistDetail () {
                     refresh={refresh}
                   />
                 </div>
+                <div className="comments">
+                  <CommentContainer
+                    userId={profile.data._id}
+                    otherUserId={user._id}
+                    playlistId={playlistId}
+                    setPopupIsOpen={setProfilePopup}
+                    setUserId={setUserId}
+                  />
+                </div>
               </div>
             </div>
           </>
@@ -185,7 +198,7 @@ function UserPlaylistDetail () {
       {profilePopup && profile && spotifyProfile &&
         <UserProfileCard
           setPopupIsOpen={setProfilePopup}
-          userId={user._id}
+          userId={userId}
           currentProfile={profile}
           spotifyProfile={spotifyProfile}
         />}

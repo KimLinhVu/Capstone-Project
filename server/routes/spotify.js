@@ -170,9 +170,8 @@ router.get('/tokens', jwt.verifyJWT, async (req, res, next) => {
 router.post('/tokens', jwt.verifyJWT, async (req, res, next) => {
   try {
     const userId = req.userId
-    const spotifyId = Spotify.locals.spotifyId
     const { accessToken, timeStamp } = req.body
-    await SpotifyToken.findOneAndUpdate({ userId, spotifyId }, { accessToken, timeStamp })
+    await SpotifyToken.findOneAndUpdate({ userId }, { accessToken, timeStamp })
     res.status(200).json()
   } catch (error) {
     next(error)

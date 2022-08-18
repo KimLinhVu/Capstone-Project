@@ -16,6 +16,7 @@ import { MdOutlineEdit } from 'react-icons/md'
 import './Dashboard.css'
 import UserProfileCard from 'components/UserProfileCard/UserProfileCard'
 import RecentlyAddedView from 'components/RecentlyAddedView/RecentlyAddedView'
+import ReactLoading from 'react-loading'
 
 export const DashboardContext = createContext()
 
@@ -40,6 +41,7 @@ function Dashboard () {
   const [disableTab, setDisableTab] = useState(true)
   const [showEdit, setShowEdit] = useState(false)
   const [backgroundPicture, setBackgroundPicture] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const track = new Tracks()
   const navigate = useNavigate()
@@ -47,10 +49,17 @@ function Dashboard () {
   /* get value of tokens out of the URL */
   useEffect(() => {
     const getSpotifyToken = async () => {
+      setIsLoading(true)
       const token = await getSpotifyAccessTokens()
-      setSpotifyToken(token)
-      fetchUserProfiles()
+      setIsLoading(false)
+      if (token !== null) {
+        setSpotifyToken(token)
+      }
     }
+    getSpotifyToken()
+  }, [])
+
+  useEffect(() => {
     const fetchUserProfiles = async () => {
       const { data } = await getCurrentUserProfile()
       setSpotifyProfile(data)
@@ -64,9 +73,11 @@ function Dashboard () {
         setBackgroundPicture(data)
       }
     }
-    getSpotifyToken()
-    getBackground()
-  }, [refresh])
+    if (spotifyToken) {
+      fetchUserProfiles()
+      getBackground()
+    }
+  }, [refresh, spotifyToken])
 
   useEffect(() => {
     const addUserPlaylist = async () => {
@@ -91,8 +102,10 @@ function Dashboard () {
 
       currentResult.data.length === 0 ? setDisableTab(true) : setDisableTab(false)
     }
-    addUserPlaylist()
-  }, [currentAddPlaylist, refresh])
+    if (spotifyToken) {
+      addUserPlaylist()
+    }
+  }, [currentAddPlaylist, refresh, spotifyToken])
 
   useEffect(() => {
     /* displays playlists included in search input */
@@ -116,6 +129,10 @@ function Dashboard () {
       setPlaylistShow(true)
       notifyError('Please add one playlist to your profile')
     }
+  }
+
+  if (isLoading) {
+    return <ReactLoading color='#B1A8A6' type='spin' className='dashboard-loading'/>
   }
 
   return (

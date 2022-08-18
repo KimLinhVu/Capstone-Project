@@ -85,7 +85,7 @@ function FavoriteView ({
     <div className="favorite-view">
       <div className='playlist-container'>
         <div className="header">
-          <h3>{spotifyProfile.display_name}&apos;s Favorites</h3>
+          <h3>My Favorites</h3>
         </div>
         <div className="playlists">
         {playlistCard}

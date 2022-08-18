@@ -2,6 +2,28 @@
   margin-bottom: 20px;
 }
 
+.recently-added-view .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.recently-added-view .header .added-track-btn {
+  width: 250px;
+  padding: 13px 0px;
+  background: var(--txt-med);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  align-self: flex-start;
+  margin-right: 5px;
+}
+
 .recently-added-view .added-track-container {
   max-height: 500px;
   overflow-y: auto;
@@ -9,10 +31,15 @@
 
 .recently-added-view .added-track-search {
   border: 1px solid var(--light-border);
-  padding: 12px;
+  padding: 12px 20px;
   border-radius: 6px;
   width: 40%;
   margin-bottom: 30px;
+}
+
+.recently-added-view .added-track-search:focus {
+  outline: none;
+  border: 1px solid var(--elements-pink);
 }
 
 .recently-added-view .added-track-header {
@@ -27,7 +54,7 @@
 .added-track-header .similarity-container {
   display: flex;
   flex-direction: row;
-  margin-left: 19%;
+  margin-left: 9%;
 }
 
 .added-track-header .filter {
@@ -42,11 +69,11 @@
 }
 
 .added-track-header .playlist {
-  margin-left: 25%;
+  margin-left: 23.5%;
 }
 
 .added-track-header .track-info {
-  margin-left: 12%;
+  margin-left: 23%;
 }
 
 .recently-added-view hr {

@@ -8,6 +8,11 @@
   background-size: cover;
 }
 
+.setting-loading {
+  margin-left: 50%;
+  margin-top: 50%;
+}
+
 .setting .content {
   width: 550px;
   border-radius: 13px;
@@ -58,6 +63,7 @@
 
 .setting .disable {
   background-color: rgba(84, 121, 141, 0.513);
+  cursor: not-allowed;
 }
 
 .setting h1 {

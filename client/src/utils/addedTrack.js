@@ -22,3 +22,11 @@ export const getAddedTrackRecords = () => {
     }
   })
 }
+
+export const getFollowingAddedTrackRecords = () => {
+  return axios.get('/addedTrack/following', {
+    headers: {
+      'x-access-token': localStorage.getItem('token')
+    }
+  })
+}

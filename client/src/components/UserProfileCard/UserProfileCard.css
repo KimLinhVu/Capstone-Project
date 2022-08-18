@@ -134,3 +134,8 @@
   height: 1px;
   background: var(--light-border);
 }
+
+.user-loading {
+  margin-left: 45%;
+  margin-top: 33%;
+}

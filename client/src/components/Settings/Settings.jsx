@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api'
 import { notifyError, notifySuccess } from 'utils/toast'
@@ -21,22 +21,38 @@ function Settings () {
   const [autocomplete, setAutocomplete] = useState(null)
   const [place, setPlace] = useState(profile.location)
   const [disable, setDisable] = useState(false)
-  const [followingChecked, setFollowingChecked] = useState(profile.followingChecked)
+  const [followingChecked, setFollowingChecked] = useState(profile.showFollowing)
   let privacySwitch
+  let followingCheckBox
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries
   })
 
+  useEffect(() => {
+    /* do not allow user to update settings if no settings were changed */
+    if (username.trim() === profile.username.trim() && profile.location.formatted_address === place?.formatted_address && privacy === profile.isPrivate && followingChecked === profile.showFollowing) {
+      setDisable(true)
+    } else {
+      setDisable(false)
+    }
+  }, [username, place, privacy, followingChecked])
+
   if (!isLoaded) {
-    return <ReactLoading color='#B1A8A6' type='spin' className='loading'/>
+    return <ReactLoading color='#B1A8A6' type='spin' className='setting-loading'/>
   }
 
   if (privacy) {
     privacySwitch = <Switch defaultChecked onChange={(e) => setPrivacy(e.target.checked)}/>
   } else {
     privacySwitch = <Switch onChange={(e) => setPrivacy(e.target.checked)}/>
+  }
+
+  if (profile.showFollowing) {
+    followingCheckBox = <FormControlLabel control={<Checkbox defaultChecked onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+  } else {
+    followingCheckBox = <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
   }
 
   /* set up city/state autocomplete */
@@ -63,7 +79,7 @@ function Settings () {
   const handleUpdateSettings = async () => {
     try {
       setDisable(true)
-      await updateUserSettings(username, place, privacy, followingChecked)
+      await updateUserSettings(username.trim(), place, privacy, followingChecked)
       notifySuccess('Successfully updated settings. Redirecting...')
       setTimeout(() => navigate('/'), 2000)
     } catch (e) {
@@ -95,18 +111,18 @@ function Settings () {
             onLoad={onLoad}
             onPlaceChanged={onPlaceChanged}
           >
-            <input type="text" placeholder={profile.location.formatted_address} onChange={() => { setPlace(null) }}/>
+            <input type="text" placeholder={profile.location.formatted_address} value={place?.formatted_address} onChange={() => { setPlace(null) }}/>
           </Autocomplete>
         </div>
         <FormControlLabel control={privacySwitch} label="Private Account" />
         {privacy
           ? (
           <div className="followers">
-            <FormControlLabel control={<Checkbox onChange={(e) => setFollowingChecked(e.target.checked)}/>} label="Only users I am following can view my profile"/>
+            {followingCheckBox}
           </div>
             )
           : null}
-        <button disabled={place === null || username === ''} className={place === null || username === '' || disable ? 'disable' : 'update-btn'} onClick={handleUpdateSettings}>Update Settings</button>
+        <button disabled={place === null || username === '' || disable} className={place === null || username === '' || disable ? 'disable' : 'update-btn'} onClick={handleUpdateSettings}>Update Settings</button>
       </div>
       <ToastContainer
         position="top-center"

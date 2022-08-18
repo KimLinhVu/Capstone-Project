@@ -1,11 +1,13 @@
-const axios = require('axios')
 const PlaylistSimilarity = require('../models/PlaylistSimilarity')
+require('dotenv').config()
+const TrackFactor = require('../models/TrackFactors')
 
 class Similarity {
   static getTrackFactors = async () => {
-    const { data } = await axios.get(`${process.env.SERVER_BASE_URL}/trackFactor`)
-    delete data._id
-    return data
+    const trackFactor = await TrackFactor.findOne()
+    const trackObject = trackFactor.toObject()
+    delete trackObject._id
+    return trackObject
   }
 
   static getSimilarityMethod = async (newUserId) => {

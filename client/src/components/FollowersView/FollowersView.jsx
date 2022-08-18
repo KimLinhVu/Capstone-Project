@@ -51,7 +51,7 @@ function FollowersView ({
       <input type="text" placeholder='Search Users' className='follower-searchbar' value={followerSearch} onChange={(e) => setFollowerSearch(e.target.value)}/>
       <div className="playlist-container">
         <div className="header">
-          <h3>{followers ? `${profile.username}'s Followers` : 'Following'}</h3>
+          <h3>{followers ? 'Followers' : 'Following'}</h3>
         </div>
         <div className="playlists">
           {userCards}

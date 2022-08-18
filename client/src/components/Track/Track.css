@@ -39,3 +39,11 @@
   align-items: center;
   gap: 15px;
 }
+
+.track audio {
+  width: 270px;
+}
+
+.track audio::-webkit-media-controls-panel, video::-webkit-media-controls-panel {
+  background-color: rgba(255, 255, 255, 0.529);
+}

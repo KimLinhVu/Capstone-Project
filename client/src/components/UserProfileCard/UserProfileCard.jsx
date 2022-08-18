@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getUserProfileById } from 'utils/users'
+import { getUserProfile, getUserProfileById } from 'utils/users'
 import { MdLocationOn } from 'react-icons/md'
 import { AiFillCloseCircle } from 'react-icons/ai'
 import Follower from 'utils/follower'
@@ -15,6 +15,7 @@ function UserProfileCard ({
   currentProfile,
   spotifyProfile
 }) {
+  const [ownId, setOwnId] = useState(null)
   const [profile, setProfile] = useState(null)
   const [profilePicture, setProfilePicture] = useState(null)
   const [originalPlaylistId, setOriginalPlaylistId] = useState(null)
@@ -29,7 +30,7 @@ function UserProfileCard ({
   let profileImage
 
   useEffect(() => {
-    const getUserProfile = async () => {
+    const getUserProfiles = async () => {
       setIsLoading(true)
       /* gets user-card profile */
       const { data } = await getUserProfileById(userId)
@@ -45,6 +46,9 @@ function UserProfileCard ({
       setOriginalPlaylistId(random.data.playlistId)
       setVector(random.data.trackVector)
 
+      const profile = await getUserProfile()
+      setOwnId(profile.data._id)
+
       setIsLoading(false)
     }
     const getProfilePicture = async () => {
@@ -52,7 +56,7 @@ function UserProfileCard ({
       setProfilePicture(data)
     }
     getProfilePicture()
-    getUserProfile()
+    getUserProfiles()
   }, [])
 
   if (isFollowing) {
@@ -62,7 +66,7 @@ function UserProfileCard ({
   }
 
   if (profilePicture === null) {
-    profileImage = spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="profile picture" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
+    profileImage = <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
   } else {
     profileImage = <img className='profile-picture' src={profilePicture} alt="profile picture"/>
   }
@@ -90,7 +94,7 @@ function UserProfileCard ({
                 </div>
               </div>
               <div className="user-right">
-                {followButton}
+                {userId !== ownId ? followButton : null}
               </div>
             </div>
             <hr />
@@ -109,7 +113,7 @@ function UserProfileCard ({
             </div>
           </div>
             )
-          : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
+          : <ReactLoading color='#B1A8A6' type='spin' className='user-loading'/>}
       </div>
     </div>
   )

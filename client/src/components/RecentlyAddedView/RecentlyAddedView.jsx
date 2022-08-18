@@ -1,6 +1,6 @@
 import AddedTrack from 'components/AddedTrack/AddedTrack'
 import React, { useEffect, useState } from 'react'
-import { getAddedTrackRecords } from 'utils/addedTrack'
+import { getAddedTrackRecords, getFollowingAddedTrackRecords } from 'utils/addedTrack'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import ReactLoading from 'react-loading'
 import './RecentlyAddedView.css'
@@ -13,13 +13,17 @@ function RecentlyAddedView ({
   const [filterSimilarity, setFilterSimilarity] = useState(false)
   const [displayAddedTracks, setDisplayAddedTracks] = useState(null)
   const [userSearch, setUserSearch] = useState('')
+  const [showFollowing, setShowFollowing] = useState(false)
+  const [followingAddedTracks, setFollowingAddedTracks] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
   let addedTrackCards
   let filterSimilarityButton
+  let showFollowingButton
 
   useEffect(() => {
     const getAddedTracks = async () => {
+      setIsLoading(true)
       const { data } = await getAddedTrackRecords()
 
       /* sort tracks by similarityScore */
@@ -30,12 +34,25 @@ function RecentlyAddedView ({
 
       setIsLoading(false)
     }
+    const getFollowingTracks = async () => {
+      const { data } = await getFollowingAddedTrackRecords()
+
+      /* sort tracks by similarityScore */
+      const sorted = data.flat().sort((a, b) => b.similarityScore - a.similarityScore)
+      setFollowingAddedTracks(sorted)
+    }
+    getFollowingTracks()
     getAddedTracks()
   }, [])
 
   useEffect(() => {
-    const newArray = addedTracks?.filter(item => item.username.toLowerCase().includes(userSearch.toLowerCase()))
-    setDisplayAddedTracks(newArray)
+    if (showFollowing) {
+      const newArray = followingAddedTracks?.filter(item => item.username.toLowerCase().includes(userSearch.toLowerCase()))
+      setDisplayAddedTracks(newArray)
+    } else {
+      const newArray = addedTracks?.filter(item => item.username.toLowerCase().includes(userSearch.toLowerCase()))
+      setDisplayAddedTracks(newArray)
+    }
   }, [userSearch])
 
   useEffect(() => {
@@ -52,7 +69,8 @@ function RecentlyAddedView ({
         track={item.track}
         playlist={item.playlist}
         similarityScore={item.similarityScore}
-        userId={item.otherUserId}
+        ownUsername={item.ownUsername}
+        otherUserId={item.otherUserId}
         username={item.username}
         addedAt={item.addedAt}
         setPopupIsOpen={setPopupIsOpen}
@@ -69,10 +87,25 @@ function RecentlyAddedView ({
     filterSimilarityButton = <IoMdArrowDropdown className='filter' onClick={() => setFilterSimilarity(true)}/>
   }
 
+  if (showFollowing) {
+    showFollowingButton = <button onClick={() => {
+      setDisplayAddedTracks(addedTracks)
+      setShowFollowing(false)
+      setUserSearch('')
+    }} className='added-track-btn'>See My Added Tracks</button>
+  } else {
+    showFollowingButton = <button onClick={() => {
+      setDisplayAddedTracks(followingAddedTracks)
+      setShowFollowing(true)
+      setUserSearch('')
+    }} className='added-track-btn' >See Following Added Tracks</button>
+  }
+
   return (
     <div className="recently-added-view">
-      <div className="search">
-        <input className='added-track-search 'type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+      <div className="header">
+        <input className='added-track-search' type="text" placeholder='Search Users' value={userSearch} onChange={(e) => setUserSearch(e.target.value)}/>
+        {followingAddedTracks && showFollowingButton}
       </div>
       <div className="added-track-header">
         <span className="user">User</span>
@@ -86,7 +119,7 @@ function RecentlyAddedView ({
       </div>
       <hr></hr>
       <div className="added-track-container">
-        {addedTrackCards}
+        {!isLoading ? addedTrackCards : <ReactLoading color='#B1A8A6' type='spin' className='loading'/>}
       </div>
       <p className='expire'>Records will expire after 7 days</p>
     </div>

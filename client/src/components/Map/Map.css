@@ -1,1 +1,19 @@
+.pac-container {
+  border: none;
+}
 
+.pac-item {
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: .9rem;
+  font-family: 'Poppins';
+}
+
+.pac-item:hover {
+  filter: brightness(.9);
+}
+
+.pac-item-query {
+  font-size: .9rem;
+}

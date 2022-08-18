@@ -1,5 +1,5 @@
 .nav-bar {
-  padding: 5px 35px 0px 35px;
+  padding: 0px 35px 0px 35px;
   position: fixed;
   width: 100%;
   font-size: 1em;
@@ -9,17 +9,17 @@
   justify-content: space-between;
   z-index: 10;
   overflow: none;
-  border-bottom: .5px solid var(--light-border);
+  border-bottom: .5px solid var(--txt-med);
 }
 
 .nav-bar .logo {
-  width: 80px;
+  width: 70px;
 }
 
 .nav-bar .avatar {
-  margin-top: 10px;
+  margin-top: 11px;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
 }

@@ -15,10 +15,10 @@ function Dropdown ({
   const track = new Tracks()
 
   useEffect(() => {
-    if (options.length !== 0) {
+    if (options?.length !== 0) {
       /* sort options array alphabetically */
       setSelected('Add a playlist')
-      if (options.length > 1) {
+      if (options?.length > 1) {
         track.sortOptionsTracks(options)
       }
     }
@@ -26,7 +26,7 @@ function Dropdown ({
 
   return (
     <div className="dropdown">
-      <div className="dropdown-btn" onClick={options.length === 0 || isLoading ? () => {} : () => setIsActive(!isActive)}>
+      <div className="dropdown-btn" onClick={options?.length === 0 || isLoading ? () => {} : () => setIsActive(!isActive)}>
         <p>{selected}</p>
         {isActive ? <IoMdArrowDropup size={20} className='icon'/> : <IoMdArrowDropdown size={20} className='icon'/>}
       </div>

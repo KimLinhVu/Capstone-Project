@@ -1,12 +1,30 @@
-import React from 'react'
-import Tracks from 'utils/tracks'
+import React, { useEffect, useState } from 'react'
+import { getTrackDetails, addSpotifyUri } from 'utils/shazam'
 import './Track.css'
 
 function Track ({
   track,
   trackNumber
 }) {
-  const tracks = new Tracks()
+  const [trackPreview, setTrackPreview] = useState(null)
+
+  useEffect(() => {
+    const trackId = track.id
+    const trackSearchParams = track.name.concat(' ', track.artists[0].name).replaceAll(' ', '%20')
+    const getPreviewUri = async () => {
+      const { data } = await getTrackDetails(trackId, trackSearchParams)
+      setTrackPreview(data)
+    }
+    const addPreviewUri = async () => {
+      setTrackPreview(track.preview_url)
+      await addSpotifyUri(trackId, track.preview_url)
+    }
+    if (track.preview_url === null) {
+      getPreviewUri()
+    } else {
+      addPreviewUri()
+    }
+  }, [])
   return (
     <div className="track">
       {track && (
@@ -20,7 +38,7 @@ function Track ({
             </div>
           </div>
           <div className="track-right">
-            <span className="time">{tracks.convertDuration(track.duration_ms)}</span>
+            <audio controls src={trackPreview}></audio>
           </div>
         </>
       )}

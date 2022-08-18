@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logoutSpotify } from 'utils/spotify'
-import { MdLocationOn, MdOutlineEdit } from 'react-icons/md'
+import { MdLocationOn, MdOutlineEdit, MdOutlinePublic, MdOutlinePublicOff } from 'react-icons/md'
 import { FaSpotify } from 'react-icons/fa'
 import Image from 'utils/image'
 import { IoMdSettings } from 'react-icons/io'
@@ -40,7 +40,7 @@ function ProfileCard ({
   }
 
   if (picture === null) {
-    profilePicture = spotifyProfile.images.length > 0 ? <img className='profile-picture' src={spotifyProfile.images[0].url} alt="profile picture" /> : <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
+    profilePicture = <img className='profile-picture' src={require('img/blueflower.jpeg')}/>
   } else {
     profilePicture = <img className='profile-picture' src={picture} alt="profile picture"/>
   }
@@ -90,6 +90,10 @@ function ProfileCard ({
             <div className="location">
               <MdLocationOn className='icon' size={25}/>
               <p className='address'>{profile.location.formatted_address}</p>
+            </div>
+            <div className="privacy">
+              {profile.isPrivate ? <MdOutlinePublicOff className='icon' size={25}/> : <MdOutlinePublic className='icon' size={25}/>}
+              <p>{profile.isPrivate ? 'Private' : 'Public'}</p>
             </div>
           </div>
           <hr />

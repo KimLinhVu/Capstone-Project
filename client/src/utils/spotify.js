@@ -9,7 +9,7 @@ const hasTokenExpired = (timeStamp, expiresIn) => {
 const refreshTokens = async (refreshToken) => {
   const { data } = await axios.get(`/spotify/refresh_token?refresh_token=${refreshToken}`)
 
-  await axios.post('/playlist/', {
+  await axios.post('/spotify/tokens', {
     accessToken: data.access_token,
     timeStamp: Date.now()
   }, {
@@ -36,6 +36,9 @@ export const getSpotifyAccessTokens = async () => {
       'x-access-token': localStorage.getItem('token')
     }
   })
+  if (data === null) {
+    return null
+  }
   const { accessToken, refreshToken, expiresIn, timeStamp } = data
 
   if (hasTokenExpired(timeStamp, expiresIn) || !accessToken) {

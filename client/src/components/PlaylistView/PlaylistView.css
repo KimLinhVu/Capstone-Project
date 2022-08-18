@@ -20,9 +20,21 @@
 
 .playlist-view .playlist-header .playlist-searchbar {
   border: 1px solid var(--light-border);
-  padding: 12px;
+  padding: 10px 20px;
+  padding-left: 40px;
   border-radius: 6px;
   width: 40%;
+}
+
+.playlist-view .playlist-header .playlist-searchbar:focus {
+  border: 1px solid var(--elements-pink);
+  outline: none;
+}
+
+.dashboard-search-icon {
+  position: absolute;
+  margin-left: 10px;
+  color: rgba(78, 77, 77, 0.694);
 }
 
 .playlist-view .playlist-header .playlist-action {
